@@ -1,0 +1,102 @@
+{
+  "Countries": [
+    {
+      "name": "Ecuador",
+      "id": 3
+    },
+    {
+      "name": "Eritrea",
+      "id": 6
+    },
+    {
+      "name": "Eswatini",
+      "id": 7
+    },
+    {
+      "name": "Belarus",
+      "id": 9
+    },
+    {
+      "name": "Belgium",
+      "id": 10
+    },
+    {
+      "id": 11,
+      "name": "Brazil"
+    },
+    {
+      "name": "Bulgaria",
+      "id": 12
+    },
+    {
+      "name": "India",
+      "id": 13
+    },
+    {
+      "id": 14,
+      "name": "Finlandia"
+    },
+    {
+      "name": "Nepal",
+      "id": 15
+    },
+    {
+      "name": "China",
+      "id": 16
+    },
+    {
+      "name": "Sweden",
+      "id": 17
+    },
+    {
+      "name": "Estonia",
+      "id": 18
+    }
+  ],
+  "institutions": [
+    {
+      "name": "Shirin K.mirss",
+      "id": 18
+    },
+    {
+      "name": "ABC",
+      "id": 19
+    },
+    {
+      "name": "DED",
+      "id": 20
+    },
+    {
+      "id": 21,
+      "name": "Shirin K.Y"
+    },
+    {
+      "name": "Shirin K.",
+      "id": 22
+    }
+  ],
+  "schools": [
+    {
+      "name": "Vandervort, Bartell and Lynch",
+      "id": 2
+    },
+    {
+      "name": "Stiedemann, Hickle and Jakubowski",
+      "id": 4
+    },
+    {
+      "name": "Buckridge Group",
+      "id": 5
+    },
+    {
+      "name": "O'Reilly Group",
+      "id": 6
+    },
+    {
+      "name": "Sporer - Weimann",
+      "id": 7
+    }
+  ],
+  "employees": [],
+  "students": []
+}
