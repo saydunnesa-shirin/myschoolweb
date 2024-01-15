@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import useNavigation from '../hooks/use-navigation';
 
-function Link({ to, children, className, activeClassName }) {
+function Link({ to, children, className, inactiveClassName, activeClassName }) {
   const { navigate, currentPath } = useNavigation();
 
   const classes = classNames(
-    'text-blue-500',
     className,
+    currentPath !== to && inactiveClassName,
     currentPath === to && activeClassName
   );
 
@@ -19,8 +19,9 @@ function Link({ to, children, className, activeClassName }) {
     navigate(to);
   };
 
+
   return (
-    <a className={classes} href={to} onClick={handleClick}>
+    <a className={classes} href={to} onClick={handleClick} aria-current={currentPath === to ? 'page' : undefined}>
       {children}
     </a>
   );
