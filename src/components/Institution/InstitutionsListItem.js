@@ -13,13 +13,14 @@ import { SUCCESS, ERROR } from '../../constants';
 
 const InstitutionsListItem = ({ institution, setIsRemoveSuccess }) => {
  
- const [popUp, setPopUp] = useState(false);
+ const [showModal, setShowModal] = useState(false);
  const [showUpdateForm, setShowUpdateForm] = useState(false);
  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
  const [doRemoveInstitution, isRemovingInstitution, removingInstitutionError] = useThunk(removeInstitution);
 
+ //Delete
  const handleDeleteClick = () => {
-      setPopUp(true);
+      setShowModal(true);
       setIsRemoveSuccess(false);
  }
 
@@ -30,6 +31,29 @@ const InstitutionsListItem = ({ institution, setIsRemoveSuccess }) => {
       }
  }
 
+ const handleModalClose = () => setShowModal(false);
+
+ const actionBar = (
+      <div className='flex justify-between mt-5'>
+            <Button secondary
+            onClick={handleModalClose}
+            >No, Cancel</Button>
+            <Button danger
+            onClick={confirmDelete}
+            >Yes, Delete</Button>
+      </div>
+      );
+
+const modal = (
+      <Modal onClose={handleModalClose} actionBar={actionBar}>
+            <p>
+                  Are you sure you want to delete this Institution?
+            </p>
+      </Modal>
+      );
+
+
+//Update
  const handleUpdateClick = () => {
       setShowUpdateForm(false);
       setIsUpdateSuccess(false);
@@ -64,7 +88,7 @@ return(
       <div>
             {content}
             { isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}
-            { popUp && <Modal setPopUp={setPopUp} entity={'Institution'} confirmDelete={confirmDelete}/>}
+            {showModal && modal}
       </div>
       )
 }
