@@ -9,18 +9,20 @@ import Panel from '../Panel';
 import CountryUpdate from './CountryUpdate';
 import Message from '../Message';
 import Modal from '../Modal';
+
 import { SUCCESS, ERROR } from '../../constants';
 
 const CountriesListItem = ({country, setIsRemoveSuccess }) => {
  
- const [popUp, setPopUp] = useState(false);
+ const [showModal, setShowModal] = useState(false);
  const [showUpdateForm, setShowUpdateForm] = useState(false);
  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
  const [doRemoveCountry, isRemovingCountry, removingCountryError] = useThunk(removeCountry);
 
+ //Delete
  const handleDeleteClick = () => {
-      setPopUp(true);
-      setIsRemoveSuccess(false);
+    setShowModal(true);
+    setIsRemoveSuccess(false);
  }
 
  const confirmDelete = () =>{
@@ -29,7 +31,29 @@ const CountriesListItem = ({country, setIsRemoveSuccess }) => {
             setIsRemoveSuccess(true);
       }
  }
+  
+ const handleModalClose = () => setShowModal(false);
 
+ const actionBar = (
+      <div className='flex justify-between mt-5'>
+            <Button secondary
+            onClick={handleModalClose}
+            >No, Cancel</Button>
+            <Button danger
+            onClick={confirmDelete}
+            >Yes, Delete</Button>
+      </div>
+      );
+
+const modal = (
+      <Modal onClose={handleModalClose} actionBar={actionBar}>
+            <p>
+               Are you sure you want to delete this country?
+            </p>
+      </Modal>
+  );
+
+ //Update
  const handleUpdateClick = () => {
       setShowUpdateForm(false);
       setIsUpdateSuccess(false);
@@ -63,10 +87,10 @@ return(
 
       <div>
             {content}
-            { isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}
-            { popUp && <Modal setPopUp={setPopUp} entity={'Country'} confirmDelete={confirmDelete}/>}
+            {isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}
+            {showModal && modal}
       </div>
-      )
+   )
 }
 
 export default CountriesListItem;

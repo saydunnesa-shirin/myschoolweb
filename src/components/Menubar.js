@@ -1,6 +1,7 @@
 import useNavigation from '../hooks/use-navigation';
 
 import Link from './Link';
+import SchoolImg from '../dist/images/school.jpg';
 
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
@@ -82,12 +83,7 @@ function Menubar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
-
+                  <img className="h-8 w-auto" src={SchoolImg} alt="Your Company"></img>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">

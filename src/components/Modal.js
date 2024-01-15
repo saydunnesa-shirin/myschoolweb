@@ -1,32 +1,38 @@
-import React from 'react'
-// import { IoWarning} from 'react-icons/io5';
-import Button from './Button';
+import ReactDOM from 'react-dom';
+import { useEffect } from 'react';
+import classNames from 'classnames';
+import { MODAL_SIZE_LARGE, MODAL_SIZE_MEDIUM } from '../constants';
 
-function Modal({entity, setPopUp, confirmDelete}) {
-  return (
+function Modal({ onClose, children, actionBar, size }) {
+  useEffect(() => {
+    document.body.classList.add('overflow-hidden');
+
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, []);
+
+  const classes = classNames(
+          'fixed bg-white p-10 rounded-md shadow-md',
+          size === MODAL_SIZE_LARGE && 'inset-20',
+          size === MODAL_SIZE_MEDIUM && 'inset-40'
+  );
+
+  return ReactDOM.createPortal(
     <div className='w-screen h-screen bg-black bg-opacity-30 fixed top-0 right-0 flex justify-center items-center'>
-      <div className='bg-white p-10 rounded-md shadow-md'>
-        <p>
-          Are you sure you want to delete this <b>{entity}</b>?
-          {/* <p className='bg-[#ffe9d9] p-2 border-l-2 border-[#fa703f] text-[#bc4c2e] flex flex-col text-sm my-1'>
-            <span className='text-[#771505] font-bold flex items-center gap-1'>
-              <IoWarning />
-              Warning
-            </span>
-            By Deleting this {entity}, you won't be able to access the system.
-          </p> */}
-        </p>
-        <div className='flex justify-between mt-5'>
-          <Button secondary={true}
-          onClick={() => setPopUp(false)}
-          >No, Cancel</Button>
-          <Button danger={true}
-          onClick={confirmDelete}
-          >Yes, Delete</Button>
+      <div
+        onClick={onClose}
+        className="fixed inset-0 bg-gray-300 opacity-80"
+      ></div>
+      <div className={classes}>
+        <div className='flex flex-col justify-between h-full'>
+          {children}
+          <div>{actionBar}</div>
         </div>
       </div>
-    </div>
-  )
+    </div>,
+    document.querySelector('.modal-container')
+  );
 }
 
-export default Modal
+export default Modal;
