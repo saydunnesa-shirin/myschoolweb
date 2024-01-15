@@ -51,6 +51,10 @@
     {
       "name": "Estonia",
       "id": 18
+    },
+    {
+      "name": "Uganda",
+      "id": 19
     }
   ],
   "institutions": [
@@ -71,8 +75,12 @@
       "name": "Shirin K.Y"
     },
     {
-      "name": "Shirin K.",
-      "id": 22
+      "id": 22,
+      "name": "Shirin K."
+    },
+    {
+      "name": "Cosmos",
+      "id": 23
     }
   ],
   "schools": [
