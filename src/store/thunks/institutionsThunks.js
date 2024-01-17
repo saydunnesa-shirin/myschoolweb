@@ -9,7 +9,9 @@ const fetchInstitutions = createAsyncThunk('institutions/fetch', async() =>{
 
 const addInstitution = createAsyncThunk('institutions/add',  async (institution) => {
     const response = await axios.post('http://localhost:3006/institutions', {
-              name:institution.name
+              name:institution.name,
+              address:institution.address,
+              countryId:institution.countryId
     });
     return response.data;
 });

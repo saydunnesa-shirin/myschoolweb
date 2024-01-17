@@ -35,50 +35,30 @@
     {
       "name": "Uganda",
       "id": 19
+    },
+    {
+      "id": 20,
+      "name": "Bangladesh"
     }
   ],
   "institutions": [
     {
-      "name": "ABC",
-      "id": 19
+      "name": "Shirin K.",
+      "address": "ABC",
+      "countryId": 13,
+      "id": 1
     },
     {
-      "name": "DED",
-      "id": 20
-    },
-    {
-      "id": 21,
-      "name": "Shirin K.Y"
-    },
-    {
-      "id": 22,
-      "name": "Shirin K."
-    },
-    {
-      "name": "Cosmos",
-      "id": 23
-    }
-  ],
-  "schools": [
-    {
-      "name": "Vandervort, Bartell and Lynch",
+      "name": "Shirin K.",
+      "address": "aaa",
+      "countryId": null,
       "id": 2
     },
     {
-      "name": "Stiedemann, Hickle and Jakubowski",
-      "id": 4
-    },
-    {
-      "name": "Buckridge Group",
-      "id": 5
-    },
-    {
-      "name": "O'Reilly Group",
-      "id": 6
-    },
-    {
-      "name": "Sporer - Weimann",
-      "id": 7
+      "name": "Shirin",
+      "address": "aa",
+      "countryId": 17,
+      "id": 3
     }
   ],
   "employees": [],

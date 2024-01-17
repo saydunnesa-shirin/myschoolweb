@@ -97,11 +97,6 @@ const countriesSlice = createSlice({
   }
 });
 
-// export const selectAllCountries = (state) => state.countries.data;
-// export const isLoading = (state) => state.countries.isLoading;
-// export const error = (state) => state.countries.error;
-
-
 export const CountriesAction = countriesSlice.actions;
 
 export const countriesReducer = countriesSlice.reducer;

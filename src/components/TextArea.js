@@ -1,6 +1,6 @@
 import className from 'classnames';
 
-function TextBox({
+function TextArea({
   mandatory,
   optional,
   ...rest
@@ -10,16 +10,15 @@ function TextBox({
     'leading-tight border rounded p-3 shadow w-full',
     {
       'bg-gray-200 text-gray-700 border border-red-500 focus:outline-none focus:bg-white': mandatory,
-      'border border-black bg-white focus:outline-none': optional,
     }
   );
 
   return (
-    <input type="text" {...rest} className={classes} />
+    <textarea type="text" {...rest} className={classes} />
   );
 }
 
-TextBox.propTypes = {
+TextArea.propTypes = {
   checkVariationValue: ({ mandatory, optional }) => {
     const count =
       Number(!!mandatory) +
@@ -33,4 +32,4 @@ TextBox.propTypes = {
   },
 };
 
-export default TextBox;
+export default TextArea;

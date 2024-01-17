@@ -9,9 +9,10 @@ import Panel from '../Panel';
 import InstitutionUpdate from './InstitutionUpdate';
 import Message from '../Message';
 import Modal from '../Modal';
+
 import { SUCCESS, ERROR } from '../../constants';
 
-const InstitutionsListItem = ({ institution, setIsRemoveSuccess }) => {
+const InstitutionsListItem = ({institution, setIsRemoveSuccess }) => {
  
  const [showModal, setShowModal] = useState(false);
  const [showUpdateForm, setShowUpdateForm] = useState(false);
@@ -20,8 +21,8 @@ const InstitutionsListItem = ({ institution, setIsRemoveSuccess }) => {
 
  //Delete
  const handleDeleteClick = () => {
-      setShowModal(true);
-      setIsRemoveSuccess(false);
+    setShowModal(true);
+    setIsRemoveSuccess(false);
  }
 
  const confirmDelete = () =>{
@@ -30,7 +31,7 @@ const InstitutionsListItem = ({ institution, setIsRemoveSuccess }) => {
             setIsRemoveSuccess(true);
       }
  }
-
+  
  const handleModalClose = () => setShowModal(false);
 
  const actionBar = (
@@ -47,13 +48,12 @@ const InstitutionsListItem = ({ institution, setIsRemoveSuccess }) => {
 const modal = (
       <Modal onClose={handleModalClose} actionBar={actionBar}>
             <p>
-                  Are you sure you want to delete this Institution?
+               Are you sure you want to delete this institution?
             </p>
       </Modal>
-      );
+  );
 
-
-//Update
+ //Update
  const handleUpdateClick = () => {
       setShowUpdateForm(false);
       setIsUpdateSuccess(false);
@@ -87,10 +87,10 @@ return(
 
       <div>
             {content}
-            { isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}
+            {isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}
             {showModal && modal}
       </div>
-      )
+   )
 }
 
 export default InstitutionsListItem;
