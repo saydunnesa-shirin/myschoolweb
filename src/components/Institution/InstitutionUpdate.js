@@ -1,8 +1,7 @@
 import React from 'react';
 import { useState, useEffect  } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
-import { updateInstitution, changeInstitutionName, setInstitutionUpdateForm, resetInstitutionForm } from "../../store";
+import { updateInstitution } from "../../store";
 import Button from '../Button';
 import TextBox from '../TextBox';
 import Label from '../Label';
@@ -11,40 +10,33 @@ import Message from '../Message';
 import { ERROR } from '../../constants';
 
 const InstitutionUpdate = ({data, onUpdateSuccess, onUpdateFormClose}) => {
-const dispatch = useDispatch();
 
 const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
 
 const [doUpdateInstitution, isUpdatingInstitution, updatingInstitutionError] = useThunk(updateInstitution);
-        
-const { id, name } = useSelector((state)=>{
-  return state.institutionForm;
-});
-// //Update
-// const initialInstitutionState = {
-//   id: data.id,
-//   name: data.name
-// };
 
-// const [institution, setInstitution] = useState(initialInstitutionState);
+// //Update
+const initialInstitutionState = {
+  id: data.id,
+  name: data.name,
+  type: data.type
+};
+
+const [country, setInstitution] = useState(initialInstitutionState);
 
 const handleNameChange = (event) => {
-  dispatch(changeInstitutionName(event.target.value));
 
-  // setInstitution({ ...institution, name: event.target.value });
+  setInstitution({ ...country, name: event.target.value });
 }
 
 useEffect(() => {
-  dispatch(setInstitutionUpdateForm(data));
-
   if(isUpdateSuccess && !isUpdatingInstitution && !updatingInstitutionError){
-    dispatch(resetInstitutionForm());
     onUpdateSuccess();
   }
 }, [isUpdatingInstitution]);
 
 const handlInstitutionUpdate = () => {
-  doUpdateInstitution({id, name});
+  doUpdateInstitution(country);
   setIsUpdateSuccess(true);
 }                                       
   return (
@@ -54,7 +46,7 @@ const handlInstitutionUpdate = () => {
                 <Label htmlFor="name">
                   Institution Name
                 </Label>
-                <TextBox mandatory={true} id="name" value={name} placeholder="XYZ" 
+                <TextBox mandatory={true} id="name" value={country.name} placeholder="XYZ" 
                 onChange={handleNameChange} />
 
                 <Button primary={true} loding={isUpdatingInstitution} onClick={handlInstitutionUpdate}> 
@@ -66,7 +58,7 @@ const handlInstitutionUpdate = () => {
                 </Button>
                 { 
                   isUpdateSuccess && !isUpdatingInstitution && updatingInstitutionError && 
-                  <Message message={'Error updating institution'} type={ERROR}></Message>
+                  <Message message={'Error updating Institution'} type={ERROR}></Message>
                 }
             </div>
           </div>

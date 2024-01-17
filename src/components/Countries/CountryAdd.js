@@ -43,29 +43,27 @@ const handlCountryAdd = () => {
     <div>
           <h1 className="text-xl mb-2">Add Country</h1>
 
-          <div className="flex flex-row justify items-center">
-            <div className="flex flex-row justify items-center m-3">
-                <Label htmlFor="name">
-                  Country Name
-                </Label>
-                <TextBox mandatory={true} id="name" value={country.name} placeholder="XYZ" 
-                onChange={handleNameChange} />
-                
-                <Button primary={true} loding={isCreatingCountry} onClick={handlCountryAdd}> 
-                  Add
-                </Button>
-                { 
-                  isSubmitted && !isCreatingCountry && creatingCountryError && <Message message={'Error creating Country'} type={ERROR}></Message>
-                }
-
-                { validationError && country.name.length === 0  && 
-                  <p  className="m-2 text-s text-red-600 dark:text-red-400">
-                    Country Name can not be empty.
-                  </p>
-                }
-                { isSubmitted && !isCreatingCountry && !creatingCountryError && <Message message={'Save successfull!'} type={SUCCESS}></Message>}
-            </div>
+          <div className="flex justify items-left m-3">
+          <div className='flex justify-left m-2'>
+            <Label htmlFor="name">
+                Name
+            </Label>
+            <TextBox id="name" value={country.name} placeholder="XYZ" 
+            onChange={handleNameChange} mandatory={validationError && country.name.length === 0 && true} />
           </div>
+          
+          <div className='flex justify-center m-2'>
+            <Button primary={true} loding={isCreatingCountry} onClick={handlCountryAdd}> 
+              Add
+            </Button>
+            { validationError && <p className="m-2 text-s text-red-600 dark:text-red-400">Please enter required field(s).</p> }
+
+          </div>
+          { isSubmitted && !isCreatingCountry && creatingCountryError && <Message message={'Error creating Country'} type={ERROR}></Message>}
+          { isSubmitted && !isCreatingCountry && !creatingCountryError && <Message message={'Save successfull!'} type={SUCCESS}></Message>}
+        </div>
+
+          
     </div>
   )
 }

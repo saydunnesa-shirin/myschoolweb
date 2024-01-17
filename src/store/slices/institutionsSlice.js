@@ -7,12 +7,28 @@ const institutionsSlice = createSlice({
     initialState: {
       searchTerm: '',
       data: [],
+      dataPerPage: 5,
+      currentPage: 1,
       isLoading: false,
       error: null,
     },
     reducers: {
-      changeSearchTerm(state, action) {
+      changeInstitutionsSearchTerm(state, action) {
         state.searchTerm = action.payload;
+        if(state.searchTerm.length !== 0)
+          state.currentPage = 1;
+      },
+      onNavigateNext: (state) => {
+        state.currentPage++;
+      },
+      onNavigatePrev: (state) => {
+        state.currentPage--;
+      },
+      onChangeTodosPerpage: (state, action) => {
+        state.dataPerPage = action.payload;
+      },
+      onClickCurrentPage: (state, action) => {
+        state.currentPage = action.payload;
       }
     },
     extraReducers(builder){
@@ -21,6 +37,7 @@ const institutionsSlice = createSlice({
         state.isLoading = true;
     });
     builder.addCase(fetchInstitutions.fulfilled, (state, action) => {
+      
         state.isLoading = false;
         state.data = action.payload;
     });
@@ -34,6 +51,7 @@ const institutionsSlice = createSlice({
     });
     builder.addCase(addInstitution.fulfilled, (state, action) => {
         state.isLoading = false;
+        console.log(action.payload);
         state.data.push(action.payload);
     });
     builder.addCase(addInstitution.rejected, (state, action) => {
@@ -47,14 +65,14 @@ const institutionsSlice = createSlice({
     });
     builder.addCase(updateInstitution.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = state.data.map(institution => {
+        state.data = state.data.map(Institution => {
 
-          if(institution.id === action.payload.id){
+          if(Institution.id === action.payload.id){
             return {
               id: action.payload.id,
               name: action.payload.name}
           }
-          return institution;
+          return Institution;
         });
 
     });
@@ -69,8 +87,8 @@ const institutionsSlice = createSlice({
     });
     builder.addCase(removeInstitution.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data = state.data.filter(institution => {
-        return institution.id !== action.payload.id
+      state.data = state.data.filter(Institution => {
+        return Institution.id !== action.payload.id
       });
     });
     builder.addCase(removeInstitution.rejected, (state, action) => {
@@ -80,6 +98,7 @@ const institutionsSlice = createSlice({
   }
 });
 
-export const { changeSearchTerm } = institutionsSlice.actions;
+
+export const InstitutionsAction = institutionsSlice.actions;
 
 export const institutionsReducer = institutionsSlice.reducer;

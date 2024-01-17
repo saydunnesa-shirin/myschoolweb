@@ -1,35 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { GoChevronDown } from 'react-icons/go';
-import Panel from './Panel';
 
 function Dropdown({ options, value, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
-  const divEl = useRef();
-
-  useEffect(() => {
-    const handler = (event) => {
-      if (!divEl.current) {
-        return;
-      }
-
-      if (!divEl.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('click', handler, true);
-
-    return () => {
-      document.removeEventListener('click', handler);
-    };
-  }, []);
 
   const handleClick = () => {
     setIsOpen(!isOpen);
   };
 
   const handleOptionClick = (option) => {
+    // CLOSE DROPDOWN
     setIsOpen(false);
+    // WHAT OPTION DID THE USER CLICK ON???
     onChange(option);
   };
 
@@ -38,24 +20,33 @@ function Dropdown({ options, value, onChange }) {
       <div
         className="hover:bg-sky-100 rounded cursor-pointer p-1"
         onClick={() => handleOptionClick(option)}
-        key={option.value}
+        key={option.id}
       >
-        {option.label}
+        {option.name}
       </div>
     );
   });
 
   return (
-    <div ref={divEl} className="w-48 relative">
-      <Panel
-        className="flex justify-between items-center cursor-pointer"
-        onClick={handleClick}
-      >
-        {value?.label || 'Select...'}
-        <GoChevronDown className="text-lg" />
-      </Panel>
-      {isOpen && <Panel className="absolute top-full">{renderedOptions}</Panel>}
+    <div>
+      <div onClick={handleClick}></div>
+      <div className="w-48 relative" >
+        
+        <div
+          className="flex justify-between items-center cursor-pointer border rounded p-3 shadow bg-white w-full"
+          onClick={handleClick}
+        >
+          {value?.name || 'Select...'}
+          <GoChevronDown className="text-lg" />
+        </div>
+        {isOpen && (
+          <div className="absolute top-full border rounded p-3 shadow bg-white w-full">
+            {renderedOptions}
+          </div>
+        )}
+      </div>
     </div>
+    
   );
 }
 
