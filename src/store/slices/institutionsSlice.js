@@ -70,7 +70,10 @@ const institutionsSlice = createSlice({
           if(Institution.id === action.payload.id){
             return {
               id: action.payload.id,
-              name: action.payload.name}
+              name: action.payload.name,
+              address: action.payload.address,
+              countryId:action.payload.countryId
+            }
           }
           return Institution;
         });

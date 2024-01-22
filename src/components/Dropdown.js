@@ -36,8 +36,8 @@ function Dropdown({ options, value, onChange, mandatory }) {
   };
 
   return (
-    <div>
-      <div onMouseLeave={() =>setIsOpen(false)} className="w-48 relative" >
+    <div className='w-96 md:w-48'>
+      <div onMouseLeave={() =>setIsOpen(false)} className="relative h-12" >
         
         <div className={classes}
           onClick={handleClick}>

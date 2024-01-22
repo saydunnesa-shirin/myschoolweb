@@ -15,7 +15,7 @@ function Modal({ onClose, children, actionBar, size }) {
   const classes = classNames(
           'fixed bg-white p-10 rounded-md shadow-md',
           size === MODAL_SIZE_LARGE && 'inset-20',
-          size === MODAL_SIZE_MEDIUM && 'inset-40'
+          size === MODAL_SIZE_MEDIUM && 'inset-40',
   );
 
   return ReactDOM.createPortal(

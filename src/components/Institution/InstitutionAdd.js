@@ -1,8 +1,8 @@
 import React from 'react';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 
-import { addInstitution, fetchCountries } from "../../store";
+import { addInstitution } from "../../store";
 import { useThunk } from "../../hooks/use-thunks";
 
 import Button from '../Button';
@@ -21,14 +21,6 @@ const initialInstitutionState = {
   countryId: null,
 };
 
-//country dropdown
-const [doFetchCountries] = useThunk(fetchCountries);
-
-///Fetch data
-useEffect(() => {
-  doFetchCountries();
-}, [doFetchCountries]);
-
 const countries = useSelector((state) => state.countries.data);
 
 const [selection, setSelection] = useState(null);
@@ -42,7 +34,6 @@ const handleSelect = (option) => {
 const [doCreateInstitution, isCreatingInstitution, creatingInstitutionError] = useThunk(addInstitution);
 
 const [institution, setInstitution] = useState(initialInstitutionState);
-
 const [validationError, setValidationError] = useState(false);
 const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -76,32 +67,30 @@ const handlInstitutionAdd = () => {
   }
 }                                       
   return (
-    <div>
-      <h1 className="text-xl mb-2">Add Institution</h1>
-      <div className="flex justify items-baseline m-3">
-        <div className='flex justify-center m-2'>
-          <Label htmlFor="name">
+    <div className='border shadow'>
+      <h1 className="text-xl m-2">Add Institution</h1>
+      <div className="sm:flex sm:items-center sm:justify-between sm:m-2 md:justify-start">
+        <div className='flex items-center m-2'>
+          <Label className='w-20' htmlFor="name">
             Name
           </Label>
           <TextBox id="name" value={institution.name} placeholder="XYZ" 
           onChange={handleNameChange} mandatory={validationError && institution.name.length === 0 && true}/>
         </div>
-        <div className='flex justify-center m-2'>
-          <Label htmlFor="address">
+        <div className='flex items-center m-2'>
+          <Label className='w-20' htmlFor="address">
             Addess
           </Label>
           <TextArea id="address" value={institution.address} 
           placeholder="XYZ" onChange={handleAddressChange} mandatory={validationError && institution.address.length === 0 && true} />
         </div>
-        <div className='flex justify-center m-2'>
-          <Label htmlFor="Country">
+        <div className='flex items-center m-2'>
+          <Label className='w-18' htmlFor="Country">
             Country
           </Label>
           <Dropdown options={countries} value={selection} onChange={handleSelect} mandatory={validationError && institution.countryId === null && true} />
-
-
         </div>
-        <div className='flex justify-center m-2'>
+        <div className='flex items-center m-2'>
           <Button primary={true} loding={isCreatingInstitution} onClick={handlInstitutionAdd} > 
             Add
           </Button>
