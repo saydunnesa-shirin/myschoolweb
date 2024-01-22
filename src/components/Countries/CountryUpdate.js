@@ -23,9 +23,9 @@ const initialCountryState = {
 };
 
 const [country, setCountry] = useState(initialCountryState);
+const [validationError, setValidationError] = useState(false);
 
 const handleNameChange = (event) => {
-
   setCountry({ ...country, name: event.target.value });
 }
 
@@ -36,32 +36,38 @@ useEffect(() => {
 }, [isUpdatingCountry]);
 
 const handlCountryUpdate = () => {
-  doUpdateCountry(country);
-  setIsUpdateSuccess(true);
+  if(country.name.length === 0)
+    setValidationError(true);
+  else{
+    setValidationError(false);
+    doUpdateCountry(country);
+    setIsUpdateSuccess(true);
+  }
 }                                       
   return (
     <div>
-          <div className="flex flex-rows justify items-center">
-            <div className=" flex justify items-center m-3">
-                <Label htmlFor="name">
-                  Country Name
-                </Label>
-                <TextBox mandatory={true} id="name" value={country.name} placeholder="XYZ" 
-                onChange={handleNameChange} />
-
-                <Button primary={true} loding={isUpdatingCountry} onClick={handlCountryUpdate}> 
+          <div className="flex justify items-baseline m-3">
+            <div className='flex justify-left m-2'>
+              <Label htmlFor="name">
+                  Name
+              </Label>
+              <TextBox id="name" value={country.name} placeholder="XYZ" 
+                onChange={handleNameChange} mandatory={validationError && country.name.length === 0 && true} />
+            </div>
+            <div className='flex justify-center m-2'>
+            <Button primary={true} loding={isUpdatingCountry} onClick={handlCountryUpdate}> 
                   Update
                 </Button>
 
                 <Button secondary={true} className="ml-2" onClick={onUpdateFormClose}> 
                   Cancel
                 </Button>
-                { 
-                  isUpdateSuccess && !isUpdatingCountry && updatingCountryError && 
-                  <Message message={'Error updating Country'} type={ERROR}></Message>
-                }
             </div>
-          </div>
+            { 
+              isUpdateSuccess && !isUpdatingCountry && updatingCountryError && 
+              <Message message={'Error updating Country'} type={ERROR}></Message>
+            }
+        </div>
     </div>
   )
 }

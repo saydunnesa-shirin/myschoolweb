@@ -32,21 +32,8 @@ const CountriesList = () => {
     if(searchTerm.length !== 0){
       dataList = data.filter((item) => item.name.toLowerCase().startsWith(searchTerm.toLowerCase())); 
     }
-
-    const sortedData = [...dataList].sort((a, b) => {
-      const valueA = a.name;
-      const valueB = b.name;
-      // const reverseOrder = sortOrder === 'asc' ? 1 : -1;
-
-      if (typeof valueA === 'string') {
-        return valueA.localeCompare(valueB);
-      } else {
-        return (valueA - valueB);
-      }
-    });
-
     return {
-      countries: sortedData
+      countries: dataList
     }
 
   }); 
