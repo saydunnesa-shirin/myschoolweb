@@ -91,38 +91,18 @@
     {
       "name": "Mongolia",
       "id": 33
+    },
+    {
+      "name": "Latvia",
+      "id": 34
     }
   ],
   "institutions": [
     {
-      "id": 1,
-      "name": "Shirin K.kkk"
-    },
-    {
-      "name": "Shirin K.",
-      "address": "aaa",
-      "countryId": null,
-      "id": 2
-    },
-    {
-      "id": 3,
-      "name": "Shirin kkkkkkk"
-    },
-    {
-      "name": "Shirin K.",
-      "address": "dd",
-      "countryId": 6,
-      "id": 4
-    },
-    {
+      "id": 5,
       "name": "Shirin K.mirss",
       "address": "hhh",
-      "countryId": null,
-      "id": 5
-    },
-    {
-      "id": 6,
-      "name": "118"
+      "countryId": 22
     }
   ],
   "employees": [],

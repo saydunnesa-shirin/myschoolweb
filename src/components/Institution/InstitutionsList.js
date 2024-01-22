@@ -3,7 +3,7 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchInstitutions } from "../../store";
+import { fetchInstitutions, fetchCountries } from "../../store";
 import { InstitutionsAction } from "../../store/slices/institutionsSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
@@ -21,9 +21,12 @@ const InstitutionsList = () => {
   const [isRemoveSuccess, setIsRemoveSuccess] = useState(false);
   const [doFetchInstitutions, isLoadingInstitutions, loadingInstitutionsError] = useThunk(fetchInstitutions);
 
+  //country dropdown
+  const [doFetchCountries] = useThunk(fetchCountries);
   ///Fetch data
   useEffect(() => {
     doFetchInstitutions();
+    doFetchCountries();
   }, [doFetchInstitutions]);
 
   const { institutions } = useSelector(({ institutions: { data, searchTerm }}) => {
@@ -81,7 +84,7 @@ const InstitutionsList = () => {
   let content;
 
   if(isLoadingInstitutions){
-    content = <Skeleton times={6} className="h-10 w-full"></Skeleton>;
+    content = <Skeleton times={6} className="h-8 w-full"></Skeleton>;
   }
   else if(loadingInstitutionsError){
 
@@ -100,14 +103,17 @@ let paging = <Paging currentPage={currentPage} pages={pages} navigatePrev={navig
 
   return (
     <div className="m-2">
-       <InstitutionAdd></InstitutionAdd>
-       <div className="flex flex-row justify-between items-center mb-2">
-          <h1 className="text-xl">Institutions</h1>
+      <InstitutionAdd></InstitutionAdd>
+      <br></br>
+      <div className='border shadow'>
+        <div className="flex flex-row justify-between items-center mt-2 mb-2">
+          <h1 className="text-xl m-2">Institutions</h1>
           <InstitutionSearch></InstitutionSearch>
-      </div>
+        </div>
         {content}
         {paging}
-        {isRemoveSuccess && <Message message={'Delete successfull!'} type={SUCCESS}></Message>}
+      </div>
+      {isRemoveSuccess && <Message message={'Delete successfull!'} type={SUCCESS}></Message>}
     </div>
   )
 }

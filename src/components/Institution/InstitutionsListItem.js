@@ -13,7 +13,7 @@ import Modal from '../Modal';
 import { SUCCESS, ERROR } from '../../constants';
 
 const InstitutionsListItem = ({institution, setIsRemoveSuccess }) => {
- 
+
  const [showModal, setShowModal] = useState(false);
  const [showUpdateForm, setShowUpdateForm] = useState(false);
  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
@@ -67,7 +67,7 @@ const modal = (
        setIsUpdateSuccess(true);
  }
 
- let content = (
+ const content = (
       <Panel key={institution.id}> 
             <Button className='mr-2' loding={isRemovingInstitution} onClick={handleDeleteClick}>
                   <GoTrashcan></GoTrashcan>
@@ -79,15 +79,14 @@ const modal = (
             {institution.name}
       </Panel>  
 );
- if (showUpdateForm) {
-   content = <InstitutionUpdate data={institution} onUpdateSuccess={handleUpdateSuccess} onUpdateFormClose={handleUpdateFormClose} />;
- }
+
+const updateModal = <InstitutionUpdate data={institution} onUpdateSuccess={handleUpdateSuccess} onUpdateFormClose={handleUpdateFormClose} />;
 
 return(
-
       <div>
             {content}
             {isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}
+            {showUpdateForm && updateModal}
             {showModal && modal}
       </div>
    )

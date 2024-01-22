@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const fetchCountries = createAsyncThunk('countries/fetch', async() =>{
     const  response = await axios.get("http://localhost:3006/Countries");
+    console.log('hi papa')
     await pause(1000);
     return response.data;
 });
