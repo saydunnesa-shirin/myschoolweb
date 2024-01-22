@@ -37,9 +37,8 @@ const countriesSlice = createSlice({
         state.isLoading = true;
     });
     builder.addCase(fetchCountries.fulfilled, (state, action) => {
-      
-        state.isLoading = false;
-        state.data = action.payload;
+      state.isLoading = false;
+      state.data = sortDataByName(action.payload);
     });
     builder.addCase(fetchCountries.rejected, (state, action) => {
         state.isLoading = false;
@@ -96,6 +95,23 @@ const countriesSlice = createSlice({
     });
   }
 });
+
+function sortDataByName (dataList){
+  const sortedData = [...dataList].sort((a, b) => {
+    const valueA = a.name;
+    const valueB = b.name;
+    // const reverseOrder = sortOrder === 'asc' ? 1 : -1;
+
+    if (typeof valueA === 'string') {
+      return valueA.localeCompare(valueB);
+    } else {
+      return (valueA - valueB);
+    }
+  });
+
+  return sortedData;
+
+}
 
 export const CountriesAction = countriesSlice.actions;
 
