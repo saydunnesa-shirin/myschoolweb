@@ -100,11 +100,132 @@
   "institutions": [
     {
       "id": 5,
-      "name": "Shirin K.mirss",
-      "address": "hhh",
-      "countryId": 22
+      "name": "Tarkish Hope Int. School",
+      "address": "Uttara, Dhaka",
+      "countryId": 20
+    },
+    {
+      "id": 6,
+      "name": "North East Int. School",
+      "address": "Uttara, Dhaka",
+      "countryId": 20
+    },
+    {
+      "id": 7,
+      "name": "Little Chapms KG",
+      "address": "Uttara, Dhaka",
+      "countryId": 20
+    },
+    {
+      "id": 8,
+      "name": "TalTech",
+      "address": "Mustamae",
+      "countryId": 18
     }
   ],
-  "employees": [],
-  "students": []
+  "employees": [
+    {
+      "id": 2,
+      "firstName": "Irem",
+      "lastName": "Reza Khan",
+      "institutionId": 5
+    },
+    {
+      "id": 3,
+      "firstName": "Saydunnesa",
+      "lastName": "Axa",
+      "institutionId": 8
+    },
+    {
+      "id": 4,
+      "firstName": "Mamun",
+      "lastName": "Reza sss",
+      "institutionId": 6
+    },
+    {
+      "id": 5,
+      "firstName": "Ali",
+      "lastName": "Alexgerder",
+      "institutionId": 8
+    },
+    {
+      "id": 6,
+      "firstName": "Nesa",
+      "lastName": "Max",
+      "institutionId": 5
+    },
+    {
+      "id": 7,
+      "firstName": "Nani",
+      "lastName": "Martin",
+      "institutionId": 7
+    },
+    {
+      "id": 8,
+      "firstName": "Joei",
+      "lastName": "Je",
+      "institutionId": 8
+    }
+  ],
+  "students": [],
+  "designations": [
+    {
+      "id": 1,
+      "name": "Teacher"
+    },
+    {
+      "id": 2,
+      "name": "Accountant"
+    },
+    {
+      "id": 3,
+      "name": "Admin"
+    }
+  ],
+  "employeeTypes": [
+    {
+      "id": 1,
+      "name": "Permanent"
+    },
+    {
+      "id": 2,
+      "name": "Contractual"
+    },
+    {
+      "id": 3,
+      "name": "Guest"
+    },
+    {
+      "id": 4,
+      "name": "Others"
+    }
+  ],
+  "genders": [
+    {
+      "id": 1,
+      "name": "Male"
+    },
+    {
+      "id": 2,
+      "name": "Female"
+    },
+    {
+      "id": 3,
+      "name": "Others"
+    }
+  ],
+  "bloodGroup": [
+    {
+      "id": 1,
+      "name": "A+"
+    },
+    {
+      "id": 2,
+      "name": "O+"
+    },
+    {
+      "id": 3,
+      "name": "B+"
+    }
+  ]
 }
