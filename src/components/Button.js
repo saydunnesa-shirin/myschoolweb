@@ -8,6 +8,7 @@ function Button({
   success,
   warning,
   danger,
+  link,
   outline,
   rounded,
   loding,
@@ -23,6 +24,7 @@ function Button({
       'border-green-500 bg-green-500 text-white': success,
       'border-yellow-400 bg-yellow-400 text-white': warning,
       'border-red-500 bg-red-500 text-white': danger,
+      'p-3 border border-gray-500 rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:text-white hover:bg-gray-500': link,
       'rounded-full': rounded,
       'bg-white': outline,
       'text-blue-500': outline && primary,
@@ -41,17 +43,18 @@ function Button({
 }
 
 Button.propTypes = {
-  checkVariationValue: ({ primary, secondary, success, warning, danger }) => {
+  checkVariationValue: ({ primary, secondary, success, warning, danger, link }) => {
     const count =
       Number(!!primary) +
       Number(!!secondary) +
       Number(!!warning) +
       Number(!!success) +
-      Number(!!danger);
+      Number(!!danger) +
+      Number(!!link);
 
     if (count > 1) {
       return new Error(
-        'Only one of primary, secondary, success, warning, danger can be true'
+        'Only one of primary, secondary, success, warning, danger, link can be true'
       );
     }
   },

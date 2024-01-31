@@ -17,6 +17,7 @@ function Menubar() {
 
   const links = [
     { label: 'Institutions', path: '/' },
+    { label: 'Employees', path: '/employees' },
     { label: 'Countries', path: '/countries' },
   ];
 
