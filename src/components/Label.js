@@ -6,7 +6,7 @@ function Label({
 }) {
   const classes = className(
     rest.className,
-    'block tracking-wide text-gray-700 text-m font-bold m-2'
+    'block text-sm font-medium leading-6 text-gray-900'
   );
 
   return (
