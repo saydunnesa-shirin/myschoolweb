@@ -16,7 +16,8 @@ function Menubar() {
   ];
 
   const links = [
-    { label: 'Institutions', path: '/' },
+    { label: 'Home', path: '/' },
+    { label: 'Institutions', path: '/institutions' }, // institutions
     { label: 'Employees', path: '/employees' },
     { label: 'Countries', path: '/countries' },
   ];

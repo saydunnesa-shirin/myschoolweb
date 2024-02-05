@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchEmployees, addEmployee, updateEmployee, removeEmployee } from '../thunks/employeesThunks';
+import { fetchEmployees, addEmployee, getEmployeeById, updateEmployee, removeEmployee } from '../thunks/employeesThunks';
 
 const employeesSlice = createSlice({
     name: 'employees',
@@ -11,6 +11,7 @@ const employeesSlice = createSlice({
       currentPage: 1,
       isLoading: false,
       error: null,
+      employee: null
     },
     reducers: {
       changeEmployeesSearchTerm(state, action) {
@@ -32,7 +33,7 @@ const employeesSlice = createSlice({
       }
     },
     extraReducers(builder){
-    //Fetch
+    //Fetch-----------------------------------------------------------------------
     builder.addCase(fetchEmployees.pending, (state, action) => {
         state.isLoading = true;
     });
@@ -45,13 +46,25 @@ const employeesSlice = createSlice({
         state.isLoading = false;
         state.error = action.error;
     });
-    //Add
+    //Fetch by id------------------------------------------------------------
+    builder.addCase(getEmployeeById.pending, (state, action) => {
+        state.isLoading = true;
+    });
+    builder.addCase(getEmployeeById.fulfilled, (state, action) => {
+      
+        state.isLoading = false;
+        state.employee = action.payload;
+    });
+    builder.addCase(getEmployeeById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error;
+    });
+    //Add-----------------------------------------------------------------------
     builder.addCase(addEmployee.pending, (state, action) => {
       state.isLoading = true;
     });
     builder.addCase(addEmployee.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action.payload);
         state.data.push(action.payload);
     });
     builder.addCase(addEmployee.rejected, (state, action) => {
@@ -59,7 +72,7 @@ const employeesSlice = createSlice({
         state.error = action.error;
     });
 
-    //Update
+    //Update-----------------------------------------------------------------------
     builder.addCase(updateEmployee.pending, (state, action) => {
       state.isLoading = true;
     });
@@ -70,9 +83,25 @@ const employeesSlice = createSlice({
           if(Employee.id === action.payload.id){
             return {
               id: action.payload.id,
+              employeeId: action.payload.employeeId,
+              institutionId: action.payload.institutionId,
+              joinDate: action.payload.joinDate,
+              designationId: action.payload.designationId,
+              employeeTypeId: action.payload.employeeTypeId,
+
               firstName: action.payload.firstName,
               lastName: action.payload.lastName,
-              institutionId: action.payload.institutionId
+              email: action.payload.email,
+              mobile: action.payload.mobile,
+
+              dateOfBirth: action.payload.dateOfBirth,
+              genderId: action.payload.genderId,
+              bloodGroupId: action.payload.bloodGroupId,
+              countryId: action.payload.countryId,
+              street: action.payload.street,
+              city: action.payload.city,
+              state: action.payload.state,
+              postalCode: action.payload.postalCode
             }
           }
           return Employee;
@@ -84,7 +113,7 @@ const employeesSlice = createSlice({
               state.error = action.error;
     });
 
-    //Remove
+    //Remove-----------------------------------------------------------------
     builder.addCase(removeEmployee.pending, (state, action) => {
       state.isLoading = true;
     });

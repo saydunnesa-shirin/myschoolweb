@@ -1,9 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import classNames from "classnames";
 
-import { fetchEmployees, fetchInstitutions, removeEmployee } from "../../store";
+import { fetchEmployees, fetchInstitutions, fetchDesignations, fetchEmployeeTypes, removeEmployee } from "../../store";
 import { EmployeesAction } from "../../store/slices/employeesSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
@@ -30,12 +29,18 @@ const EmployeesList = () => {
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
   const [doRemoveEmployee, isRemovingEmployee, removingEmployeeError] = useThunk(removeEmployee);
 
-  //country dropdown
+  //dropdown lists
   const [doFetchInstitutions] = useThunk(fetchInstitutions);
+  const [doFetchDesignations] = useThunk(fetchDesignations);
+  const [doFetchEmployeeTypes] = useThunk(fetchEmployeeTypes);
+
  //Fetch data
   useEffect(() => {
     doFetchEmployees();
     doFetchInstitutions();
+    doFetchDesignations();
+    doFetchEmployeeTypes();
+
   }, [doFetchEmployees]);
 
   const { employees } = useSelector(({ employees: { data, searchTerm }}) => {
@@ -107,11 +112,11 @@ const EmployeesList = () => {
   //Add
   const handleAddFormClose = () => setShowAddForm(false);
   
-  const addEmployee = <div>
+  const addEmployee = <div className='transition ease-out duration-5000'>
     <EmployeeAdd onClose={handleAddFormClose}></EmployeeAdd>
   </div>
 
-  const handleAddCLick = async () =>{
+  const handleAddCLick = () =>{
     setShowAddForm(!showAddForm);
 
     if(showUpdateForm)
@@ -129,10 +134,11 @@ const EmployeesList = () => {
   const updateForm = <div> 
       <EmployeeUpdate data={employee} onClose={handleUpdateFormClose}
        onUpdateSuccess={handleUpdateSuccess} />
-  </div>;
+    </div>;
 
   const handleUpdateClick = async (rowData) => {
-    setShowUpdateForm(false);
+    if(showUpdateForm)
+      setShowUpdateForm(false);
     await delay(200);
 
     setEmployee(rowData);
@@ -171,6 +177,11 @@ const EmployeesList = () => {
   //Table
   const config = [
     {
+      label: 'Employee ID',
+      render: (employee) => employee.employeeId,
+      sortValue: (employee) => employee.employeeId,
+    },
+    {
       label: 'First Name',
       render: (employee) => employee.firstName,
       sortValue: (employee) => employee.firstName,
@@ -179,7 +190,18 @@ const EmployeesList = () => {
       label: 'Last Name',
       render: (employee) => employee.lastName,
       sortValue: (employee) => employee.lastName,
-    }
+    },
+    {
+      label: 'Email',
+      render: (employee) => employee.email,
+      sortValue: (employee) => employee.email,
+    },
+    {
+      label: 'Mobile',
+      render: (employee) => employee.mobile,
+      sortValue: (employee) => employee.mobile,
+    },
+
     
   ];
 
@@ -212,7 +234,7 @@ const EmployeesList = () => {
   }
 
   return (
-    <div className="p -2 m-2">
+    <div className="p-2 m-2">
       <div className='border shadow'>
         <div className="flex flex-row justify-between items-center mt-2 mb-2">
           <h1 className="text-xl m-2">Employees</h1>
