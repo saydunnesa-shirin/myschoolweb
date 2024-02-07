@@ -1,10 +1,11 @@
 import React from 'react';
 import {useState} from "react";
 import {useSelector} from "react-redux";
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
 
 import {addEmployee} from "../../store";
 import {useThunk} from "../../hooks/use-thunks";
+
+import Datepicker from '../Datepicker';
 
 import TextBox from '../TextBox';
 import Button from '../Button';
@@ -18,7 +19,7 @@ export default function EmployeeAdd({onClose}) {
 const initialEmployeeState = {
 employeeId:"",
 institutionId: null,
-joinDate:null,
+joinDate: null,
 designationId:null,
 employeeTypeId:null,
 
@@ -90,39 +91,19 @@ const handleCountrySelect = (option) => {
 };
 
 //Textbox
-const handleFirstNameChange = (event) => {
-setEmployee({ ...employee, firstName: event.target.value.replace(/[0-9]/, '') });
-}
-const handleLastNameChange = (event) => {
-setEmployee({ ...employee, lastName: event.target.value.replace(/[0-9]/, '') });
-}
-const handleEmployeeIdChange = (event) => {
-setEmployee({ ...employee, employeeId: event.target.value });
-}
-const handleJoinDateChange = (event) => {
-setEmployee({ ...employee, joinDate: event.target.value.replace(/[a-z]/, '') });
-}
-const handleDateOfBirthChange = (event) => {
-setEmployee({ ...employee, dateOfBirth: event.target.value.replace(/[a-z]/, '') });
-}
-const handleMobileChange = (event) => {
-setEmployee({ ...employee, mobile: event.target.value.replace(/[a-z]/, '') });
-}
-const handleEmailChange = (event) => {
-setEmployee({ ...employee, email: event.target.value });
-}
-const handleStreetChange = (event) => {
-setEmployee({ ...employee, street: event.target.value });
-}
-const handleCityChange = (event) => {
-setEmployee({ ...employee, city: event.target.value });
-}
-const handleStateChange = (event) => {
-setEmployee({ ...employee, state: event.target.value });
-}
-const handlePostalCodeChange = (event) => {
-setEmployee({ ...employee, postalCode: event.target.value });
-}
+const handleFirstNameChange = (event) => setEmployee({ ...employee, firstName: event.target.value.replace(/[0-9]/, '') });
+const handleLastNameChange = (event) => setEmployee({ ...employee, lastName: event.target.value.replace(/[0-9]/, '') });
+const handleEmployeeIdChange = (event) => setEmployee({ ...employee, employeeId: event.target.value });
+const handleMobileChange = (event) => setEmployee({ ...employee, mobile: event.target.value.replace(/[a-z]/, '') });
+const handleEmailChange = (event) => setEmployee({ ...employee, email: event.target.value });
+const handleStreetChange = (event) => setEmployee({ ...employee, street: event.target.value });
+const handleCityChange = (event) => setEmployee({ ...employee, city: event.target.value });
+const handleStateChange = (event) => setEmployee({ ...employee, state: event.target.value });
+const handlePostalCodeChange = (event) => setEmployee({ ...employee, postalCode: event.target.value });
+
+//DatePicker
+const handleJoinDateChange = (newValue) => setEmployee({ ...employee, joinDate: newValue });
+const handleDateOfBirthChange = (newValue) => setEmployee({ ...employee, dateOfBirth: newValue});
 
 //Add
 function isValid(){
@@ -146,7 +127,9 @@ function isValid(){
 
 const handlEmployeeAdd = (event) => {
   event.preventDefault();
+  console.log(employee);
   const valid = isValid();
+
   if(valid)
   {
     setValidationError(false);
@@ -162,7 +145,7 @@ const handlEmployeeAdd = (event) => {
     setGenderSelection(null);
     setCountrySelection(null);
   }
-}  
+}
   return (
     <form className="border shadow p-2" onSubmit={handlEmployeeAdd}>
       <div className="space-y-12">
@@ -209,11 +192,9 @@ const handlEmployeeAdd = (event) => {
                 Joining Date
               </Label>
               <div className="mt-2">
-                <TextBox
-                  name="joinDate"
-                  id="joinDate"
-                  value={employee.joinDate} 
-                  placeholder="XYZ" onChange={handleJoinDateChange} 
+                <Datepicker 
+                  initialValue={employee.joinDate ? employee.joinDate : null}
+                  changeDate={handleJoinDateChange}
                   mandatory={validationError && employee.joinDate === null && true}
                 />
               </div>
@@ -309,10 +290,9 @@ const handlEmployeeAdd = (event) => {
                 Date of Birth
               </Label>
               <div className="mt-2">
-                <TextBox id="dateOfBirth" 
-                value={employee.dateOfBirth} 
-                placeholder="XYZ" 
-                onChange={handleDateOfBirthChange} 
+                <Datepicker 
+                  initialValue={employee.dateOfBirth}
+                  changeDate={handleDateOfBirthChange}
                 />
               </div>
             </div>

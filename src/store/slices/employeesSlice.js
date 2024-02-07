@@ -119,8 +119,9 @@ const employeesSlice = createSlice({
     });
     builder.addCase(removeEmployee.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data = state.data.filter(Employee => {
-        return Employee.id !== action.payload.id
+      console.log(action.payload.id);
+      state.data = state.data.filter(employee => {
+        return employee.id !== action.payload.id
       });
     });
     builder.addCase(removeEmployee.rejected, (state, action) => {
