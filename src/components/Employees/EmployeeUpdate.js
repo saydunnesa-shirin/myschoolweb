@@ -10,6 +10,7 @@ import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
 import { ERROR } from '../../constants';
+import Datepicker from '../Datepicker';
 
 const EmployeeUpdate = ({data, onClose, onUpdateSuccess}) => {
 
@@ -89,39 +90,19 @@ const handleCountrySelect = (option) => {
 };
 
 //Textbox
-const handleFirstNameChange = (event) => {
-setEmployee({ ...employee, firstName: event.target.value.replace(/[0-9]/, '') });
-}
-const handleLastNameChange = (event) => {
-setEmployee({ ...employee, lastName: event.target.value.replace(/[0-9]/, '') });
-}
-const handleEmployeeIdChange = (event) => {
-setEmployee({ ...employee, employeeId: event.target.value });
-}
-const handleJoinDateChange = (event) => {
-setEmployee({ ...employee, joinDate: event.target.value.replace(/[a-z]/, '') });
-}
-const handleDateOfBirthChange = (event) => {
-setEmployee({ ...employee, dateOfBirth: event.target.value.replace(/[a-z]/, '') });
-}
-const handleMobileChange = (event) => {
-setEmployee({ ...employee, mobile: event.target.value.replace(/[a-z]/, '') });
-}
-const handleEmailChange = (event) => {
-setEmployee({ ...employee, email: event.target.value });
-}
-const handleStreetChange = (event) => {
-setEmployee({ ...employee, street: event.target.value });
-}
-const handleCityChange = (event) => {
-setEmployee({ ...employee, city: event.target.value });
-}
-const handleStateChange = (event) => {
-setEmployee({ ...employee, state: event.target.value });
-}
-const handlePostalCodeChange = (event) => {
-setEmployee({ ...employee, postalCode: event.target.value });
-}
+const handleFirstNameChange = (event) => setEmployee({ ...employee, firstName: event.target.value.replace(/[0-9]/, '') });
+const handleLastNameChange = (event) => setEmployee({ ...employee, lastName: event.target.value.replace(/[0-9]/, '') });
+const handleEmployeeIdChange = (event) => setEmployee({ ...employee, employeeId: event.target.value });
+const handleMobileChange = (event) => setEmployee({ ...employee, mobile: event.target.value.replace(/[a-z]/, '') });
+const handleEmailChange = (event) => setEmployee({ ...employee, email: event.target.value });
+const handleStreetChange = (event) => setEmployee({ ...employee, street: event.target.value });
+const handleCityChange = (event) => setEmployee({ ...employee, city: event.target.value });
+const handleStateChange = (event) => setEmployee({ ...employee, state: event.target.value });
+const handlePostalCodeChange = (event) => setEmployee({ ...employee, postalCode: event.target.value });
+
+//DatePicker
+const handleJoinDateChange = (newValue) => setEmployee({ ...employee, joinDate: newValue });
+const handleDateOfBirthChange = (newValue) => setEmployee({ ...employee, dateOfBirth: newValue});
 
 useEffect(() => {
   if(isSubmitted && !isUpdatingEmployee && !updatingEmployeeError){
@@ -164,7 +145,6 @@ useEffect(() => {
 }, [isUpdatingEmployee]);
 
 function isValid(){
-  console.log('hi');
   if(
     employee.firstName.length < 2 
     || employee.lastName.length < 2 
@@ -250,13 +230,11 @@ const updateForm = (
                 Joining Date
               </Label>
               <div className="mt-2">
-                <TextBox
-                  name="joinDate"
-                  id="joinDate"
-                  value={employee.joinDate} 
-                  placeholder="XYZ" onChange={handleJoinDateChange} 
+                <Datepicker 
+                  initialValue={employee.joinDate}
+                  changeDate={handleJoinDateChange}
                   mandatory={validationError && employee.joinDate === null && true}
-                />
+                  />
               </div>
             </div>
             <div className="sm:col-span-2">
@@ -350,11 +328,10 @@ const updateForm = (
                 Date of Birth
               </Label>
               <div className="mt-2">
-                <TextBox id="dateOfBirth" 
-                value={employee.dateOfBirth} 
-                placeholder="XYZ" 
-                onChange={handleDateOfBirthChange} 
-                />
+                <Datepicker 
+                  initialValue={employee.dateOfBirth}
+                  changeDate={handleDateOfBirthChange}
+                  />
               </div>
             </div>
             <div className="sm:col-span-2">
@@ -476,47 +453,6 @@ const updateForm = (
         }
       </div>
     </form>
-  
-  // <div className='border shadow'>
-  //     <div className='flex justify-between text-xl m-2'>
-  //       <h1>Update Employee</h1>
-  //       <Button onClick={onClose}>x</Button>
-  //     </div>
-  //     <div className="sm:flex sm:items-center sm:justify-between sm:m-2 md:justify-start">
-  //       <div className='flex items-center m-2'>
-  //         <Label className='w-20' htmlFor="firstName">
-  //           First Name
-  //         </Label>
-  //         <TextBox id="firstName" value={employee.firstName} placeholder="XYZ" 
-  //         onChange={handleFirstNameChange} mandatory={validationError && employee.firstName.length === 0 && true}/>
-  //       </div>
-  //       <div className='flex items-center m-2'>
-  //         <Label className='w-20' htmlFor="lastName">
-  //           Last Name
-  //         </Label>
-  //         <TextBox id="lastName" value={employee.lastName} 
-  //         placeholder="XYZ" onChange={handleLastNameChange} mandatory={validationError && employee.lastName.length === 0 && true} />
-  //       </div>
-  //       <div className='flex items-center m-2'>
-  //         <Label className='w-18' htmlFor="Country">
-  //           Institution
-  //         </Label>
-  //         <Dropdown options={institutions} value={selection} onChange={handleSelect} 
-  //           mandatory={validationError && employee.institutionId === null && true} />
-  //       </div>
-  //       <div className='flex items-center m-2'>
-  //         <Button primary={true} loding={isUpdatingEmployee} onClick={handlEmployeeUpdate} > 
-  //           Update
-  //         </Button>
-  //         { validationError && <p className="m-2 text-s text-red-600 dark:text-red-400">Please enter required field(s).</p> }
-  //       </div>
-        
-  //       { 
-  //         isSubmitted && !isUpdatingEmployee && updatingEmployeeError && 
-  //         <Message message={'Error updating Employee'} type={ERROR}></Message>
-  //       }
-  //     </div>
-  // </div>
 );
 
   return (
