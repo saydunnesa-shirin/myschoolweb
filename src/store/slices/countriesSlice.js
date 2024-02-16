@@ -68,15 +68,17 @@ const countriesSlice = createSlice({
           if(Country.id === action.payload.id){
             return {
               id: action.payload.id,
-              name: action.payload.name}
+              name: action.payload.name,
+              iso2Code: action.payload.iso2Code
+            }
           }
           return Country;
         });
 
     });
     builder.addCase(updateCountry.rejected, (state, action) => {
-              state.isLoading = false;
-              state.error = action.error;
+      state.isLoading = false;
+      state.error = action.error;
     });
 
     //Remove
@@ -110,7 +112,6 @@ function sortDataByName (dataList){
   });
 
   return sortedData;
-
 }
 
 export const CountriesAction = countriesSlice.actions;

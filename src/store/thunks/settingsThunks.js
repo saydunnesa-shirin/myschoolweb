@@ -3,23 +3,23 @@ import axios from 'axios';
 import {baseURL} from '../../constants';
 
 const fetchGenders = createAsyncThunk('genders/fetch', async() =>{
-    const  response = await axios.get(`${baseURL}/genders`);
+    const  response = await axios.get(`${baseURL}/types/genders`);
     await pause(1000);
     return response.data;
 });
 
 const fetchEmployeeTypes = createAsyncThunk('employeeTypes/fetch', async() =>{
-    const  response = await axios.get(`${baseURL}/employeeTypes`);
+    const  response = await axios.get(`${baseURL}/types/employeeTypes`);
     return response.data;
 });
 
 const fetchDesignations = createAsyncThunk('designations/fetch', async() =>{
-    const  response = await axios.get(`${baseURL}/designations`);
+    const  response = await axios.get(`${baseURL}/types/designations`);
     return response.data;
 });
 
 const fetchBloodGroups = createAsyncThunk('bloodGroups/fetch', async() =>{
-    const  response = await axios.get(`${baseURL}/bloodGroups`);
+    const  response = await axios.get(`${baseURL}/types/bloodGroups`);
     return response.data;
 });
 

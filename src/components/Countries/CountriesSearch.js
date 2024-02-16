@@ -13,9 +13,14 @@ const CountriesSearch = () => {
           dispatch(CountriesAction.changeCountriesSearchTerm(event.target.value));
   }
   return (
-    <div>
-          <TextBox optional={true} id="name" value={searchTerm && searchTerm} placeholder={'Country Name'}
-          onChange={handleSearchTermChange}/>
+    
+    <div className='pr-1 w-1/3'>
+          <TextBox optional={true} 
+          id="name" 
+          value={searchTerm && searchTerm} 
+          placeholder={'Country Name'}
+          onChange={handleSearchTermChange}
+          />
     </div>
   )
 }

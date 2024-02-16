@@ -182,6 +182,11 @@ const EmployeesList = () => {
       sortValue: (employee) => employee.employeeId,
     },
     {
+      label: 'Country',
+      render: (employee) => employee.countryName,
+      sortValue: (employee) => employee.countryName,
+    },
+    {
       label: 'First Name',
       render: (employee) => employee.firstName,
       sortValue: (employee) => employee.firstName,

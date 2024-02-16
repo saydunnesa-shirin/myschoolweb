@@ -101,7 +101,8 @@ const employeesSlice = createSlice({
               street: action.payload.street,
               city: action.payload.city,
               state: action.payload.state,
-              postalCode: action.payload.postalCode
+              postalCode: action.payload.postalCode,
+              countryName: action.payload.countryName
             }
           }
           return Employee;
