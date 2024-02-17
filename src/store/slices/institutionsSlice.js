@@ -72,7 +72,8 @@ const institutionsSlice = createSlice({
               id: action.payload.id,
               name: action.payload.name,
               address: action.payload.address,
-              countryId:action.payload.countryId
+              countryId:action.payload.countryId,
+              countryName: action.payload.countryName
             }
           }
           return Institution;

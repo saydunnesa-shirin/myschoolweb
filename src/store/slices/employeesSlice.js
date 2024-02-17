@@ -95,13 +95,16 @@ const employeesSlice = createSlice({
               mobile: action.payload.mobile,
 
               dateOfBirth: action.payload.dateOfBirth,
+              fatherName: action.payload.fatherName,
+              motherName: action.payload.motherName,
               genderId: action.payload.genderId,
               bloodGroupId: action.payload.bloodGroupId,
               countryId: action.payload.countryId,
               street: action.payload.street,
               city: action.payload.city,
               state: action.payload.state,
-              postalCode: action.payload.postalCode
+              postalCode: action.payload.postalCode,
+              countryName: action.payload.countryName
             }
           }
           return Employee;

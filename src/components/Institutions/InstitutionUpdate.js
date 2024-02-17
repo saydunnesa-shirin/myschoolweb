@@ -5,16 +5,13 @@ import { useSelector } from "react-redux";
 import { updateInstitution} from "../../store";
 import Button from '../Button';
 import TextBox from '../TextBox';
-import TextArea from '../TextArea';
 import Dropdown from '../Dropdown';
 import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
 import { ERROR } from '../../constants';
-import Modal from '../Modal';
 
-const InstitutionUpdate = ({data, onUpdateSuccess, onUpdateFormClose}) => {
-
+const InstitutionUpdate = ({data, onClose, onUpdateSuccess}) => {
 // //Update
 const initialInstitutionState = {
   id: data.id,
@@ -23,7 +20,7 @@ const initialInstitutionState = {
   countryId: data.countryId
 };
 
-const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
+const [isSubmitted, setIsSubmitted] = useState(false);
 const [institution, setInstitution] = useState(initialInstitutionState);
 const [validationError, setValidationError] = useState(false);
 const [doUpdateInstitution, isUpdatingInstitution, updatingInstitutionError] = useThunk(updateInstitution);
@@ -33,7 +30,7 @@ const countries = useSelector((state) => state.countries.data);
 const [selection, setSelection] = useState(null);
 
 useEffect(() => {
-  if(isUpdateSuccess && !isUpdatingInstitution && !updatingInstitutionError){
+  if(isSubmitted && !isUpdatingInstitution && !updatingInstitutionError){
     onUpdateSuccess();
   }
 
@@ -66,70 +63,106 @@ function isValid(){
   }
 }
 
-const handlInstitutionUpdate = () => {
-
+const handlInstitutionUpdate = (event) => {
+  event.preventDefault();
   const valid = isValid();
+  
   if(valid)
   {
     setValidationError(false);
     doUpdateInstitution(institution);
-    setIsUpdateSuccess(true);
+    setIsSubmitted(true);
     setSelection(null);
   }
 }     
-
-const actionBar = (
-  <div className='flex items-center border shadow'>
-      <Button secondary className='m-3'
-      onClick={onUpdateFormClose}
-      >Cancel</Button>
-      <Button primary
-      loding={isUpdatingInstitution} onClick={handlInstitutionUpdate}
-      >Update</Button>
-          { validationError && <p className="m-2 text-s text-red-600 dark:text-red-400">Please enter required field(s).</p> }
-      
-  </div>
-  );
-
-const modal = (
-  <Modal onClose={onUpdateFormClose} actionBar={actionBar}>
-
-    <div className='border shadow'>
-          <h1 className="text-xl m-2">Update Institution</h1>
-          <div className="sm:flex sm:items-center sm:justify-between sm:m-2 md:justify-start">
-            <div className='flex items-center m-2'>
-              <Label className='w-20' htmlFor="name">
-                Name
-              </Label>
-              <TextBox id="name" value={institution.name} placeholder="XYZ" 
-              onChange={handleNameChange} mandatory={validationError && institution.name.length === 0 && true}/>
-            </div>
-            <div className='flex items-center m-2'>
-              <Label className='w-20' htmlFor="address">
-                Addess
-              </Label>
-              <TextArea id="address" value={institution.address} 
-              placeholder="XYZ" onChange={handleAddressChange} mandatory={validationError && institution.address.length === 0 && true} />
-            </div>
-            <div className='flex items-center m-2'>
-              <Label className='w-18' htmlFor="Country">
-                Country
-              </Label>
-              <Dropdown options={countries} value={selection} onChange={handleSelect} mandatory={validationError && institution.countryId === null && true} />
-            </div>
-            
-            { 
-              isUpdateSuccess && !isUpdatingInstitution && updatingInstitutionError && 
-              <Message message={'Error updating Institution'} type={ERROR}></Message>
-            }
-          </div>
-        </div>
-  </Modal>
-);
-
   return (
     <div>
-      {modal}
+      <form className="border shadow p-2" onSubmit={handlInstitutionUpdate}>
+        <div className="space-y-12">
+          <div className="border-b border-gray-900/10 pb-12">
+            <div className='flex justify-between'>
+              <h2 className="text-base font-semibold leading-7 text-gray-900">
+                Institution Update
+              </h2>
+              <Button onClick={onClose}>x</Button>
+            </div>
+            
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-4 sm:col-start-1">
+                <Label>
+                  Name
+                </Label>
+                
+                <div className="mt-2">
+                  <TextBox
+                    autoFocus={true}
+                    name="name"
+                    id="name"
+                    value={institution.name} 
+                    placeholder="Tal Tech" onChange={handleNameChange} 
+                    mandatory={validationError && institution.name.length < 2 && true}
+                  />
+                </div>
+              </div>
+              
+              <div className="sm:col-span-2">
+                <Label>
+                  Country
+                </Label>
+                <div className="mt-2">
+                  <Dropdown 
+                    options={countries} 
+                    value={selection} 
+                    onChange={handleSelect} 
+                    mandatory={validationError && institution.countryId === null && true} 
+                  />
+                  
+                </div>
+              </div>
+              <div className="sm:col-span-4">
+                <Label>
+                  Address
+                </Label>
+                <div className="mt-2">
+                  <TextBox
+                    name="address"
+                    id="address"
+                    value={institution.address} 
+                    placeholder="Tallinn" onChange={handleAddressChange} 
+                    mandatory={validationError && institution.address.length < 2 && true}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 flex items-center justify-center gap-x-6">
+          <Button onClick={onClose} type="button" secondary>
+            Cancel
+          </Button>
+          <Button 
+          type="submit" 
+          primary
+          loding={isUpdatingInstitution} 
+          >
+            Save
+          </Button>
+          { 
+            validationError 
+            && <p className="m-2 text-s text-red-600 dark:text-red-400">
+                Please enter required field(s).
+              </p> 
+          }
+          { 
+            isSubmitted 
+            && !isUpdatingInstitution 
+            && updatingInstitutionError 
+            && <Message message={'Error creating institution'} type={ERROR}></Message>
+          }
+          
+        </div>
+      </form>
     </div>
   )
 }

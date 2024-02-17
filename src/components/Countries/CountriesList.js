@@ -86,15 +86,19 @@ let paging = <Paging currentPage={currentPage} pages={pages} navigatePrev={navig
             </Paging>
 
   return (
-    <div className="m-2">
-       <CountryAdd></CountryAdd>
-       <div className="flex flex-row justify-between items-center mb-2">
-          <h1 className="text-xl">Countries</h1>
+    <div className="p-2 m-2">
+      <CountryAdd></CountryAdd>
+      <br></br>
+      <div className='border shadow'>
+        
+        <div className="flex flex-row justify-between items-center mt-2 mb-2">
+          <h1 className="text-xl m-2">Countries</h1>
           <CountriesSearch></CountriesSearch>
-      </div>
+        </div>
         {content}
         {paging}
-        {isRemoveSuccess && <Message message={'Delete successfull!'} type={SUCCESS}></Message>}
+      </div>
+      {isRemoveSuccess && <Message message={'Delete successfull!'} type={SUCCESS}></Message>}
     </div>
   )
 }
