@@ -28,6 +28,8 @@ lastName: data.lastName,
 email:data.email,
 mobile:data.mobile,
 
+fatherName:data.fatherName,
+motherName:data.motherName,
 dateOfBirth:data.dateOfBirth,
 genderId:data.genderId,
 bloodGroupId:data.bloodGroupId,
@@ -95,6 +97,8 @@ const handleLastNameChange = (event) => setEmployee({ ...employee, lastName: eve
 const handleEmployeeIdChange = (event) => setEmployee({ ...employee, employeeId: event.target.value });
 const handleMobileChange = (event) => setEmployee({ ...employee, mobile: event.target.value.replace(/[a-z]/, '') });
 const handleEmailChange = (event) => setEmployee({ ...employee, email: event.target.value });
+const handleFatherNameChange = (event) => setEmployee({ ...employee, fatherName: event.target.value.replace(/[0-9]/, '') });
+const handleMotherNameChange = (event) => setEmployee({ ...employee, motherName: event.target.value.replace(/[0-9]/, '') });
 const handleStreetChange = (event) => setEmployee({ ...employee, street: event.target.value });
 const handleCityChange = (event) => setEmployee({ ...employee, city: event.target.value });
 const handleStateChange = (event) => setEmployee({ ...employee, state: event.target.value });
@@ -320,6 +324,32 @@ const updateForm = (
                 placeholder="+8801711483333" 
                 onChange={handleMobileChange} 
                 mandatory={validationError && employee.mobile.length < 5  && true}
+                />
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <Label>
+                Father name
+              </Label>
+              <div className="mt-2">
+                <TextBox
+                  id="fatherName" 
+                  value={employee.fatherName} 
+                  placeholder="XYZ" 
+                  onChange={handleFatherNameChange} 
+                />
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <Label>
+                Mother name
+              </Label>
+              <div className="mt-2">
+                <TextBox
+                  id="motherName" 
+                  value={employee.motherName} 
+                  placeholder="XYZ" 
+                  onChange={handleMotherNameChange} 
                 />
               </div>
             </div>

@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { updateInstitution} from "../../store";
 import Button from '../Button';
 import TextBox from '../TextBox';
-import TextArea from '../TextArea';
 import Dropdown from '../Dropdown';
 import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
@@ -64,9 +63,10 @@ function isValid(){
   }
 }
 
-const handlInstitutionUpdate = () => {
-
+const handlInstitutionUpdate = (event) => {
+  event.preventDefault();
   const valid = isValid();
+  
   if(valid)
   {
     setValidationError(false);
@@ -121,7 +121,7 @@ const handlInstitutionUpdate = () => {
               </div>
               <div className="sm:col-span-4">
                 <Label>
-                Address
+                  Address
                 </Label>
                 <div className="mt-2">
                   <TextBox

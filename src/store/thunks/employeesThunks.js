@@ -24,6 +24,8 @@ const addEmployee = createAsyncThunk('employees/add',  async (employee) => {
             mobile: employee.mobile,
 
             dateOfBirth: employee.dateOfBirth,
+            fatherName: employee.fatherName,
+            motherName: employee.motherName,
             genderId: employee.genderId,
             bloodGroupId: employee.bloodGroupId,
             countryId: employee.countryId,
@@ -56,6 +58,8 @@ const updateEmployee = createAsyncThunk('employees/update', async (employee) => 
             mobile: employee.mobile,
 
             dateOfBirth: employee.dateOfBirth,
+            fatherName: employee.fatherName,
+            motherName: employee.motherName,
             genderId: employee.genderId,
             bloodGroupId: employee.bloodGroupId,
             countryId: employee.countryId,

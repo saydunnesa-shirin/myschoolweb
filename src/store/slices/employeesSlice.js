@@ -95,6 +95,8 @@ const employeesSlice = createSlice({
               mobile: action.payload.mobile,
 
               dateOfBirth: action.payload.dateOfBirth,
+              fatherName: action.payload.fatherName,
+              motherName: action.payload.motherName,
               genderId: action.payload.genderId,
               bloodGroupId: action.payload.bloodGroupId,
               countryId: action.payload.countryId,
