@@ -2,14 +2,14 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchEmployees, fetchInstitutions, fetchDesignations, fetchEmployeeTypes, removeEmployee } from "../../store";
-import { EmployeesAction } from "../../store/slices/employeesSlice";
+import { fetchAcademicSessionTemplates, removeAcademicSessionTemplate, getEmployeeById } from "../../store";
+import { AcademicSessionTemplatesAction } from "../../store/slices/academicSessionTemplatesSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
 import Skeleton from "../Skeleton";
-import EmployeeAdd from "./EmployeeAdd";
-import EmployeeUpdate from "./EmployeeUpdate";
-import EmployeeSearch from "./EmployeeSearch";
+import AcademicSessionTemplateAdd from "./AcademicSessionTemplateAdd";
+import AcademicSessionTemplateUpdate from "./AcademicSessionTemplateUpdate";
+import AcademicSessionTemplateSearch from "./AcademicSessionTemplateSearch";
 import Message from "../Message";
 import { SUCCESS, ERROR } from '../../constants';
 import Paging from "../Paging";
@@ -17,43 +17,47 @@ import SortableTable from '../SortableTable';
 import Button from '../Button';
 import Modal from '../Modal';
 
-const EmployeesList = () => {
+const AcademicSessionTemplatesList = () => {
   const dispatch = useDispatch();
 
+  const [doFetchUser, isLoadingUser, loadingUserError] = useThunk(getEmployeeById);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   const [isRemoveSuccess, setIsRemoveSuccess] = useState(false);
-  const [doFetchEmployees, isLoadingEmployees, loadingEmployeesError] = useThunk(fetchEmployees);
+  const [doFetchAcademicSessionTemplates, isLoadingAcademicSessionTemplates, loadingAcademicSessionTemplatesError] = useThunk(fetchAcademicSessionTemplates);
   
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
-  const [doRemoveEmployee, isRemovingEmployee, removingEmployeeError] = useThunk(removeEmployee);
+  const [doRemoveAcademicSessionTemplate, isRemovingAcademicSessionTemplate, removingAcademicSessionTemplateError] = useThunk(removeAcademicSessionTemplate);
 
-  //dropdown lists
-  const [doFetchInstitutions] = useThunk(fetchInstitutions);
-  const [doFetchDesignations] = useThunk(fetchDesignations);
-  const [doFetchEmployeeTypes] = useThunk(fetchEmployeeTypes);
+
+  const user = useSelector((state) => state.employees.employee);
+  const getInstitution = async () => {
+    doFetchUser(3);
+    if(user != null)
+      doFetchAcademicSessionTemplates({institutionId: user.institutionId});
+  }
 
  //Fetch data
   useEffect(() => {
-    doFetchEmployees({});
-    doFetchInstitutions();
-    doFetchDesignations();
-    doFetchEmployeeTypes();
+    if(user != null){
+      doFetchAcademicSessionTemplates({institutionId: user.institutionId});
+    }
+    else{
+      getInstitution();
+    }
+  }, [user]);
 
-  }, [doFetchEmployees]);
-
-  const { employees } = useSelector(({ employees: { data, searchTerm }}) => {
+  const { academicSessionTemplates } = useSelector(({ academicSessionTemplates: { data, searchTerm }}) => {
     let dataList = data;
     
     if(searchTerm.length !== 0){
-      dataList = data.filter((item) => item.firstName.toLowerCase().startsWith(searchTerm.toLowerCase())); 
+      dataList = data.filter((item) => item.templateName.toLowerCase().startsWith(searchTerm.toLowerCase())); 
     }
 
     const sortedData = [...dataList].sort((a, b) => {
-      const valueA = a.firstName;
-      const valueB = b.firstName;
-      // const reverseOrder = sortOrder === 'asc' ? 1 : -1;
+      const valueA = a.templateName;
+      const valueB = b.templateName;
 
       if (typeof valueA === 'string') {
         return valueA.localeCompare(valueB);
@@ -63,28 +67,27 @@ const EmployeesList = () => {
     });
 
     return {
-      employees: sortedData
+      academicSessionTemplates: sortedData
     }
-
   }); 
   
  //Delete
  const [showModal, setShowModal] = useState(false);
- const [employee, setEmployee] = useState(null);
+ const [academicSessionTemplate, setAcademicSessionTemplate] = useState(null);
 
  const handleModalClose = () => setShowModal(false);
 
- const handleDeleteClick = (employee) => {
+ const handleDeleteClick = (academicSessionTemplate) => {
     setShowModal(true);
-    setEmployee(employee);
+    setAcademicSessionTemplate(academicSessionTemplate);
     setIsRemoveSuccess(false);
   }
 
  const confirmDelete = () =>{
-    doRemoveEmployee(employee);
+    doRemoveAcademicSessionTemplate(academicSessionTemplate);
     setShowModal(false);
 
-    if(!isRemovingEmployee && !removingEmployeeError){
+    if(!isRemovingAcademicSessionTemplate && !removingAcademicSessionTemplateError){
         setIsRemoveSuccess(true);
     }
  }
@@ -112,8 +115,8 @@ const EmployeesList = () => {
   //Add
   const handleAddFormClose = () => setShowAddForm(false);
   
-  const addEmployee = <div className='transition ease-out duration-5000'>
-    <EmployeeAdd onClose={handleAddFormClose}></EmployeeAdd>
+  const addAcademicSessionTemplate = <div className='transition ease-out duration-5000'>
+    <AcademicSessionTemplateAdd onClose={handleAddFormClose}></AcademicSessionTemplateAdd>
   </div>
 
   const handleAddCLick = () =>{
@@ -132,7 +135,7 @@ const EmployeesList = () => {
   }
 
   const updateForm = <div> 
-      <EmployeeUpdate data={employee} onClose={handleUpdateFormClose}
+      <AcademicSessionTemplateUpdate data={academicSessionTemplate} onClose={handleUpdateFormClose}
        onUpdateSuccess={handleUpdateSuccess} />
     </div>;
 
@@ -141,95 +144,68 @@ const EmployeesList = () => {
       setShowUpdateForm(false);
     await delay(200);
 
-    setEmployee(rowData);
+    setAcademicSessionTemplate(rowData);
     setShowUpdateForm(true);
     setIsUpdateSuccess(false);
     setShowAddForm(false);
   }
 
   //Paging
-  const dataPerPage = useSelector((state) => state.employees.dataPerPage);
-  const currentPage = useSelector((state) => state.employees.currentPage);
+  const dataPerPage = useSelector((state) => state.academicSessionTemplates.dataPerPage);
+  const currentPage = useSelector((state) => state.academicSessionTemplates.currentPage);
 
-  const totalPages = Math.ceil(employees.length / dataPerPage);
+  const totalPages = Math.ceil(academicSessionTemplates.length / dataPerPage);
   const pages = [...Array(totalPages + 1).keys()].slice(1);
   const indexOfLastPage = currentPage * dataPerPage;
   const indexofFirstPage = indexOfLastPage - dataPerPage;
 
-  const visibleEmployees = employees.slice(indexofFirstPage, indexOfLastPage);
+  const visibleAcademicSessionTemplates = academicSessionTemplates.slice(indexofFirstPage, indexOfLastPage);
 
   const navigatePrev = () => {
     if (currentPage !== 1) {
-      dispatch(EmployeesAction.onNavigatePrev());
+      dispatch(AcademicSessionTemplatesAction.onNavigatePrev());
     }
   };
 
   const navigateNext = () => {
     if (currentPage !== totalPages) {
-      dispatch(EmployeesAction.onNavigateNext());
+      dispatch(AcademicSessionTemplatesAction.onNavigateNext());
     }
   };
 
-  const handleCurrentPage = (_p) => dispatch(EmployeesAction.onClickCurrentPage(_p));
+  const handleCurrentPage = (_p) => dispatch(AcademicSessionTemplatesAction.onClickCurrentPage(_p));
 
-  const handleChangeDataPerpage = (e) => dispatch(EmployeesAction.onChangeTodosPerpage(e));
+  const handleChangeDataPerpage = (e) => dispatch(AcademicSessionTemplatesAction.onChangeTodosPerpage(e));
   
   //Table
   const config = [
     {
-      label: 'Employee ID',
-      render: (employee) => employee.employeeId,
-      sortValue: (employee) => employee.employeeId,
-    },
-    {
-      label: 'Country',
-      render: (employee) => employee.countryName,
-      sortValue: (employee) => employee.countryName,
-    },
-    {
-      label: 'First Name',
-      render: (employee) => employee.firstName,
-      sortValue: (employee) => employee.firstName,
-    },
-    {
-      label: 'Last Name',
-      render: (employee) => employee.lastName,
-      sortValue: (employee) => employee.lastName,
-    },
-    {
-      label: 'Email',
-      render: (employee) => employee.email,
-      sortValue: (employee) => employee.email,
-    },
-    {
-      label: 'Mobile',
-      render: (employee) => employee.mobile,
-      sortValue: (employee) => employee.mobile,
-    },
-
-    
+      label: 'Template',
+      render: (academicSessionTemplate) => academicSessionTemplate.templateName,
+      sortValue: (academicSessionTemplate) => academicSessionTemplate.templateName,
+    }
   ];
 
-  const keyFn = (employee) => {
-    return employee.id;
+  const keyFn = (academicSessionTemplate) => {
+    return academicSessionTemplate.id;
   };
 
   let content;
 
-  if(isLoadingEmployees){
+  if(isLoadingAcademicSessionTemplates){
     content = <Skeleton times={6} className="h-8 w-full"></Skeleton>;
   }
-  else if(loadingEmployeesError){
-    content = <div> <Message message={'Error fetching employees'} type={ERROR}></Message>  </div>
+  else if(loadingAcademicSessionTemplatesError){
+    content = <div> <Message message={'Error fetching academicSessionTemplates'} type={ERROR}></Message>  </div>
   }
   else{
     content = <div>
       <SortableTable 
-        data={visibleEmployees} 
+        data={visibleAcademicSessionTemplates} 
         config={config} 
         keyFn={keyFn} 
         onDeleteClick={handleDeleteClick}
-        isRemovingRecord={isRemovingEmployee}
+        isRemovingRecord={isRemovingAcademicSessionTemplate}
         onUpdateClick={handleUpdateClick}
       />
       <Paging currentPage={currentPage} pages={pages} navigatePrev={navigatePrev} navigateNext={navigateNext} 
@@ -242,18 +218,18 @@ const EmployeesList = () => {
     <div className="p-2 m-2">
       <div className='border shadow'>
         <div className="flex flex-row justify-between items-center mt-2 mb-2">
-          <h1 className="text-xl m-2">Employees</h1>
-          <EmployeeSearch></EmployeeSearch>
+          <h1 className="text-xl m-2">Templates</h1>
+          <AcademicSessionTemplateSearch></AcademicSessionTemplateSearch>
         </div>
         {content}
       </div>
       <br></br>
       {!showAddForm && <div className='p-3'>
         <Button link onClick={handleAddCLick}>
-          + Employee Add
+          + Add
         </Button>
       </div> }
-      {showAddForm && addEmployee}
+      {showAddForm && addAcademicSessionTemplate}
       {showUpdateForm && updateForm}
       
       {isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}
@@ -263,4 +239,4 @@ const EmployeesList = () => {
   )
 }
 
-export default EmployeesList;
+export default AcademicSessionTemplatesList;

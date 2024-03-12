@@ -17,9 +17,11 @@ function Menubar() {
 
   const links = [
     { label: 'Home', path: '/' },
-    { label: 'Institutions', path: '/institutions' }, // institutions
-    { label: 'Employees', path: '/employees' },
+    { label: 'Institutions', path: '/institutions' },
     { label: 'Countries', path: '/countries' },
+    { label: 'Employees', path: '/employees' },
+    { label: 'Session Templates', path: '/academicSessionTemplates' },
+    { label: 'Sessions', path: '/academicSessions' }
   ];
 
   const renderedLinks = links.map((link) => {

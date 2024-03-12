@@ -2,8 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {baseURL} from '../../constants';
 
-const fetchEmployees = createAsyncThunk('employees/fetch', async() =>{
-    const  response = await axios.post(`${baseURL}/employees/query`, {});
+const fetchEmployees = createAsyncThunk('employees/fetch', async(query) =>{
+    const  response = await axios.post(`${baseURL}/employees/query`, {
+        institutionId: query.institutionId,
+        designationId: query.designationId
+    });
     await pause(1000);
     return response.data;
 });
@@ -39,7 +42,7 @@ const addEmployee = createAsyncThunk('employees/add',  async (employee) => {
 });
 
 const getEmployeeById = createAsyncThunk('employees/getById', async (id) => {
-    const response = await axios.get(`${baseURL}/employees?id=${id}`);
+    const response = await axios.get(`${baseURL}/employees/${id}`);
     return response.data;
 });
 

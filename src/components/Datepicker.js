@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import DatePicker from "react-tailwindcss-datepicker"; 
 import className from 'classnames';
 
@@ -7,6 +7,7 @@ const Datepicker = ({
   changeDate,
   mandatory = false,
   asSingleDate = true,
+  reset = false,
   ...rest
 }) => {
 
@@ -18,9 +19,24 @@ const classes = className(
   }
 );
 
+function dateFormat(initialValue){
+  return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(initialValue);
+}
+
+//Set Details data
+useEffect(() => {
+  if(reset)
+  {
+    setDateValue({
+      startDate : null,//initialValue,
+      endDate: null//initialValue
+    })
+  }
+}, [reset]);
+
 const [dateValue, setDateValue] = useState({
-  startDate : initialValue === null? new Date() :  initialValue,
-  endDate: initialValue === null? new Date() :  initialValue,
+  startDate : initialValue,
+  endDate: initialValue
 });
 
 //DatePicker
@@ -30,22 +46,21 @@ const handleDateChange = (newValue) => {
       changeDate(newValue.startDate);
     else
       changeDate(newValue);
-
 }
 
   return (
     <div>
         <DatePicker 
-        inputClassName={classes}
-        placeholder={"DD/MM/YYYY"} 
-        popoverDirection="down" 
-        startWeekOn="mon"
-        containerClassName="relative"
-        asSingle={asSingleDate} 
-        useRange={!asSingleDate} 
-        value={dateValue} 
-        onChange={handleDateChange} 
-        displayFormat={"DD/MM/YYYY"} 
+          inputClassName={classes}
+          placeholder={"DD/MM/YYYY"} 
+          popoverDirection="down" 
+          startWeekOn="mon"
+          containerClassName="relative"
+          asSingle={asSingleDate} 
+          useRange={!asSingleDate} 
+          value={dateValue} 
+          onChange={handleDateChange} 
+          displayFormat={"DD/MM/YYYY"} 
         />
     </div>
   )
