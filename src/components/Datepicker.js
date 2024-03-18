@@ -28,8 +28,8 @@ useEffect(() => {
   if(reset)
   {
     setDateValue({
-      startDate : null,//initialValue,
-      endDate: null//initialValue
+      startDate : initialValue,
+      endDate: initialValue
     })
   }
 }, [reset]);
@@ -61,6 +61,7 @@ const handleDateChange = (newValue) => {
           value={dateValue} 
           onChange={handleDateChange} 
           displayFormat={"DD/MM/YYYY"} 
+          readOnly={true}
         />
     </div>
   )

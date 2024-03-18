@@ -7,7 +7,7 @@ import TextBox from '../TextBox';
 import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
-import { SUCCESS, ERROR } from '../../constants';
+import { SUCCESS, ERROR } from '../../helpers/constants';
 
 const CountryAdd = () => {
 

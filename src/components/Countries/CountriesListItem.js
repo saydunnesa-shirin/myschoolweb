@@ -10,7 +10,7 @@ import CountryUpdate from './CountryUpdate';
 import Message from '../Message';
 import Modal from '../Modal';
 
-import { SUCCESS, ERROR } from '../../constants';
+import { SUCCESS, ERROR } from '../../helpers/constants';
 
 const CountriesListItem = ({country, setIsRemoveSuccess }) => {
  

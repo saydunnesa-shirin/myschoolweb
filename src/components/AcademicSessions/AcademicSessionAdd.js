@@ -11,7 +11,7 @@ import TextArea from '../TextArea';
 import Datepicker from '../Datepicker';
 import Label from '../Label';
 import Message from '../Message';
-import { SUCCESS, ERROR } from '../../constants';
+import { SUCCESS, ERROR } from '../../helpers/constants';
 import AcademicClassesList from './AcademicClassesList';
 
 const AcademicSessionAdd = ({onClose, isLoadingAcademicSessionTemplates, loadingAcademicSessionTemplatesError}) => {
@@ -21,15 +21,17 @@ const academicSessionTemplates = useSelector((state) => state.academicSessionTem
 const initialAcademicSessionState = {
   institutionId: user.institutionId,
   name: "",
-  startDate: null, //new Date(new Date().getFullYear(), 0, 1),
-  endDate: null,//new Date(new Date().getFullYear(), 11, 31),
+  startDate: new Date(`${new Date().getFullYear()}-01-01`), //new Date(new Date().getFullYear(), 0, 1),
+  endDate: new Date(`${new Date().getFullYear()}-12-31`),//new Date(new Date().getFullYear(), 11, 31),
   description: "",
   academicClasses: []
 };
 //Add
 const [doCreateAcademicSession, isCreatingAcademicSession, creatingAcademicSessionError] = useThunk(addAcademicSession);
+
 const [academicSession, setAcademicSession] = useState(initialAcademicSessionState);
 const [validationError, setValidationError] = useState(false);
+const [validationErrorMessage, setValidationErrorMessage] = useState('');
 const [isSubmitted, setIsSubmitted] = useState(false);
 
 const handleNameChange = (event) => {
@@ -51,10 +53,22 @@ const handleStartDateChange = (newValue) => setAcademicSession({ ...academicSess
 const handleEndDateChange = (newValue) => setAcademicSession({ ...academicSession, endDate: newValue});
 
 function isValid(){
-  if(academicSession.name.length === 0 || academicSession.startDate == null || academicSession.endDate == null){
+  if(academicSession.name.length === 0 
+    || academicSession.startDate == null 
+    || academicSession.endDate == null 
+    ){
+    setValidationErrorMessage('Please enter required field(s).');
     setValidationError(true);
     return false;
-  }else{
+  }
+  else if(academicSession.startDate != null 
+          && academicSession.endDate != null 
+          && academicSession.startDate > academicSession.endDate){
+    setValidationErrorMessage('Invalid date! Start date can not be greater than end date.');
+    setValidationError(true);
+    return false;
+  }
+  else{
     setValidationError(false);
     return true;
   }
@@ -97,7 +111,7 @@ function addDetail(){
   });
 }
 
-const handleAcademicClassesCreate = (rowData) => {
+const handleAcademicClassesCreate = (rowData, isActive) => {
 
     setAcademicSession((preAcademicSession) =>({ 
       ...preAcademicSession,
@@ -106,7 +120,7 @@ const handleAcademicClassesCreate = (rowData) => {
       if (academicClass.academicSessionTemplateId === rowData.academicSessionTemplateId) {
         // Create a *new* object with changes
         return { ...academicClass, 
-                isActive: true,
+                isActive: isActive? !academicClass.isActive : academicClass.isActive,
                 name: rowData.name,
                 teacherId: rowData.teacherId
                };
@@ -193,30 +207,19 @@ const handleAcademicClassesCreate = (rowData) => {
           <br></br>
           <AcademicClassesList 
             institutionId={user.institutionId}
-            academicSessionTemplates={academicSessionTemplates}
-            isLoadingAcademicSessionTemplates={isLoadingAcademicSessionTemplates} 
-            loadingAcademicSessionTemplatesError={loadingAcademicSessionTemplatesError} 
-            handleAcademicClassesUpdate={handleAcademicClassesCreate}
-            isCreatingAcademicSession={isCreatingAcademicSession}
+            detailList={academicSessionTemplates}
+            isLoding={isLoadingAcademicSessionTemplates} 
+            loadingError={loadingAcademicSessionTemplatesError} 
+            handleAcademicClassesAdd={handleAcademicClassesCreate}
+            isCreatingMaster={isCreatingAcademicSession}
           ></AcademicClassesList>
         </div>
       </div>
-
       <div className="mt-6 flex items-center justify-center gap-x-6">
-        <Button onClick={onClose} type="button" secondary>
-          Cancel
-        </Button>
-        <Button 
-        type="submit" 
-        primary
-        loding={isCreatingAcademicSession} 
-        >
-          Save
-        </Button>
         { 
           validationError 
           && <p className="m-2 text-s text-red-600 dark:text-red-400">
-              Please enter required field(s).
+              {validationErrorMessage}
             </p> 
         }
         { 
@@ -231,6 +234,18 @@ const handleAcademicClassesCreate = (rowData) => {
           && !creatingAcademicSessionError 
           && <Message message={'Save successfull!'} type={SUCCESS}></Message>
         }
+      </div>
+      <div className="mt-6 flex items-center justify-center gap-x-6">
+        <Button onClick={onClose} type="button" secondary>
+          Cancel
+        </Button>
+        <Button 
+        type="submit" 
+        primary
+        loding={isCreatingAcademicSession} 
+        >
+          Save
+        </Button>
       </div>
     </form>
   )

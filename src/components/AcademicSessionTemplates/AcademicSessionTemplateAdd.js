@@ -9,7 +9,7 @@ import Button from '../Button';
 import TextBox from '../TextBox';
 import Label from '../Label';
 import Message from '../Message';
-import { SUCCESS, ERROR } from '../../constants';
+import { SUCCESS, ERROR } from '../../helpers/constants';
 
 const AcademicSessionTemplateAdd = ({onClose}) => {
 const user = useSelector((state) => state.employees.employee);

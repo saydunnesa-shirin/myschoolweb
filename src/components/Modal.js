@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import { useEffect } from 'react';
 import classNames from 'classnames';
-import { MODAL_SIZE_LARGE, MODAL_SIZE_MEDIUM } from '../constants';
+import { MODAL_SIZE_LARGE, MODAL_SIZE_MEDIUM } from '../helpers/constants';
 
 function Modal({ onClose, children, actionBar, size }) {
   useEffect(() => {

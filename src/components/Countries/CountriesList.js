@@ -12,7 +12,7 @@ import CountriesListItem from "./CountriesListItem";
 import CountryAdd from "./CountryAdd";
 import CountriesSearch from "./CountriesSearch";
 import Message from "../Message";
-import { SUCCESS, ERROR } from '../../constants';
+import { SUCCESS, ERROR } from '../../helpers/constants';
 import Paging from "../Paging";
 
 const CountriesList = () => {

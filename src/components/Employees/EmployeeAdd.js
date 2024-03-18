@@ -12,7 +12,7 @@ import Button from '../Button';
 import Dropdown from '../Dropdown';
 import Label from '../Label';
 import Message from '../Message';
-import {SUCCESS, ERROR} from '../../constants';
+import {SUCCESS, ERROR} from '../../helpers/constants';
 
 export default function EmployeeAdd({onClose}) {
 

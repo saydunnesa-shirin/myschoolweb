@@ -8,7 +8,7 @@ import TextBox from '../TextBox';
 import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
-import { ERROR } from '../../constants';
+import { ERROR } from '../../helpers/constants';
 
 const AcademicSessionTemplateUpdate = ({data, onClose, onUpdateSuccess}) => {
 

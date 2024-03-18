@@ -11,7 +11,7 @@ import EmployeeAdd from "./EmployeeAdd";
 import EmployeeUpdate from "./EmployeeUpdate";
 import EmployeeSearch from "./EmployeeSearch";
 import Message from "../Message";
-import { SUCCESS, ERROR } from '../../constants';
+import { SUCCESS, ERROR } from '../../helpers/constants';
 import Paging from "../Paging";
 import SortableTable from '../SortableTable';
 import Button from '../Button';

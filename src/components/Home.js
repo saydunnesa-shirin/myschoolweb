@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import { GoSync } from 'react-icons/go';
 
 import Message from "./Message";
-import { ERROR } from '../constants';
+import { ERROR } from '../helpers/constants';
 
 const Home = () => {
   const isLoading = useSelector((state) => state.settings.isLoading);

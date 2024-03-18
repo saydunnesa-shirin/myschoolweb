@@ -2,30 +2,32 @@ import React from 'react';
 
 import Skeleton from "../Skeleton";
 import Message from '../Message';
-import { ERROR } from '../../constants';
+import { ERROR } from '../../helpers/constants';
 import AcademicClassesListItem from './AcademicClassesListItem';
 
-const AcademicClassesList = ({institutionId, academicSessionTemplates, isLoadingAcademicSessionTemplates, loadingAcademicSessionTemplatesError, handleAcademicClassesUpdate, isCreatingAcademicSession}) => {
+const AcademicClassesList = ({isUpdate = false, institutionId, detailList, isLoding, loadingError, handleAcademicClassesAdd, isCreatingMaster}) => {
 
-const handleAcademicClassescChange = (rowData) => {
-  handleAcademicClassesUpdate(rowData);
+const handleAcademicClassescChange = (rowData, isActive) => {
+  handleAcademicClassesAdd(rowData, isActive);
 }
 
 let detailContent;
 
-  if(isLoadingAcademicSessionTemplates || isCreatingAcademicSession){
+  if(isLoding || isCreatingMaster){
     detailContent = <Skeleton times={6} className="h-8 w-full"></Skeleton>;
   }
-  else if(loadingAcademicSessionTemplatesError){
+  else if(loadingError){
     detailContent = <div> <Message message={'Error fetching templates'} type={ERROR}></Message>  </div>
   }
   else{
-    detailContent = academicSessionTemplates.map((academicSessionTemplate) => {
+    detailContent = detailList.map((detail) => {
       return(
-      <AcademicClassesListItem key={academicSessionTemplate.id}
-        academicSessionTemplate={academicSessionTemplate} 
+      <AcademicClassesListItem 
+        isUpdate={isUpdate}
+        key={detail.id}
+        detail={detail} 
         institutionId={institutionId}
-        handleAcademicClassescChange={(rowData) => handleAcademicClassesUpdate(rowData)}
+        handleAcademicClassescChange={(rowData, isActive) => handleAcademicClassescChange(rowData, isActive)}
       ></AcademicClassesListItem>
       )
     });

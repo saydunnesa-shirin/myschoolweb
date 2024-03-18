@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {baseURL} from '../../constants';
+import {baseURL} from '../../helpers/constants';
 
 const fetchAcademicSessions = createAsyncThunk('academicSessions/fetch', async(query) =>{
     await pause(1000);
@@ -31,7 +31,8 @@ const addAcademicSession = createAsyncThunk('academicSessions/add',  async (acad
 });
 
 const updateAcademicSession = createAsyncThunk('academicSessions/update', async (academicSession) => {
-  const response = await axios.put(`${baseURL}/academicSessions`, {
+    console.log(academicSession)
+  const response = await axios.put(`${baseURL}/academicSessions/update`, {
         id:academicSession.id,
         name:academicSession.name,
         description:academicSession.description,

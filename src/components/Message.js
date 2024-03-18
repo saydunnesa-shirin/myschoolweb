@@ -3,7 +3,7 @@ import { useEffect  } from "react";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { SUCCESS, ERROR } from '../constants';
+import { SUCCESS, ERROR } from '../helpers/constants';
 
 const Message = ({message, type}) => {
           
