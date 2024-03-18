@@ -10,7 +10,7 @@ import TextBox from '../TextBox';
 import Dropdown from '../Dropdown';
 import Label from '../Label';
 import Message from '../Message';
-import { SUCCESS, ERROR } from '../../constants';
+import { SUCCESS, ERROR } from '../../helpers/constants';
 
 const InstitutionAdd = ({onClose}) => {
 

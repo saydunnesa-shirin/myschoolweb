@@ -1,35 +1,35 @@
 import React from 'react';
-import { useState  } from "react";
+import { useState, useEffect  } from "react";
 import { useSelector } from "react-redux";
 import Panel from '../Panel';
 import Dropdown from '../Dropdown';
 import TextBox from '../TextBox';
 
-const AcademicClassesListItem = ({academicSessionTemplate, institutionId, handleAcademicClassescChange}) => {
+const AcademicClassesListItem = ({isUpdate = false, detail, institutionId, handleAcademicClassescChange}) => {
 
 const initialAcademicClassState = {
+id: isUpdate ? detail.id : 0,
 institutionId: institutionId,
-teacherId: null,
-academicSessionTemplateId: academicSessionTemplate.id,
-name: academicSessionTemplate.templateName,
-isActive: false
+teacherId: isUpdate ? detail.teacherId : null,
+academicSessionTemplateId: detail.id,
+name: isUpdate ? detail.name : detail.templateName,
+isActive: isUpdate ? detail.isActive : false
 };
- 
+
 const [validationError, setValidationError] = useState(false);
 const [academicClass, setAcademicClass] = useState(initialAcademicClassState);
-const [isActive, setIsActive] = React.useState(false);
 
 const handleChange = () => {
   if(academicClass.name !== null && academicClass.name.length > 0  && academicClass.institutionId !== null && academicClass.teacherId !== null)
   {
-    setIsActive(true);
-    setAcademicClass({ ...academicClass, isActive: !isActive });
-    handleAcademicClassescChange(academicClass)
+    setAcademicClass({ ...academicClass, isActive: !academicClass.isActive });
+
+    handleAcademicClassescChange(academicClass, true);
     setValidationError(false);
   }
   else{
     setValidationError(true);
-    setIsActive(false);
+    setAcademicClass({ ...academicClass, isActive: false });
   }
 }
 
@@ -50,15 +50,24 @@ const [teacherSelection, setTeacherSelection] = useState(null);
 const handleTeacherSelect = (option) => {
   setTeacherSelection(option);
   setAcademicClass({ ...academicClass, teacherId: option.id });
+  handleAcademicClassescChange(academicClass, false);
 };
 
 const handleNameChange = (event) => {
   setAcademicClass({ ...academicClass, name: event.target.value });
+  handleAcademicClassescChange(academicClass, false);
 }
+
+useEffect(() => {
+  if( detail.teacherId !== null && teachers != null){
+    const teacher = teachers.filter((item) => item.id === detail.teacherId);
+    setTeacherSelection(teacher[0]); 
+  }
+}, []);
 
 return(
       <div>
-          <Panel key={academicSessionTemplate.id}> 
+          <Panel key={detail.id}> 
             <div className='space-y-12'>
                 <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                   <div className="sm:col-span-0.5 sm:col-start-1">
@@ -66,7 +75,7 @@ return(
                       <input 
                         type='checkbox' 
                         className='p-2 mr-2 text-xl'
-                        checked={isActive}
+                        checked={academicClass.isActive}
                         onChange={handleChange}
                         ></input>
                     </div>
@@ -77,10 +86,10 @@ return(
                         name="name"
                         id="name"
                         value={academicClass.name} 
-                        placeholder="Class I" onChange={handleNameChange} 
+                        placeholder="Class I" 
+                        onChange={handleNameChange} 
                         mandatory={validationError && academicClass.name.length < 2 && true}
-                        />
-                    
+                      />
                     </div>
                   </div>
                   <div className="sm:col-span-3">
@@ -89,7 +98,7 @@ return(
                         value={teacherSelection} 
                         onChange={handleTeacherSelect} 
                         mandatory={validationError && academicClass.teacherId === null && true} 
-                        />
+                      />
                     </div>
                   </div>
                 </div>

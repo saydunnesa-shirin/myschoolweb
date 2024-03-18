@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {baseURL} from '../../constants';
+import {baseURL} from '../../helpers/constants';
 
 const fetchAcademicSessionTemplates = createAsyncThunk('academicSessionTemplates/fetch', async(query) =>{
     await pause(1000);

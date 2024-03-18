@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {baseURL} from '../../constants';
+import {baseURL} from '../../helpers/constants';
 
 const fetchEmployees = createAsyncThunk('employees/fetch', async(query) =>{
     const  response = await axios.post(`${baseURL}/employees/query`, {

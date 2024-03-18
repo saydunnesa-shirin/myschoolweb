@@ -11,7 +11,7 @@ import TextArea from '../TextArea';
 import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
-import { ERROR } from '../../constants';
+import { ERROR } from '../../helpers/constants';
 import AcademicClassesList from './AcademicClassesList';
 
 const AcademicSessionUpdate = ({onClose, onUpdateSuccess, isLoading, loadingError}) => {
@@ -19,27 +19,28 @@ const AcademicSessionUpdate = ({onClose, onUpdateSuccess, isLoading, loadingErro
 const data = useSelector((state) => state.academicSessions.academicSession);
 
 const user = useSelector((state) => state.employees.employee);
-// //Update
+// Update
 const initialAcademicSessionState = {
   id: data.id,
   institutionId: user.institutionId,
   name: data.name,
   startDate: data.startDate,
   endDate: data.endDate,
-  description: data.description
+  description: data.description,
+  academicClasses: data.academicClasses
 };
+const [doUpdateAcademicSession, isUpdatingAcademicSession, updatingAcademicSessionError] = useThunk(updateAcademicSession);
 
 const [isSubmitted, setIsSubmitted] = useState(false);
 const [academicSession, setAcademicSession] = useState(initialAcademicSessionState);
 const [validationError, setValidationError] = useState(false);
-const [doUpdateAcademicSession, isUpdatingAcademicSession, updatingAcademicSessionError] = useThunk(updateAcademicSession);
+const [validationErrorMessage, setValidationErrorMessage] = useState('');
 
 useEffect(() => {
   if(isSubmitted && !isUpdatingAcademicSession && !updatingAcademicSessionError){
     onUpdateSuccess();
   }
 }, [isUpdatingAcademicSession]);
-
 
 const handleNameChange = (event) => {
   setAcademicSession({ 
@@ -60,11 +61,22 @@ const handleStartDateChange = (newValue) => setAcademicSession({ ...academicSess
 const handleEndDateChange = (newValue) => setAcademicSession({ ...academicSession, endDate: newValue});
 
 function isValid(){
-  if(academicSession.name.length === 0 || academicSession.startDate == null || academicSession.endDate == null){
-
+  if(academicSession.name.length === 0 
+    || academicSession.startDate == null 
+    || academicSession.endDate == null 
+    ){
+    setValidationErrorMessage('Please enter required field(s).');
     setValidationError(true);
     return false;
-  }else{
+  }
+  else if(academicSession.startDate != null 
+          && academicSession.endDate != null 
+          && academicSession.startDate > academicSession.endDate){
+    setValidationErrorMessage('Invalid date! Start date can not be greater than end date.');
+    setValidationError(true);
+    return false;
+  }
+  else{
     setValidationError(false);
     return true;
   }
@@ -73,7 +85,8 @@ function isValid(){
 const handlAcademicSessionUpdate = (event) => {
   event.preventDefault();
   const valid = isValid();
-  
+  console.log(academicSession)
+
   if(valid)
   {
     setValidationError(false);
@@ -82,26 +95,25 @@ const handlAcademicSessionUpdate = (event) => {
   }
 }  
 
-const handleAcademicClassesUpdate = (rowData) => {
+const handleAcademicClassesUpdate = (rowData, isActive) => {
+    setAcademicSession((preAcademicSession) =>({ 
+      ...preAcademicSession,
+      academicClasses:
+      academicSession.academicClasses.map(academicClass => {
+      if (academicClass.id === rowData.id) {
+        // Create a *new* object with changes
+        return { ...academicClass, 
+                isActive: isActive? !academicClass.isActive : academicClass.isActive,
+                name: rowData.name,
+                teacherId: rowData.teacherId
+              };
+      } else {
+        // No changes
+        return academicClass;
+      }
+    })
 
-  setAcademicSession((preAcademicSession) =>({ 
-    ...preAcademicSession,
-    academicClasses:
-    academicSession.academicClasses.map(academicClass => {
-    if (academicClass.academicSessionTemplateId === rowData.academicSessionTemplateId) {
-      // Create a *new* object with changes
-      return { ...academicClass, 
-              isActive: true,
-              name: rowData.name,
-              teacherId: rowData.teacherId
-             };
-    } else {
-      // No changes
-      return academicClass;
-    }
-  })
-
-}));   
+  }));   
 }
 
   return (
@@ -120,14 +132,14 @@ const handleAcademicClassesUpdate = (rowData) => {
                   <Label>
                     Session
                   </Label>
-                  
                   <div className="mt-2">
                     <TextBox
                       autoFocus={true}
                       name="name"
                       id="name"
                       value={academicSession.name} 
-                      placeholder="Class I" onChange={handleNameChange} 
+                      placeholder="Class I" 
+                      onChange={handleNameChange}
                       mandatory={validationError && academicSession.name.length < 2 && true}
                     />
                   </div>
@@ -136,7 +148,6 @@ const handleAcademicClassesUpdate = (rowData) => {
                   <Label>
                     Start Date
                   </Label>
-                  
                   <div className="mt-2">
                     <Datepicker 
                       initialValue={academicSession.startDate ? academicSession.startDate : null}
@@ -149,7 +160,6 @@ const handleAcademicClassesUpdate = (rowData) => {
                   <Label>
                     End Date
                   </Label>
-                  
                   <div className="mt-2">
                     <Datepicker 
                       initialValue={academicSession.endDate ? academicSession.endDate : null}
@@ -175,12 +185,13 @@ const handleAcademicClassesUpdate = (rowData) => {
             </div>
             <br></br>
             <AcademicClassesList 
+              isUpdate={true}
               institutionId={user.institutionId}
-              academicSessionTemplates={data.academicClasses}
-              isLoadingAcademicSessionTemplates={isLoading} 
-              loadingAcademicSessionTemplatesError={loadingError} 
-              handleAcademicClassesUpdate={handleAcademicClassesUpdate}
-              isCreatingAcademicSession={isUpdatingAcademicSession}
+              detailList={data.academicClasses}
+              isLoding={isLoading} 
+              loadingError={loadingError} 
+              handleAcademicClassesAdd={handleAcademicClassesUpdate}
+              isCreatingMaster={isUpdatingAcademicSession}
             ></AcademicClassesList>
           </div>
         </div>
@@ -196,9 +207,9 @@ const handleAcademicClassesUpdate = (rowData) => {
             Save
           </Button>
           { 
-            validationError 
+            validationError
             && <p className="m-2 text-s text-red-600 dark:text-red-400">
-                Please enter required field(s).
+                {validationErrorMessage}
               </p> 
           }
           { 

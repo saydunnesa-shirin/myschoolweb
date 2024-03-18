@@ -11,7 +11,8 @@ import AcademicSessionAdd from "./AcademicSessionAdd";
 import AcademicSessionUpdate from "./AcademicSessionUpdate";
 import AcademicSessionSearch from "./AcademicSessionSearch";
 import Message from "../Message";
-import { SUCCESS, ERROR } from '../../constants';
+import { SUCCESS, ERROR } from '../../helpers/constants';
+import { displayToLocaleDateString } from '../../helpers/utils';
 import Paging from "../Paging";
 import SortableTable from '../SortableTable';
 import Button from '../Button';
@@ -206,11 +207,11 @@ const AcademicSessionsList = () => {
     },
     {
       label: 'Start Date',
-      render: (academicSession) => academicSession.startDate
+      render: (academicSession) => displayToLocaleDateString(academicSession.startDate)
     },
     {
       label: 'End Date',
-      render: (academicSession) => academicSession.endDate
+      render: (academicSession) => displayToLocaleDateString(academicSession.endDate)
     }
   ];
 

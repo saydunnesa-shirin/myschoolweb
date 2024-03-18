@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {baseURL} from '../../constants';
+import {baseURL} from '../../helpers/constants';
 
 const fetchGenders = createAsyncThunk('genders/fetch', async() =>{
     const  response = await axios.get(`${baseURL}/types/genders`);
