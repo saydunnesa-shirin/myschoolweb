@@ -6,6 +6,8 @@ import { academicSessionsReducer } from './slices/academicSessionsSlice';
 
 import { countriesReducer } from './slices/countriesSlice';
 import { employeesReducer } from './slices/employeesSlice';
+import { studentsReducer } from './slices/studentsSlice';
+
 import { institutionsReducer } from './slices/institutionsSlice';
 import { settingsReducer } from './slices/settingsSlice';
 
@@ -15,6 +17,7 @@ export const store = configureStore({
       academicSessions: academicSessionsReducer,
       countries: countriesReducer,
       employees: employeesReducer,
+      students: studentsReducer,
       institutions: institutionsReducer,
       settings: settingsReducer
     },
@@ -27,5 +30,7 @@ export * from './thunks/academicSessionsThunks';
 
 export *  from './thunks/countriesThunks';
 export *  from './thunks/employeesThunks';
+export *  from './thunks/studentsThunks';
+
 export * from './thunks/institutionsThunks';
 export * from './thunks/settingsThunks';

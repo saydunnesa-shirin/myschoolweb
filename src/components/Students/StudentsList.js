@@ -2,14 +2,14 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchAcademicSessionTemplates, removeAcademicSessionTemplate, getEmployeeById } from "../../store";
-import { AcademicSessionTemplatesAction } from "../../store/slices/academicSessionTemplatesSlice";
+import { fetchStudents, fetchInstitutions, removeStudent, getEmployeeById } from "../../store";
+import { StudentsAction } from "../../store/slices/studentsSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
 import Skeleton from "../Skeleton";
-import AcademicSessionTemplateAdd from "./AcademicSessionTemplateAdd";
-import AcademicSessionTemplateUpdate from "./AcademicSessionTemplateUpdate";
-import AcademicSessionTemplateSearch from "./AcademicSessionTemplateSearch";
+import StudentAdd from "./StudentAdd";
+import StudentUpdate from "./StudentUpdate";
+import StudentSearch from "./StudentSearch";
 import Message from "../Message";
 import { SUCCESS, ERROR } from '../../helpers/constants';
 import Paging from "../Paging";
@@ -17,47 +17,53 @@ import SortableTable from '../SortableTable';
 import Button from '../Button';
 import Modal from '../Modal';
 
-const AcademicSessionTemplatesList = () => {
+const StudentsList = () => {
   const dispatch = useDispatch();
 
   const [doFetchUser, isLoadingUser, loadingUserError] = useThunk(getEmployeeById);
+
   const [showAddForm, setShowAddForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   const [isRemoveSuccess, setIsRemoveSuccess] = useState(false);
-  const [doFetchAcademicSessionTemplates, isLoadingAcademicSessionTemplates, loadingAcademicSessionTemplatesError] = useThunk(fetchAcademicSessionTemplates);
+  const [doFetchStudents, isLoadingStudents, loadingStudentsError] = useThunk(fetchStudents);
   
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
-  const [doRemoveAcademicSessionTemplate, isRemovingAcademicSessionTemplate, removingAcademicSessionTemplateError] = useThunk(removeAcademicSessionTemplate);
+  const [doRemoveStudent, isRemovingStudent, removingStudentError] = useThunk(removeStudent);
 
+  //dropdown lists
+  // const [doFetchInstitutions] = useThunk(fetchInstitutions);
 
   const user = useSelector((state) => state.employees.employee);
+
   const getInstitution = async () => {
     doFetchUser(3);
     if(user != null)
-      doFetchAcademicSessionTemplates({institutionId: user.institutionId});
+      doFetchStudents({institutionId: user.institutionId, isActive: true});
   }
 
- //Fetch data
-  useEffect(() => {
+   //Fetch data
+   useEffect(() => {
     if(user != null){
-      doFetchAcademicSessionTemplates({institutionId: user.institutionId});
+      doFetchStudents({institutionId: user.institutionId, isActive: true});
     }
     else{
       getInstitution();
     }
   }, [user]);
 
-  const { academicSessionTemplates } = useSelector(({ academicSessionTemplates: { data, searchTerm }}) => {
+
+  const { students } = useSelector(({ students: { data, searchTerm }}) => {
     let dataList = data;
     
     if(searchTerm.length !== 0){
-      dataList = data.filter((item) => item.templateName.toLowerCase().startsWith(searchTerm.toLowerCase())); 
+      dataList = data.filter((item) => item.firstName.toLowerCase().startsWith(searchTerm.toLowerCase())); 
     }
 
     const sortedData = [...dataList].sort((a, b) => {
-      const valueA = a.templateName;
-      const valueB = b.templateName;
+      const valueA = a.firstName;
+      const valueB = b.firstName;
+      // const reverseOrder = sortOrder === 'asc' ? 1 : -1;
 
       if (typeof valueA === 'string') {
         return valueA.localeCompare(valueB);
@@ -67,35 +73,36 @@ const AcademicSessionTemplatesList = () => {
     });
 
     return {
-      academicSessionTemplates: sortedData
+      students: sortedData
     }
+
   }); 
   
  //Delete
  const [showModal, setShowModal] = useState(false);
- const [academicSessionTemplate, setAcademicSessionTemplate] = useState(null);
+ const [student, setStudent] = useState(null);
 
  const handleModalClose = () => setShowModal(false);
 
- const handleDeleteClick = (academicSessionTemplate) => {
+ const handleDeleteClick = (student) => {
     setShowModal(true);
-    setAcademicSessionTemplate(academicSessionTemplate);
+    setStudent(student);
     setIsRemoveSuccess(false);
   }
 
  const confirmDelete = () =>{
-    doRemoveAcademicSessionTemplate(academicSessionTemplate);
+    doRemoveStudent(student);
     setShowModal(false);
 
-    if(!isRemovingAcademicSessionTemplate && !removingAcademicSessionTemplateError){
+    if(!isRemovingStudent && !removingStudentError){
         setIsRemoveSuccess(true);
     }
  }
 
   const deleteModalActionBar = (
   <div className='flex justify-between mt-5'>
-        <Button secondary onClick={handleModalClose}>No, Cancel</Button>
-        <Button danger onClick={confirmDelete}>Yes, Delete</Button>
+      <Button secondary onClick={handleModalClose}>No, Cancel</Button>
+      <Button danger onClick={confirmDelete}>Yes, Delete</Button>
   </div>
   );
 
@@ -115,8 +122,8 @@ const AcademicSessionTemplatesList = () => {
   //Add
   const handleAddFormClose = () => setShowAddForm(false);
   
-  const addAcademicSessionTemplate = <div className='transition ease-out duration-5000'>
-    <AcademicSessionTemplateAdd onClose={handleAddFormClose}></AcademicSessionTemplateAdd>
+  const addStudent = <div className='transition ease-out duration-5000'>
+    <StudentAdd onClose={handleAddFormClose}></StudentAdd>
   </div>
 
   const handleAddCLick = () =>{
@@ -135,7 +142,7 @@ const AcademicSessionTemplatesList = () => {
   }
 
   const updateForm = <div> 
-      <AcademicSessionTemplateUpdate data={academicSessionTemplate} onClose={handleUpdateFormClose}
+      <StudentUpdate data={student} onClose={handleUpdateFormClose}
        onUpdateSuccess={handleUpdateSuccess} />
     </div>;
 
@@ -144,68 +151,95 @@ const AcademicSessionTemplatesList = () => {
       setShowUpdateForm(false);
     await delay(200);
 
-    setAcademicSessionTemplate(rowData);
+    setStudent(rowData);
     setShowUpdateForm(true);
     setIsUpdateSuccess(false);
     setShowAddForm(false);
   }
 
   //Paging
-  const dataPerPage = useSelector((state) => state.academicSessionTemplates.dataPerPage);
-  const currentPage = useSelector((state) => state.academicSessionTemplates.currentPage);
+  const dataPerPage = useSelector((state) => state.students.dataPerPage);
+  const currentPage = useSelector((state) => state.students.currentPage);
 
-  const totalPages = Math.ceil(academicSessionTemplates.length / dataPerPage);
+  const totalPages = Math.ceil(students.length / dataPerPage);
   const pages = [...Array(totalPages + 1).keys()].slice(1);
   const indexOfLastPage = currentPage * dataPerPage;
   const indexofFirstPage = indexOfLastPage - dataPerPage;
 
-  const visibleAcademicSessionTemplates = academicSessionTemplates.slice(indexofFirstPage, indexOfLastPage);
+  const visibleStudents = students.slice(indexofFirstPage, indexOfLastPage);
 
   const navigatePrev = () => {
     if (currentPage !== 1) {
-      dispatch(AcademicSessionTemplatesAction.onNavigatePrev());
+      dispatch(StudentsAction.onNavigatePrev());
     }
   };
 
   const navigateNext = () => {
     if (currentPage !== totalPages) {
-      dispatch(AcademicSessionTemplatesAction.onNavigateNext());
+      dispatch(StudentsAction.onNavigateNext());
     }
   };
 
-  const handleCurrentPage = (_p) => dispatch(AcademicSessionTemplatesAction.onClickCurrentPage(_p));
+  const handleCurrentPage = (_p) => dispatch(StudentsAction.onClickCurrentPage(_p));
 
-  const handleChangeDataPerpage = (e) => dispatch(AcademicSessionTemplatesAction.onChangeTodosPerpage(e));
+  const handleChangeDataPerpage = (e) => dispatch(StudentsAction.onChangeTodosPerpage(e));
   
   //Table
   const config = [
     {
-      label: 'Template',
-      render: (academicSessionTemplate) => academicSessionTemplate.templateName,
-      sortValue: (academicSessionTemplate) => academicSessionTemplate.templateName,
-    }
+      label: 'Student ID',
+      render: (student) => student.studentId,
+      sortValue: (student) => student.studentId,
+    },
+    {
+      label: 'Country',
+      render: (student) => student.countryName,
+      sortValue: (student) => student.countryName,
+    },
+    {
+      label: 'First Name',
+      render: (student) => student.firstName,
+      sortValue: (student) => student.firstName,
+    },
+    {
+      label: 'Last Name',
+      render: (student) => student.lastName,
+      sortValue: (student) => student.lastName,
+    },
+    {
+      label: 'Email',
+      render: (student) => student.email,
+      sortValue: (student) => student.email,
+    },
+    {
+      label: 'Mobile',
+      render: (student) => student.mobile,
+      sortValue: (student) => student.mobile,
+    },
+
+    
   ];
 
-  const keyFn = (academicSessionTemplate) => {
-    return academicSessionTemplate.id;
+  const keyFn = (student) => {
+    return student.id;
   };
 
   let content;
 
-  if(isLoadingAcademicSessionTemplates){
+  if(isLoadingStudents){
     content = <Skeleton times={6} className="h-8 w-full"></Skeleton>;
   }
-  else if(loadingAcademicSessionTemplatesError || loadingUserError){
-    content = <div> <Message message={'Error fetching academic session templates'} type={ERROR}></Message>  </div>
+  else if(loadingStudentsError || loadingUserError){
+    content = <div> <Message message={'Error fetching students'} type={ERROR}></Message>  </div>
   }
   else{
     content = <div>
       <SortableTable 
-        data={visibleAcademicSessionTemplates} 
+        data={visibleStudents} 
         config={config} 
         keyFn={keyFn} 
         onDeleteClick={handleDeleteClick}
-        isRemovingRecord={isRemovingAcademicSessionTemplate}
+        isRemovingRecord={isRemovingStudent}
         onUpdateClick={handleUpdateClick}
       />
       <Paging currentPage={currentPage} pages={pages} navigatePrev={navigatePrev} navigateNext={navigateNext} 
@@ -218,18 +252,18 @@ const AcademicSessionTemplatesList = () => {
     <div className="p-2 m-2">
       <div className='border shadow'>
         <div className="flex flex-row justify-between items-center mt-2 mb-2">
-          <h1 className="text-xl m-2">Templates</h1>
-          <AcademicSessionTemplateSearch></AcademicSessionTemplateSearch>
+          <h1 className="text-xl m-2">Students</h1>
+          <StudentSearch></StudentSearch>
         </div>
         {content}
       </div>
       <br></br>
       {!showAddForm && <div className='p-3'>
         <Button link onClick={handleAddCLick}>
-          + Add
+          + Student Add
         </Button>
       </div> }
-      {showAddForm && addAcademicSessionTemplate}
+      {showAddForm && addStudent}
       {showUpdateForm && updateForm}
       
       {isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}
@@ -239,4 +273,4 @@ const AcademicSessionTemplatesList = () => {
   )
 }
 
-export default AcademicSessionTemplatesList;
+export default StudentsList;

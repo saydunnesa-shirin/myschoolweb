@@ -15,7 +15,7 @@ const AcademicSessionTemplateAdd = ({onClose}) => {
 const user = useSelector((state) => state.employees.employee);
 
 const initialAcademicSessionTemplateState = {
-  institutionId: user.institutionId,
+  institutionId: user? user.institutionId: null,
   templateName: ""
 };
 //Add

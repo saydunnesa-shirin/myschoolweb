@@ -8,6 +8,7 @@ import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
 import { ERROR } from '../../helpers/constants';
+import { displayErrorMessage } from '../../helpers/utils';
 
 const CountryUpdate = ({data, onUpdateSuccess, onUpdateFormClose}) => {
 
@@ -61,7 +62,8 @@ const handlCountryUpdate = (event) => {
     doUpdateCountry(country);
     setIsUpdateSuccess(true);
   }
-}                                       
+}        
+
   return (
     <form className="border shadow p-2" onSubmit={handlCountryUpdate}>
     <div className="space-y-12">
@@ -126,7 +128,10 @@ const handlCountryUpdate = (event) => {
               { 
                 !isUpdatingCountry 
                 && updatingCountryError 
-                && <Message message={'Error creating country'} type={ERROR}></Message>
+                && <Message 
+                      message={displayErrorMessage(updatingCountryError.message, 'Error updating country')} 
+                      type={ERROR}
+                    ></Message>
               }
             </div>
         </div>

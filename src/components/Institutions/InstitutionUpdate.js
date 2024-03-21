@@ -10,6 +10,7 @@ import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
 import { ERROR } from '../../helpers/constants';
+import { displayErrorMessage } from '../../helpers/utils';
 
 const InstitutionUpdate = ({data, onClose, onUpdateSuccess}) => {
 // //Update
@@ -158,7 +159,10 @@ const handlInstitutionUpdate = (event) => {
             isSubmitted 
             && !isUpdatingInstitution 
             && updatingInstitutionError 
-            && <Message message={'Error creating institution'} type={ERROR}></Message>
+            && <Message 
+                message={displayErrorMessage(updatingInstitutionError.message, 'Error updating institution')} 
+                type={ERROR}
+              ></Message>
           }
           
         </div>

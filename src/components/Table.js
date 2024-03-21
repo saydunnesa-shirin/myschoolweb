@@ -2,7 +2,8 @@ import { Fragment, useState } from 'react';
 import Button from './Button';
 import { GoTrashcan, GoPencil } from 'react-icons/go';
 
-function Table({ data, config, keyFn, onDeleteClick, isRemovingRecord, onUpdateClick }) {
+function Table({ 
+  data, config, keyFn, onDeleteClick, isRemovingRecord, onUpdateClick }) {
 
   const [recordId, setRecordId] = useState(null);
 
