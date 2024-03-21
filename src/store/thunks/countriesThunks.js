@@ -17,10 +17,8 @@ const addCountry = createAsyncThunk('countries/add',  async (country) => {
 });
 
 const updateCountry = createAsyncThunk('countries/update', async (country) => {
-
-//   const response = await axios.put(`${baseURL}/countries/${country.id}`, country);
-  const response = await axios.put(`${baseURL}/countries`, country);
-  await pause(3000);
+  // const response = await axios.put(`${baseURL}/countries/${country.id}`, country);
+  const response = await axios.put(`${baseURL}/countries`, country)
   return response.data;
 });
 

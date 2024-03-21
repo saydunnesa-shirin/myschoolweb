@@ -13,6 +13,7 @@ import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
 import { ERROR } from '../../helpers/constants';
 import AcademicClassesList from './AcademicClassesList';
+import { displayErrorMessage } from '../../helpers/utils';
 
 const AcademicSessionUpdate = ({onClose, onUpdateSuccess, isLoading, loadingError}) => {
 
@@ -216,7 +217,10 @@ const handleAcademicClassesUpdate = (rowData, isActive) => {
             isSubmitted 
             && !isUpdatingAcademicSession 
             && updatingAcademicSessionError 
-            && <Message message={'Error creating academicSession'} type={ERROR}></Message>
+            && <Message 
+                  message={displayErrorMessage(updatingAcademicSessionError.message, 'Error updating Academic Session')} 
+                  type={ERROR}
+               ></Message>
           }
         </div>
       </form>

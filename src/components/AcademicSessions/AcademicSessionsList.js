@@ -224,8 +224,8 @@ const AcademicSessionsList = () => {
   if(isLoadingAcademicSessions){
     content = <Skeleton times={6} className="h-8 w-full"></Skeleton>;
   }
-  else if(loadingAcademicSessionsError){
-    content = <div> <Message message={'Error fetching academicSessions'} type={ERROR}></Message>  </div>
+  else if(loadingAcademicSessionsError || loadingUserError){
+    content = <div> <Message message={'Error fetching academic sessions'} type={ERROR}></Message>  </div>
   }
   else{
     content = <div>

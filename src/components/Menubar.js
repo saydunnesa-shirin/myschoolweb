@@ -20,6 +20,7 @@ function Menubar() {
     { label: 'Institutions', path: '/institutions' },
     { label: 'Countries', path: '/countries' },
     { label: 'Employees', path: '/employees' },
+    { label: 'Students', path: '/students' },
     { label: 'Session Templates', path: '/academicSessionTemplates' },
     { label: 'Sessions', path: '/academicSessions' }
   ];

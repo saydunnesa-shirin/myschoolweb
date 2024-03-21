@@ -9,6 +9,7 @@ import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
 import { ERROR } from '../../helpers/constants';
+import { displayErrorMessage } from '../../helpers/utils';
 
 const AcademicSessionTemplateUpdate = ({data, onClose, onUpdateSuccess}) => {
 
@@ -111,7 +112,10 @@ const handlAcademicSessionTemplateUpdate = (event) => {
             isSubmitted 
             && !isUpdatingAcademicSessionTemplate 
             && updatingAcademicSessionTemplateError 
-            && <Message message={'Error creating academicSessionTemplate'} type={ERROR}></Message>
+            && <Message 
+                  message={displayErrorMessage(updatingAcademicSessionTemplateError.message, 'Error updating Academic Session Template')} 
+                  type={ERROR}
+                ></Message>
           }
         </div>
       </form>

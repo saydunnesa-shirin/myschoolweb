@@ -9,6 +9,7 @@ import Route from './components/Route';
 import InstitutionsList from './components/Institutions/InstitutionsList';
 import CountriesList from './components/Countries/CountriesList';
 import EmployeesList from './components/Employees/EmployeesList';
+import StudentsList from './components/Students/StudentsList';
 import Home from './components/Home';
 import AcademicSessionTemplatesList from './components/AcademicSessionTemplates/AcademicSessionTemplatesList';
 import AcademicSessionsList from './components/AcademicSessions/AcademicSessionsList';
@@ -50,6 +51,9 @@ const App = () => {
       </Route>
       <Route path="/employees">
         <EmployeesList />
+      </Route>
+      <Route path="/students">
+        <StudentsList />
       </Route>
     </div>
   </div>
