@@ -96,15 +96,15 @@ const handlAcademicSessionUpdate = (event) => {
   }
 }  
 
-const handleAcademicClassesUpdate = (rowData, isActive) => {
+const handleAcademicClassesUpdate = (rowData) => {
     setAcademicSession((preAcademicSession) =>({ 
       ...preAcademicSession,
       academicClasses:
       academicSession.academicClasses.map(academicClass => {
       if (academicClass.id === rowData.id) {
-        // Create a *new* object with changes
+        // update a object with changes
         return { ...academicClass, 
-                isActive: isActive? !academicClass.isActive : academicClass.isActive,
+                isActive: rowData.isActive, 
                 name: rowData.name,
                 teacherId: rowData.teacherId
               };

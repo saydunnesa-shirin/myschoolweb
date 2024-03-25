@@ -11,7 +11,7 @@ import Label from '../Label';
 import Message from '../Message';
 import { SUCCESS, ERROR } from '../../helpers/constants';
 
-const AcademicSessionTemplateAdd = ({onClose}) => {
+const AcademicSessionTemplateCreate = ({onClose}) => {
 const user = useSelector((state) => state.employees.employee);
 
 const initialAcademicSessionTemplateState = {
@@ -123,4 +123,4 @@ const handlAcademicSessionTemplateAdd = (event) => {
   )
 }
 
-export default AcademicSessionTemplateAdd
+export default AcademicSessionTemplateCreate

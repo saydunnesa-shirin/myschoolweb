@@ -9,7 +9,7 @@ import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
 import { SUCCESS, ERROR } from '../../helpers/constants';
 
-const CountryAdd = () => {
+const CountryCreate = () => {
 
 const [doCreateCountry, isCreatingCountry, creatingCountryError] = useThunk(addCountry);
 //Add
@@ -138,4 +138,4 @@ const handlCountryAdd = (event) => {
   )
 }
 
-export default CountryAdd
+export default CountryCreate

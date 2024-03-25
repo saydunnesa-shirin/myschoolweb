@@ -8,10 +8,9 @@ import TextBox from '../TextBox';
 const AcademicClassesListItem = ({isUpdate = false, detail, institutionId, handleAcademicClassescChange}) => {
 
 const initialAcademicClassState = {
-id: isUpdate ? detail.id : 0,
+id: detail.id,
 institutionId: institutionId,
 teacherId: isUpdate ? detail.teacherId : null,
-academicSessionTemplateId: detail.id,
 name: isUpdate ? detail.name : detail.templateName,
 isActive: isUpdate ? detail.isActive : false
 };
@@ -23,8 +22,7 @@ const handleChange = () => {
   if(academicClass.name !== null && academicClass.name.length > 0  && academicClass.institutionId !== null && academicClass.teacherId !== null)
   {
     setAcademicClass({ ...academicClass, isActive: !academicClass.isActive });
-
-    handleAcademicClassescChange(academicClass, true);
+    handleAcademicClassescChange({ ...academicClass, isActive: !academicClass.isActive });
     setValidationError(false);
   }
   else{
@@ -50,12 +48,12 @@ const [teacherSelection, setTeacherSelection] = useState(null);
 const handleTeacherSelect = (option) => {
   setTeacherSelection(option);
   setAcademicClass({ ...academicClass, teacherId: option.id });
-  handleAcademicClassescChange(academicClass, false);
+  handleAcademicClassescChange({ ...academicClass, teacherId: option.id });
 };
 
 const handleNameChange = (event) => {
   setAcademicClass({ ...academicClass, name: event.target.value });
-  handleAcademicClassescChange(academicClass, false);
+  handleAcademicClassescChange({ ...academicClass, name: event.target.value });
 }
 
 useEffect(() => {
@@ -67,7 +65,7 @@ useEffect(() => {
 
 return(
       <div>
-          <Panel key={detail.id}> 
+          <Panel key={detail.id}>  
             <div className='space-y-12'>
                 <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                   <div className="sm:col-span-0.5 sm:col-start-1">

@@ -9,7 +9,7 @@ import { CountriesAction } from "../../store/slices/countriesSlice";
 import { useThunk } from "../../hooks/use-thunks";
 import Skeleton from "../Skeleton";
 import CountriesListItem from "./CountriesListItem";
-import CountryAdd from "./CountryAdd";
+import CountryCreate from "./CountryCreate";
 import CountriesSearch from "./CountriesSearch";
 import Message from "../Message";
 import { SUCCESS, ERROR } from '../../helpers/constants';
@@ -87,7 +87,7 @@ let paging = <Paging currentPage={currentPage} pages={pages} navigatePrev={navig
 
   return (
     <div className="p-2 m-2">
-      <CountryAdd></CountryAdd>
+      <CountryCreate></CountryCreate>
       <br></br>
       <div className='border shadow'>
         

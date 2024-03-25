@@ -7,7 +7,7 @@ import { AcademicSessionTemplatesAction } from "../../store/slices/academicSessi
 
 import { useThunk } from "../../hooks/use-thunks";
 import Skeleton from "../Skeleton";
-import AcademicSessionTemplateAdd from "./AcademicSessionTemplateAdd";
+import AcademicSessionTemplateCreate from "./AcademicSessionTemplateCreate";
 import AcademicSessionTemplateUpdate from "./AcademicSessionTemplateUpdate";
 import AcademicSessionTemplateSearch from "./AcademicSessionTemplateSearch";
 import Message from "../Message";
@@ -116,7 +116,7 @@ const AcademicSessionTemplatesList = () => {
   const handleAddFormClose = () => setShowAddForm(false);
   
   const addAcademicSessionTemplate = <div className='transition ease-out duration-5000'>
-    <AcademicSessionTemplateAdd onClose={handleAddFormClose}></AcademicSessionTemplateAdd>
+    <AcademicSessionTemplateCreate onClose={handleAddFormClose}></AcademicSessionTemplateCreate>
   </div>
 
   const handleAddCLick = () =>{
