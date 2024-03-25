@@ -7,7 +7,7 @@ import { StudentsAction } from "../../store/slices/studentsSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
 import Skeleton from "../Skeleton";
-import StudentAdd from "./StudentAdd";
+import StudentCreate from "./StudentCreate";
 import StudentUpdate from "./StudentUpdate";
 import StudentSearch from "./StudentSearch";
 import Message from "../Message";
@@ -123,7 +123,7 @@ const StudentsList = () => {
   const handleAddFormClose = () => setShowAddForm(false);
   
   const addStudent = <div className='transition ease-out duration-5000'>
-    <StudentAdd onClose={handleAddFormClose}></StudentAdd>
+    <StudentCreate onClose={handleAddFormClose}></StudentCreate>
   </div>
 
   const handleAddCLick = () =>{

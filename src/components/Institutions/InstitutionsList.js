@@ -7,7 +7,7 @@ import { InstitutionsAction } from "../../store/slices/institutionsSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
 import Skeleton from "../Skeleton";
-import InstitutionAdd from "./InstitutionAdd";
+import InstitutionCreate from "./InstitutionCreate";
 import InstitutionUpdate from "./InstitutionUpdate";
 import InstitutionSearch from "./InstitutionSearch";
 import Message from "../Message";
@@ -104,7 +104,7 @@ const InstitutionsList = () => {
   const handleAddFormClose = () => setShowAddForm(false);
   
   const addInstitution = <div className='transition ease-out duration-5000'>
-    <InstitutionAdd onClose={handleAddFormClose}></InstitutionAdd>
+    <InstitutionCreate onClose={handleAddFormClose}></InstitutionCreate>
   </div>
 
   const handleAddCLick = () =>{

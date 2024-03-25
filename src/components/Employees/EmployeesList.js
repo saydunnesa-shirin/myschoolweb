@@ -7,7 +7,7 @@ import { EmployeesAction } from "../../store/slices/employeesSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
 import Skeleton from "../Skeleton";
-import EmployeeAdd from "./EmployeeAdd";
+import EmployeeCreate from "./EmployeeCreate";
 import EmployeeUpdate from "./EmployeeUpdate";
 import EmployeeSearch from "./EmployeeSearch";
 import Message from "../Message";
@@ -113,7 +113,7 @@ const EmployeesList = () => {
   const handleAddFormClose = () => setShowAddForm(false);
   
   const addEmployee = <div className='transition ease-out duration-5000'>
-    <EmployeeAdd onClose={handleAddFormClose}></EmployeeAdd>
+    <EmployeeCreate onClose={handleAddFormClose}></EmployeeCreate>
   </div>
 
   const handleAddCLick = () =>{

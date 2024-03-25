@@ -14,7 +14,7 @@ import Label from '../Label';
 import Message from '../Message';
 import {SUCCESS, ERROR} from '../../helpers/constants';
 
-export default function StudentAdd({onClose}) {
+export default function StudentCreate({onClose}) {
 
 const user = useSelector((state) => state.employees.employee);
 
@@ -107,7 +107,7 @@ function isValid(){
   }
 }
 
-const handlStudentAdd = (event) => {
+const handlStudentCreate = (event) => {
   event.preventDefault();
   const valid = isValid();
   console.log(student);
@@ -126,7 +126,7 @@ const handlStudentAdd = (event) => {
   }
 }
   return (
-    <form className="border shadow p-2" onSubmit={handlStudentAdd}>
+    <form className="border shadow p-2" onSubmit={handlStudentCreate}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <div className='flex justify-between'>

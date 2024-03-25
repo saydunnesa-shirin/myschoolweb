@@ -7,8 +7,8 @@ import AcademicClassesListItem from './AcademicClassesListItem';
 
 const AcademicClassesList = ({isUpdate = false, institutionId, detailList, isLoding, loadingError, handleAcademicClassesAdd, isCreatingMaster}) => {
 
-const handleAcademicClassescChange = (rowData, isActive) => {
-  handleAcademicClassesAdd(rowData, isActive);
+const handleAcademicClassescChange = (rowData) => {
+  handleAcademicClassesAdd(rowData);
 }
 
 let detailContent;
@@ -27,7 +27,7 @@ let detailContent;
         key={detail.id}
         detail={detail} 
         institutionId={institutionId}
-        handleAcademicClassescChange={(rowData, isActive) => handleAcademicClassescChange(rowData, isActive)}
+        handleAcademicClassescChange={(rowData) => handleAcademicClassescChange(rowData)}
       ></AcademicClassesListItem>
       )
     });

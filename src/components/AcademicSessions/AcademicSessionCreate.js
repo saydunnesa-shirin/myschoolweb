@@ -14,12 +14,12 @@ import Message from '../Message';
 import { SUCCESS, ERROR } from '../../helpers/constants';
 import AcademicClassesList from './AcademicClassesList';
 
-const AcademicSessionAdd = ({onClose, isLoadingAcademicSessionTemplates, loadingAcademicSessionTemplatesError}) => {
+const AcademicSessionCreate = ({onClose, isLoadingAcademicSessionTemplates, loadingAcademicSessionTemplatesError}) => {
 const user = useSelector((state) => state.employees.employee);
 const academicSessionTemplates = useSelector((state) => state.academicSessionTemplates.data);
 
 const initialAcademicSessionState = {
-  institutionId: user.institutionId,
+  institutionId: user? user.institutionId: null,
   name: "",
   startDate: new Date(`${new Date().getFullYear()}-01-01`), //new Date(new Date().getFullYear(), 0, 1),
   endDate: new Date(`${new Date().getFullYear()}-12-31`),//new Date(new Date().getFullYear(), 11, 31),
@@ -100,7 +100,7 @@ function addDetail(){
     setAcademicSession((preAcademicSession) => ({
       ...preAcademicSession,
       academicClasses: [...preAcademicSession.academicClasses, {
-          institutionId: user.institutionId,
+          institutionId: user? user.institutionId: null,
           teacherId: null,
           academicSessionTemplateId: academicSessionTemplate.id,
           name: academicSessionTemplate.templateName,
@@ -111,16 +111,16 @@ function addDetail(){
   });
 }
 
-const handleAcademicClassesCreate = (rowData, isActive) => {
+const handleAcademicClassesCreate = (rowData) => {
 
     setAcademicSession((preAcademicSession) =>({ 
       ...preAcademicSession,
       academicClasses:
       academicSession.academicClasses.map(academicClass => {
-      if (academicClass.academicSessionTemplateId === rowData.academicSessionTemplateId) {
+      if (academicClass.academicSessionTemplateId === rowData.id) {
         // Create a *new* object with changes
         return { ...academicClass, 
-                isActive: isActive? !academicClass.isActive : academicClass.isActive,
+                isActive: rowData.isActive,
                 name: rowData.name,
                 teacherId: rowData.teacherId
                };
@@ -206,7 +206,7 @@ const handleAcademicClassesCreate = (rowData, isActive) => {
           </div>
           <br></br>
           <AcademicClassesList 
-            institutionId={user.institutionId}
+            institutionId={user? user.institutionId: null}
             detailList={academicSessionTemplates}
             isLoding={isLoadingAcademicSessionTemplates} 
             loadingError={loadingAcademicSessionTemplatesError} 
@@ -251,4 +251,4 @@ const handleAcademicClassesCreate = (rowData, isActive) => {
   )
 }
 
-export default AcademicSessionAdd
+export default AcademicSessionCreate

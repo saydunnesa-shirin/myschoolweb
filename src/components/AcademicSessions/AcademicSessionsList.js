@@ -7,7 +7,7 @@ import { AcademicSessionsAction } from "../../store/slices/academicSessionsSlice
 
 import { useThunk } from "../../hooks/use-thunks";
 import Skeleton from "../Skeleton";
-import AcademicSessionAdd from "./AcademicSessionAdd";
+import AcademicSessionAdd from "./AcademicSessionCreate";
 import AcademicSessionUpdate from "./AcademicSessionUpdate";
 import AcademicSessionSearch from "./AcademicSessionSearch";
 import Message from "../Message";

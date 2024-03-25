@@ -12,7 +12,7 @@ import Label from '../Label';
 import Message from '../Message';
 import { SUCCESS, ERROR } from '../../helpers/constants';
 
-const InstitutionAdd = ({onClose}) => {
+const InstitutionCreate = ({onClose}) => {
 
 const initialInstitutionState = {
   name: "",
@@ -54,7 +54,7 @@ function isValid(){
   }
 }
 
-const handlInstitutionAdd = (event) => {
+const handlInstitutionCreate = (event) => {
   event.preventDefault();
   const valid = isValid();
   if(valid)
@@ -68,7 +68,7 @@ const handlInstitutionAdd = (event) => {
 }   
 
   return (
-    <form className="border shadow p-2" onSubmit={handlInstitutionAdd}>
+    <form className="border shadow p-2" onSubmit={handlInstitutionCreate}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <div className='flex justify-between'>
@@ -163,4 +163,4 @@ const handlInstitutionAdd = (event) => {
   )
 }
 
-export default InstitutionAdd
+export default InstitutionCreate

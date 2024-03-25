@@ -14,7 +14,7 @@ import Label from '../Label';
 import Message from '../Message';
 import {SUCCESS, ERROR} from '../../helpers/constants';
 
-export default function EmployeeAdd({onClose}) {
+export default function EmployeeCreate({onClose}) {
 
 const initialEmployeeState = {
 employeeId:"",
@@ -130,7 +130,7 @@ function isValid(){
   }
 }
 
-const handlEmployeeAdd = (event) => {
+const handlEmployeeCreate = (event) => {
   event.preventDefault();
   console.log(employee);
   const valid = isValid();
@@ -152,7 +152,7 @@ const handlEmployeeAdd = (event) => {
   }
 }
   return (
-    <form className="border shadow p-2" onSubmit={handlEmployeeAdd}>
+    <form className="border shadow p-2" onSubmit={handlEmployeeCreate}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <div className='flex justify-between'>
