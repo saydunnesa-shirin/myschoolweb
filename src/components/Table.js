@@ -48,7 +48,7 @@ function Table({
   });
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       <table className="w-full table-auto border-spacing-2">
         <thead>
           <tr className="border-b-2">

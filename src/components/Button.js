@@ -16,7 +16,7 @@ function Button({
 }) {
   const classes = className(
     rest.className,
-    'flex items-center px-3 py-1.5 border h-8 rounded',
+    'flex items-center px-2 py-1.5 border rounded text-2xl',
     {
       'opacity-80': loding,
       'border-blue-500 bg-blue-500 text-white': primary,
@@ -24,7 +24,7 @@ function Button({
       'border-green-500 bg-green-500 text-white': success,
       'border-yellow-400 bg-yellow-400 text-white': warning,
       'border-red-500 bg-red-500 text-white': danger,
-      'p-3 border border-gray-500 rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:text-white hover:bg-gray-500': link,
+      'px-2 py-1.5 border border-gray-500 rounded-md text-gray-700 hover:text-white hover:bg-gray-500': link,
       'rounded-full': rounded,
       'bg-white': outline,
       'text-blue-500': outline && primary,

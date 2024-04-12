@@ -11,7 +11,7 @@ import AcademicSessionTemplateCreate from "./AcademicSessionTemplateCreate";
 import AcademicSessionTemplateUpdate from "./AcademicSessionTemplateUpdate";
 import AcademicSessionTemplateSearch from "./AcademicSessionTemplateSearch";
 import Message from "../Message";
-import { SUCCESS, ERROR } from '../../helpers/constants';
+import { SUCCESS, ERROR, LOGGED_IN_USER_ID } from '../../helpers/constants';
 import Paging from "../Paging";
 import SortableTable from '../SortableTable';
 import Button from '../Button';
@@ -33,7 +33,7 @@ const AcademicSessionTemplatesList = () => {
 
   const user = useSelector((state) => state.employees.employee);
   const getInstitution = async () => {
-    doFetchUser(3);
+    doFetchUser(LOGGED_IN_USER_ID);
     if(user != null)
       doFetchAcademicSessionTemplates({institutionId: user.institutionId});
   }
@@ -218,7 +218,7 @@ const AcademicSessionTemplatesList = () => {
     <div className="p-2 m-2">
       <div className='border shadow'>
         <div className="flex flex-row justify-between items-center mt-2 mb-2">
-          <h1 className="text-xl m-2">Templates</h1>
+          <h1 className="m-2">Templates</h1>
           <AcademicSessionTemplateSearch></AcademicSessionTemplateSearch>
         </div>
         {content}

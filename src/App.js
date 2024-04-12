@@ -13,6 +13,8 @@ import StudentsList from './components/Students/StudentsList';
 import Home from './components/Home';
 import AcademicSessionTemplatesList from './components/AcademicSessionTemplates/AcademicSessionTemplatesList';
 import AcademicSessionsList from './components/AcademicSessions/AcademicSessionsList';
+import { LOGGED_IN_USER_ID } from './helpers/constants';
+
 
 const App = () => {
 
@@ -23,7 +25,7 @@ const App = () => {
 
   //Fetch data
   useEffect(() => {
-    doFetchUser(3);
+    doFetchUser(LOGGED_IN_USER_ID);
     doFetchGenders();
     doFetchBloodGroups();
     doFetchCountries();
@@ -31,7 +33,7 @@ const App = () => {
 
 
   return (
-  <div>
+  <div className='text-2xl'>
     <Menubar />
     <div>
       <Route path="/">

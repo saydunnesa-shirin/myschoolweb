@@ -6,7 +6,6 @@ import { ERROR } from '../../helpers/constants';
 import AcademicClassesListItem from './AcademicClassesListItem';
 
 const AcademicClassesList = ({isUpdate = false, institutionId, detailList, isLoding, loadingError, handleAcademicClassesAdd, isCreatingMaster}) => {
-
 const handleAcademicClassescChange = (rowData) => {
   handleAcademicClassesAdd(rowData);
 }
@@ -34,7 +33,7 @@ let detailContent;
   }
   return (
     <div>
-      <h1 className="text-xl m-2">Templates</h1>
+      <h2 className="m-2">Templates</h2>
       <div className='border shadow'>
         {detailContent}
       </div>

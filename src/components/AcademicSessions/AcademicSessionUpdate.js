@@ -20,10 +20,11 @@ const AcademicSessionUpdate = ({onClose, onUpdateSuccess, isLoading, loadingErro
 const data = useSelector((state) => state.academicSessions.academicSession);
 
 const user = useSelector((state) => state.employees.employee);
+console.log(user);
 // Update
 const initialAcademicSessionState = {
   id: data.id,
-  institutionId: user.institutionId,
+  institutionId: user? user.institutionId : null,
   name: data.name,
   startDate: data.startDate,
   endDate: data.endDate,
@@ -123,7 +124,7 @@ const handleAcademicClassesUpdate = (rowData) => {
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <div className='flex justify-between'>
-              <h2 className="text-base font-semibold leading-7 text-gray-900">
+              <h2 className="text-gray-900">
                 Update
               </h2>
               <Button onClick={onClose}>x</Button>

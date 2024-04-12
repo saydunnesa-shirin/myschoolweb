@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect  } from "react";
 import { useSelector } from "react-redux";
 
-import { updateStudent} from "../../store";
+import { updateStudent, fetchAcademicClasses} from "../../store";
 import Button from '../Button';
 import TextBox from '../TextBox';
 import Dropdown from '../Dropdown';
@@ -17,27 +17,33 @@ const StudentUpdate = ({data, onClose, onUpdateSuccess}) => {
 const user = useSelector((state) => state.employees.employee);
  //Update
 const initialStudentState = {
-id: data.id,
-studentId:data.studentId,
-institutionId: user.institutionId,
-admissionDate:data.admissionDate,
+  id: data.id,
+  studentId:data.studentId,
+  institutionId: user? user.institutionId : null,
+  admissionDate:data.admissionDate,
+  statusId: data.statusId, 
+  activeSessionId: data.activeSessionId,
+  activeClassId: data.activeClassId,
+  activeClassName: data.activeClassName,
 
-firstName: data.firstName,
-lastName: data.lastName,
-email:data.email,
-mobile:data.mobile,
+  firstName: data.firstName,
+  lastName: data.lastName,
+  email:data.email,
+  mobile:data.mobile,
 
-fatherName:data.fatherName,
-motherName:data.motherName,
-dateOfBirth:data.dateOfBirth,
-genderId:data.genderId,
-bloodGroupId:data.bloodGroupId,
-countryId:data.countryId,
-street: data.street,
-city:data.city,
-state:data.state,
-postalCode:data.postalCode
+  fatherName:data.fatherName,
+  motherName:data.motherName,
+  dateOfBirth:data.dateOfBirth,
+  genderId:data.genderId,
+  bloodGroupId:data.bloodGroupId,
+  countryId:data.countryId,
+  street: data.street,
+  city:data.city,
+  state:data.state,
+  postalCode:data.postalCode
 };
+
+const [doFetchAcademicClasses, isLoadingAcademicClasses, loadingAcademicClassesError] = useThunk(fetchAcademicClasses);
 
 const [isSubmitted, setIsSubmitted] = useState(false);
 const [student, setStudent] = useState(initialStudentState);
@@ -45,20 +51,38 @@ const [validationError, setValidationError] = useState(false);
 const [doUpdateStudent, isUpdatingStudent, updatingStudentError] = useThunk(updateStudent);
 
 //DDL
-const institutions = useSelector((state) => state.institutions.data);
+const { activeSessions } = useSelector(({ academicSessions: { data }}) => {
+  const list = data.map((item) => {
+    const id = item.id;
+    const name = item.name;
+    return ({id, name});
+  });
+
+  return {
+    activeSessions: list
+  }
+});
+
+const { academicClasses } = useSelector(({ academicClasses: { data }}) => {
+  const list = data.map((item) => {
+    const id = item.id;
+    const name = item.name;
+    return ({id, name});
+  });
+
+  return {
+    academicClasses: list
+  }
+});
 const genders = useSelector((state) => state.settings.genders);
 const bloodGroups = useSelector((state) => state.settings.bloodGroups);
 const countries = useSelector((state) => state.countries.data);
 
-const [institutionSelection, setInstitutionSelection] = useState(null);
+const [activeSessionSelection, setActiveSessionSelection] = useState(null);
+const [activeClassSelection, setActiveClassSelection] = useState(null);
 const [genderSelection, setGenderSelection] = useState(null);
 const [bloodGroupSelection, setBloodGroupSelection] = useState(null);
 const [countrySelection, setCountrySelection] = useState(null);
-
-const handleInstitutionSelect = (option) => {
-setInstitutionSelection(option);
-setStudent({ ...student, institutionId: option.id });
-};
 
 const handleGenderSelect = (option) => {
 setGenderSelection(option);
@@ -73,6 +97,21 @@ setStudent({ ...student, bloodGroupId: option.id });
 const handleCountrySelect = (option) => {
   setCountrySelection(option);
   setStudent({ ...student, countryId: option.id });
+};
+
+const handleActiveSessionSelect = (option) => {
+  setActiveSessionSelection(option);
+  setStudent({ ...student, activeSessionId: option.id });
+  setActiveClassSelection(null);
+  
+  if(user){
+    doFetchAcademicClasses({academicSessionId: option.id, institutionId: user.institutionId, isActive: true});
+  }
+};
+
+const handleActiveClassSelect = (option) => {
+  setActiveClassSelection(option);
+  setStudent({ ...student, activeClassId: option.id });
 };
 
 //Textbox
@@ -99,24 +138,32 @@ useEffect(() => {
 
   //Set DDL
   if(isUpdatingStudent === false){
-    if( data.institutionId !== null){
-      const institution = institutions.filter((item) => item.id === data.institutionId);
-      setInstitutionSelection(institution[0]); 
-    }
 
-    if( data.genderId !== null){
+    if(data.genderId !== null){
       const gender = genders.filter((item) => item.id === data.genderId);
       setGenderSelection(gender[0]); 
     }
 
-    if( data.countryId !== null){
+    if(data.countryId !== null){
       const country = countries.filter((item) => item.id === data.countryId);
       setCountrySelection(country[0]); 
     }
 
-    if( data.bloodGroupId !== null){
+    if(data.bloodGroupId !== null){
       const bloodGroup = bloodGroups.filter((item) => item.id === data.bloodGroupId);
       setBloodGroupSelection(bloodGroup[0]); 
+    }
+
+    if(data.activeSessionId !== null){
+      const activeSession = activeSessions.filter((item) => item.id === data.activeSessionId);
+      setActiveSessionSelection(activeSession[0]); 
+      if(user){
+        doFetchAcademicClasses({academicSessionId: data.activeSessionId, institutionId: user.institutionId, isActive: true});
+      }
+    }
+
+    if( data.activeClassId !== null){
+      setActiveClassSelection({id: data.activeClassId, name: data.activeClassName}); 
     }
   }
   
@@ -124,13 +171,17 @@ useEffect(() => {
 
 function isValid(){
   if(
-    student.firstName.length < 2 
-    || student.lastName.length < 2 
-    || student.studentId.length < 2 
-    || student.institutionId == null
-    || student.admissionDate == null
-    || student.mobile.length < 5
-    || student.email.length < 5
+     (student.studentId && student.studentId.length < 2)
+      || (student.firstName && student.firstName.length < 2)
+      || (student.lastName && student.lastName.length < 2)
+      || student.institutionId == null
+      || student.activeClassId == null
+      || student.activeSessionId == null
+      || student.admissionDate == null
+      || (student.email && student.email.length < 5)
+      || (student.mobile && student.mobile.length < 5)
+      || (student.fatherName && student.fatherName.length < 2)
+      || (student.motherName && student.motherName.length < 2)
     )
   {
     setValidationError(true);
@@ -150,7 +201,6 @@ const handlStudentUpdate = (event) => {
     doUpdateStudent(student);
     setIsSubmitted(true);
     //initial setup
-    setInstitutionSelection(null);
     setBloodGroupSelection(null);
     setGenderSelection(null);
     setCountrySelection(null);
@@ -163,16 +213,16 @@ const updateForm = (
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <div className='flex justify-between'>
-            <h2 className="text-base font-semibold leading-7 text-gray-900">
+            <h2 className="text-gray-900">
               Student Update
             </h2>
             <Button onClick={onClose}>x</Button>
           </div>
           
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-2 sm:col-start-1">
+            <div className="sm:col-span-3 sm:col-start-1">
               <Label>
-                Student ID
+                Student ID <b className='text-red-600'>*</b>
               </Label>
               <div className="mt-2">
                 <TextBox
@@ -186,9 +236,9 @@ const updateForm = (
               </div>
             </div>
             
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-3">
               <Label>
-                Joining Date
+                Admission Date <b className='text-red-600'>*</b>
               </Label>
               <div className="mt-2">
                 <Datepicker 
@@ -198,17 +248,43 @@ const updateForm = (
                   />
               </div>
             </div>
+            <div className="sm:col-span-3">
+              <Label>
+                Active Session <b className='text-red-600'>*</b>
+              </Label>
+              <div className="mt-2">
+                <Dropdown 
+                  options={activeSessions} 
+                  value={activeSessionSelection} 
+                  onChange={handleActiveSessionSelect} 
+                />
+                
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <Label>
+                Active Class <b className='text-red-600'>*</b>
+              </Label>
+              <div className="mt-2">
+                <Dropdown 
+                  options={academicClasses} 
+                  value={activeClassSelection} 
+                  onChange={handleActiveClassSelect} 
+                />
+                
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+          <h2 className=" text-gray-900">Personal Information</h2>
+          <p className="mt-1 text-gray-600">Use a permanent address where you can receive mail.</p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <Label>
-                First name
+                First name <b className='text-red-600'>*</b>
               </Label>
               <div className="mt-2">
                 <TextBox
@@ -223,7 +299,7 @@ const updateForm = (
 
             <div className="sm:col-span-3">
               <Label>
-                Last name
+                Last name <b className='text-red-600'>*</b>
               </Label>
               <div className="mt-2">
                 <TextBox
@@ -233,7 +309,34 @@ const updateForm = (
                 />
               </div>
             </div>
-
+            <div className="sm:col-span-3">
+              <Label>
+                Father name <b className='text-red-600'>*</b>
+              </Label>
+              <div className="mt-2">
+                <TextBox
+                  id="fatherName" 
+                  value={student.fatherName} 
+                  placeholder="XYZ" 
+                  onChange={handleFatherNameChange}
+                  mandatory={validationError && student.fatherName.length < 5  && true}
+                />
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <Label>
+                Mother name <b className='text-red-600'>*</b>
+              </Label>
+              <div className="mt-2">
+                <TextBox
+                  id="motherName" 
+                  value={student.motherName} 
+                  placeholder="XYZ" 
+                  onChange={handleMotherNameChange} 
+                  mandatory={validationError && student.motherName.length < 5  && true}
+                />
+              </div>
+            </div>
             <div className="sm:col-span-3">
               <Label>
                Email Address
@@ -243,7 +346,7 @@ const updateForm = (
                 value={student.email} 
                 placeholder="abc@exapmple.com" 
                 onChange={handleEmailChange} 
-                mandatory={validationError && student.email.length < 5  && true}
+                mandatory={validationError && (student.email && student.email.length < 5)  && true}
                 />
               </div>
             </div>
@@ -252,40 +355,16 @@ const updateForm = (
                 Mobile
               </Label>
               <div className="mt-2">
-                <TextBox id="mobile" 
-                value={student.mobile} 
-                placeholder="+8801711483333" 
-                onChange={handleMobileChange} 
-                mandatory={validationError && student.mobile.length < 5  && true}
+                <TextBox 
+                  id="mobile" 
+                  value={student.mobile} 
+                  placeholder="+8801711483333" 
+                  onChange={handleMobileChange} 
+                  mandatory={validationError && (student.mobile && student.mobile.length < 5)  && true}
                 />
               </div>
             </div>
-            <div className="sm:col-span-3">
-              <Label>
-                Father name
-              </Label>
-              <div className="mt-2">
-                <TextBox
-                  id="fatherName" 
-                  value={student.fatherName} 
-                  placeholder="XYZ" 
-                  onChange={handleFatherNameChange} 
-                />
-              </div>
-            </div>
-            <div className="sm:col-span-3">
-              <Label>
-                Mother name
-              </Label>
-              <div className="mt-2">
-                <TextBox
-                  id="motherName" 
-                  value={student.motherName} 
-                  placeholder="XYZ" 
-                  onChange={handleMotherNameChange} 
-                />
-              </div>
-            </div>
+            
             <div className="sm:col-span-2">
               <Label>
                 Date of Birth
@@ -294,7 +373,7 @@ const updateForm = (
                 <Datepicker 
                   initialValue={student.dateOfBirth}
                   changeDate={handleDateOfBirthChange}
-                  />
+                />
               </div>
             </div>
             <div className="sm:col-span-2">
@@ -303,9 +382,9 @@ const updateForm = (
               </Label>
               <div className="mt-2">
                 <Dropdown 
-                options={genders} 
-                value={genderSelection} 
-                onChange={handleGenderSelect} 
+                  options={genders} 
+                  value={genderSelection} 
+                  onChange={handleGenderSelect} 
                 />
               </div>
             </div>
@@ -315,9 +394,9 @@ const updateForm = (
               </Label>
               <div className="mt-2">
                 <Dropdown 
-                options={bloodGroups} 
-                value={bloodGroupSelection} 
-                onChange={handleBloodGroupSelect} 
+                  options={bloodGroups} 
+                  value={bloodGroupSelection} 
+                  onChange={handleBloodGroupSelect} 
                 />
               </div>
             </div>
@@ -327,8 +406,8 @@ const updateForm = (
               </Label>
               <div className="mt-2">
                 <Dropdown options={countries} 
-                value={countrySelection} 
-                onChange={handleCountrySelect} 
+                  value={countrySelection} 
+                  onChange={handleCountrySelect} 
                 />
               </div>
             </div>
@@ -338,11 +417,11 @@ const updateForm = (
               </Label>
               <div className="mt-2">
                 <TextBox
-                    name="street"
-                    id="street"
-                    value={student.street} 
-                    placeholder="XYZ" onChange={handleStreetChange} 
-                  />
+                  name="street"
+                  id="street"
+                  value={student.street} 
+                  placeholder="XYZ" onChange={handleStreetChange} 
+                />
               </div>
             </div>
 
@@ -352,11 +431,11 @@ const updateForm = (
               </Label>
               <div className="mt-2">
                 <TextBox
-                    name="city"
-                    id="city"
-                    value={student.city} 
-                    placeholder="XYZ" onChange={handleCityChange} 
-                  />
+                  name="city"
+                  id="city"
+                  value={student.city} 
+                  placeholder="XYZ" onChange={handleCityChange} 
+                />
               </div>
             </div>
 

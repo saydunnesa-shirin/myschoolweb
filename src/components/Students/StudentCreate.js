@@ -1,8 +1,8 @@
 import React from 'react';
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {useSelector} from "react-redux";
 
-import {addStudent} from "../../store";
+import {addStudent, fetchAcademicClasses } from "../../store";
 import {useThunk} from "../../hooks/use-thunks";
 
 import Datepicker from '../Datepicker';
@@ -14,33 +14,35 @@ import Label from '../Label';
 import Message from '../Message';
 import {SUCCESS, ERROR} from '../../helpers/constants';
 
-export default function StudentCreate({onClose}) {
+export default function StudentCreate({status, onClose, formHeader}){
 
 const user = useSelector((state) => state.employees.employee);
 
 const initialStudentState = {
-studentId:"",
-institutionId:  user? user.institutionId: null,
-admissionDate: null,
+  studentId:"",
+  institutionId:  user? user.institutionId: null,
+  admissionDate: null,
+  statusId: status, 
+  activeSessionId: null,
+  activeClassId: null,
+  firstName: "",
+  lastName: "",
+  email:"",
+  mobile:"",
 
-firstName: "",
-lastName: "",
-email:"",
-mobile:"",
-
-fatherName:"",
-motherName:"",
-dateOfBirth:null,
-genderId:null,
-bloodGroupId:null,
-countryId:null,
-street: "",
-city:"",
-state:"",
-postalCode:""
+  fatherName:"",
+  motherName:"",
+  dateOfBirth:null,
+  genderId:null,
+  bloodGroupId:null,
+  countryId:null,
+  street: "",
+  city:"",
+  state:"",
+  postalCode:""
 };
 
-//Add
+const [doFetchAcademicClasses, isLoadingAcademicClasses, loadingAcademicClassesError] = useThunk(fetchAcademicClasses);
 const [doCreateStudent, isCreatingStudent, creatingStudentError] = useThunk(addStudent);
 
 const [student, setStudent] = useState(initialStudentState);
@@ -48,13 +50,42 @@ const [validationError, setValidationError] = useState(false);
 const [isSubmitted, setIsSubmitted] = useState(false);
 
 //DDL
+const { activeSessions } = useSelector(({ academicSessions: { data }}) => {
+  const list = data.map((item) => {
+    const id = item.id;
+    const name = item.name;
+    return ({id, name});
+  });
+
+  return {
+    activeSessions: list
+  }
+});
+
+const { academicClasses } = useSelector(({ academicClasses: { data }}) => {
+  const list = data.map((item) => {
+    const id = item.id;
+    const name = item.name;
+    return ({id, name});
+  });
+
+  return {
+    academicClasses: list
+  }
+});
+
 const genders = useSelector((state) => state.settings.genders);
 const bloodGroups = useSelector((state) => state.settings.bloodGroups);
 const countries = useSelector((state) => state.countries.data);
 
+const [activeSessionSelection, setActiveSessionSelection] = useState(null);
+const [activeClassSelection, setActiveClassSelection] = useState(null);
+
 const [genderSelection, setGenderSelection] = useState(null);
 const [bloodGroupSelection, setBloodGroupSelection] = useState(null);
 const [countrySelection, setCountrySelection] = useState(null);
+
+const [admissionDate, setAdmissionDate] = useState(null);
 
 const handleGenderSelect = (option) => {
 setGenderSelection(option);
@@ -69,6 +100,21 @@ setStudent({ ...student, bloodGroupId: option.id });
 const handleCountrySelect = (option) => {
   setCountrySelection(option);
   setStudent({ ...student, countryId: option.id });
+};
+
+const handleActiveSessionSelect = (option) => {
+  setActiveSessionSelection(option);
+  setStudent({ ...student, activeSessionId: option.id });
+  setActiveClassSelection(null);
+  
+  if(user){
+    doFetchAcademicClasses({academicSessionId: option.id, institutionId: user.institutionId, isActive: true});
+  }
+};
+
+const handleActiveClassSelect = (option) => {
+  setActiveClassSelection(option);
+  setStudent({ ...student, activeClassId: option.id });
 };
 
 //Textbox
@@ -86,18 +132,26 @@ const handleStateChange = (event) => setStudent({ ...student, state: event.targe
 const handlePostalCodeChange = (event) => setStudent({ ...student, postalCode: event.target.value });
 
 //DatePicker
-const handleAdmissionDateChange = (newValue) => setStudent({ ...student, admissionDate: newValue });
+const handleAdmissionDateChange = (newValue) => {
+  setAdmissionDate(newValue);
+  setStudent({ ...student, admissionDate: newValue })
+}
 const handleDateOfBirthChange = (newValue) => setStudent({ ...student, dateOfBirth: newValue});
 
 //Add
 function isValid(){
-  if(student.firstName.length < 2 
-    || student.lastName.length < 2 
-    || student.studentId.length < 2 
-    // || student.institutionId == null
-    || student.admissionDate == null
-    || (student.mobile && student.mobile.length < 5)
-    || (student.email && student.email.length < 5)
+  if(
+      (student.studentId && student.studentId.length < 2)
+      || (student.firstName && student.firstName.length < 2)
+      || (student.lastName && student.lastName.length < 2)
+      || student.institutionId == null
+      || student.activeClassId == null
+      || student.activeSessionId == null
+      || student.admissionDate == null
+      || (student.email && student.email.length < 5)
+      || (student.mobile && student.mobile.length < 5)
+      || (student.fatherName && student.fatherName.length < 2)
+      || (student.motherName && student.motherName.length < 2)
     ){
       setValidationError(true);
       return false;
@@ -110,19 +164,24 @@ function isValid(){
 const handlStudentCreate = (event) => {
   event.preventDefault();
   const valid = isValid();
-  console.log(student);
-
+  console.log(student)
   if(valid)
   {
     setValidationError(false);
     doCreateStudent(student);
     setIsSubmitted(true);
 
-    //initial setup
-    // setStudent(initialStudentState);
-    // setBloodGroupSelection(null);
-    // setGenderSelection(null);
-    // setCountrySelection(null);
+    //Reset
+    setActiveClassSelection(null);
+    setActiveSessionSelection(null);
+    
+    setGenderSelection(null);
+    setBloodGroupSelection(null);
+    setCountrySelection(null);
+    setStudent(initialStudentState);
+    setAdmissionDate(null);
+
+    console.log(student)
   }
 }
   return (
@@ -130,16 +189,16 @@ const handlStudentCreate = (event) => {
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <div className='flex justify-between'>
-            <h2 className="text-base font-semibold leading-7 text-gray-900">
-              Student Add
+            <h2 className="text-gray-900">
+              {formHeader}
             </h2>
             <Button onClick={onClose}>x</Button>
           </div>
           
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-2 sm:col-start-1">
+            <div className="sm:col-span-3 sm:col-start-1">
               <Label>
-                Student ID
+                Student ID <b className='text-red-600'>*</b>
               </Label>
               
               <div className="mt-2">
@@ -154,16 +213,44 @@ const handlStudentCreate = (event) => {
               </div>
             </div>
 
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-3">
               <Label>
-                Admission Date
+                Admission Date <b className='text-red-600'>*</b>
               </Label>
               <div className="mt-2">
                 <Datepicker 
-                  initialValue={student.admissionDate ? student.admissionDate : null}
+                  // initialValue={student.admissionDate ? student.admissionDate : null}
+                  initialValue={admissionDate}
                   changeDate={handleAdmissionDateChange}
                   mandatory={validationError && student.admissionDate === null && true}
                 />
+              </div>
+            </div>
+
+            <div className="sm:col-span-3">
+              <Label>
+                Active Session <b className='text-red-600'>*</b>
+              </Label>
+              <div className="mt-2">
+                <Dropdown 
+                  options={activeSessions} 
+                  value={activeSessionSelection} 
+                  onChange={handleActiveSessionSelect} 
+                />
+                
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <Label>
+                Active Class <b className='text-red-600'>*</b>
+              </Label>
+              <div className="mt-2">
+                <Dropdown 
+                  options={academicClasses} 
+                  value={activeClassSelection} 
+                  onChange={handleActiveClassSelect} 
+                />
+                
               </div>
             </div>
             
@@ -171,13 +258,13 @@ const handlStudentCreate = (event) => {
         </div>
 
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+          <h2 className="text-gray-900">Personal Information</h2>
+          <p className="mt-1 text-gray-600">Use a permanent address where you can receive mail.</p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <Label>
-                First name
+                First name <b className='text-red-600'>*</b>
               </Label>
               <div className="mt-2">
                 <TextBox
@@ -192,7 +279,7 @@ const handlStudentCreate = (event) => {
 
             <div className="sm:col-span-3">
               <Label>
-                Last name
+                Last name <b className='text-red-600'>*</b>
               </Label>
               <div className="mt-2">
                 <TextBox
@@ -204,7 +291,7 @@ const handlStudentCreate = (event) => {
             </div>
             <div className="sm:col-span-3">
               <Label>
-                Father name
+                Father name <b className='text-red-600'>*</b>
               </Label>
               <div className="mt-2">
                 <TextBox
@@ -218,7 +305,7 @@ const handlStudentCreate = (event) => {
             </div>
             <div className="sm:col-span-3">
               <Label>
-                Mother name
+                Mother name <b className='text-red-600'>*</b>
               </Label>
               <div className="mt-2">
                 <TextBox
