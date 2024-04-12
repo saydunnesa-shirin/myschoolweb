@@ -18,6 +18,9 @@ const addStudent = createAsyncThunk('students/add',  async (student) => {
             studentId: student.studentId,
             institutionId: student.institutionId,
             admissionDate: student.admissionDate,
+            statusId: student.statusId, 
+            activeSessionId: student.activeSessionId,
+            activeClassId: student.activeClassId,
 
             firstName: student.firstName,
             lastName: student.lastName,
@@ -52,6 +55,11 @@ const updateStudent = createAsyncThunk('students/update', async (student) => {
             studentId: student.studentId,
             institutionId: student.institutionId,
             admissionDate: student.admissionDate,
+            statusId: student.statusId, 
+            activeSessionId: student.activeSessionId,
+            activeClassId: student.activeClassId,
+            activeSessionName: student.activeSessionName,
+            activeClassName: student.activeClassName,
 
             firstName: student.firstName,
             lastName: student.lastName,

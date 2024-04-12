@@ -14,6 +14,8 @@ import { SUCCESS, ERROR } from '../../helpers/constants';
 const AcademicSessionTemplateCreate = ({onClose}) => {
 const user = useSelector((state) => state.employees.employee);
 
+console.log(user);
+
 const initialAcademicSessionTemplateState = {
   institutionId: user? user.institutionId: null,
   templateName: ""
@@ -60,7 +62,7 @@ const handlAcademicSessionTemplateAdd = (event) => {
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <div className='flex justify-between'>
-            <h2 className="text-base font-semibold leading-7 text-gray-900">
+            <h2 className="text-gray-900">
               Add
             </h2>
             <Button onClick={onClose}>x</Button>

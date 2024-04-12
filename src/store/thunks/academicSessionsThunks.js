@@ -3,7 +3,6 @@ import axios from 'axios';
 import {baseURL} from '../../helpers/constants';
 
 const fetchAcademicSessions = createAsyncThunk('academicSessions/fetch', async(query) =>{
-    await pause(1000);
     const  response = await axios.post(`${baseURL}/academicSessions/query`, {
         institutionId: query.institutionId,
         isActive: true
@@ -31,7 +30,6 @@ const addAcademicSession = createAsyncThunk('academicSessions/add',  async (acad
 });
 
 const updateAcademicSession = createAsyncThunk('academicSessions/update', async (academicSession) => {
-    console.log(academicSession)
   const response = await axios.put(`${baseURL}/academicSessions/update`, {
         id:academicSession.id,
         name:academicSession.name,
@@ -52,11 +50,5 @@ const removeAcademicSession = createAsyncThunk('academicSessions/remove', async 
     });
     return academicSession;
 });
-
-const pause = (duration) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, duration);
-    });
-};
 
 export { fetchAcademicSessions, getById, addAcademicSession, updateAcademicSession, removeAcademicSession };

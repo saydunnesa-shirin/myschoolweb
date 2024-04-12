@@ -5,7 +5,7 @@ import { GoChevronDown } from 'react-icons/go';
 function Dropdown({ options, value, onChange, mandatory }) {
 
   const classes = className(
-    'flex justify-between p-1 cursor-pointer w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',
+    'flex justify-between p-1 cursor-pointer w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-indigo-600',
     {
       'bg-red-50 text-gray-700 border border-red-500': mandatory,
     }

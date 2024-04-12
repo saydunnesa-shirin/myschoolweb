@@ -85,6 +85,12 @@ const studentsSlice = createSlice({
               studentId: action.payload.studentId,
               institutionId: action.payload.institutionId,
               admissionDate: action.payload.admissionDate,
+              statusId: action.payload.statusId, 
+              activeSessionId: action.payload.activeSessionId,
+              activeClassId: action.payload.activeClassId,
+
+              activeSessionName: action.payload.activeSessionName,
+              activeClassName: action.payload.activeClassName,
 
               firstName: action.payload.firstName,
               lastName: action.payload.lastName,

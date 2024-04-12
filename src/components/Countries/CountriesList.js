@@ -92,7 +92,7 @@ let paging = <Paging currentPage={currentPage} pages={pages} navigatePrev={navig
       <div className='border shadow'>
         
         <div className="flex flex-row justify-between items-center mt-2 mb-2">
-          <h1 className="text-xl m-2">Countries</h1>
+          <h1 className="m-2">Countries</h1>
           <CountriesSearch></CountriesSearch>
         </div>
         {content}

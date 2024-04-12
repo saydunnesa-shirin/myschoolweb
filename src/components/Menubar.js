@@ -30,9 +30,9 @@ function Menubar() {
       <Link
         key={link.label}
         to={link.path}
-        className="rounded-md px-3 py-2 text-sm font-medium"
+        className="rounded-md px-3 py-2"
         inactiveClassName="text-gray-300 hover:bg-gray-700 hover:text-white"
-        activeClassName="font-bold bg-gray-900 text-white">
+        activeClassName="bg-blue-900 text-white">
         {link.label}
       </Link>
      );

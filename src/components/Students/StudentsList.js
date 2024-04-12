@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchStudents, fetchInstitutions, removeStudent, getEmployeeById } from "../../store";
+import { fetchStudents, removeStudent, getEmployeeById, fetchAcademicSessions } from "../../store";
 import { StudentsAction } from "../../store/slices/studentsSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
@@ -11,7 +11,7 @@ import StudentCreate from "./StudentCreate";
 import StudentUpdate from "./StudentUpdate";
 import StudentSearch from "./StudentSearch";
 import Message from "../Message";
-import { SUCCESS, ERROR } from '../../helpers/constants';
+import { SUCCESS, ERROR, LOGGED_IN_USER_ID } from '../../helpers/constants';
 import Paging from "../Paging";
 import SortableTable from '../SortableTable';
 import Button from '../Button';
@@ -19,36 +19,39 @@ import Modal from '../Modal';
 
 const StudentsList = () => {
   const dispatch = useDispatch();
-
   const [doFetchUser, isLoadingUser, loadingUserError] = useThunk(getEmployeeById);
 
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [showAddNewForm, setShowAddNewForm] = useState(false);
+  const [showAddExistingForm, setShowAddExistingForm] = useState(false);
+
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   const [isRemoveSuccess, setIsRemoveSuccess] = useState(false);
   const [doFetchStudents, isLoadingStudents, loadingStudentsError] = useThunk(fetchStudents);
-  
+
+  const [doFetchAcademicSessions, isLoadingAcademicSessions, loadingAcademicSessionsError] = useThunk(fetchAcademicSessions);
+
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
   const [doRemoveStudent, isRemovingStudent, removingStudentError] = useThunk(removeStudent);
 
-  //dropdown lists
-  // const [doFetchInstitutions] = useThunk(fetchInstitutions);
-
   const user = useSelector((state) => state.employees.employee);
 
-  const getInstitution = async () => {
-    doFetchUser(3);
-    if(user != null)
+  const fetchData = async () => {
+    doFetchUser(LOGGED_IN_USER_ID);
+    if(user) {
       doFetchStudents({institutionId: user.institutionId, isActive: true});
+      doFetchAcademicSessions({institutionId: user.institutionId, isActive: true})
+    }
   }
 
    //Fetch data
-   useEffect(() => {
-    if(user != null){
+  useEffect(() => {
+    if(user){
       doFetchStudents({institutionId: user.institutionId, isActive: true});
+      doFetchAcademicSessions({institutionId: user.institutionId, isActive: true})
     }
     else{
-      getInstitution();
+      fetchData();
     }
   }, [user]);
 
@@ -99,12 +102,12 @@ const StudentsList = () => {
     }
  }
 
-  const deleteModalActionBar = (
+ const deleteModalActionBar = (
   <div className='flex justify-between mt-5'>
       <Button secondary onClick={handleModalClose}>No, Cancel</Button>
       <Button danger onClick={confirmDelete}>Yes, Delete</Button>
   </div>
-  );
+ );
 
   const modal = (
     <Modal onClose={handleModalClose} actionBar={deleteModalActionBar}>
@@ -120,15 +123,31 @@ const StudentsList = () => {
   }
 
   //Add
-  const handleAddFormClose = () => setShowAddForm(false);
+  const handleAddFormClose = () => setShowAddNewForm(false);
+  const handleAddExistingFormClose = () => setShowAddExistingForm(false);
   
-  const addStudent = <div className='transition ease-out duration-5000'>
-    <StudentCreate onClose={handleAddFormClose}></StudentCreate>
+  const addNewStudent = <div className='transition ease-out duration-5000'>
+    <StudentCreate onClose={handleAddFormClose} status={1} formHeader={'New Registration'}></StudentCreate>
+  </div>
+
+  const addExistingStudent = <div className='transition ease-out duration-5000'>
+    <StudentCreate onClose={handleAddExistingFormClose} status={2} formHeader={'Update Existing Registration'}></StudentCreate>
   </div>
 
   const handleAddCLick = () =>{
-    setShowAddForm(!showAddForm);
+    setShowAddNewForm(!showAddNewForm);
 
+    if(showUpdateForm)
+      setShowUpdateForm(false);
+    if(showAddExistingForm)
+      setShowAddExistingForm(false);
+  }
+
+  const handleAddExistingCLick = () =>{
+    setShowAddExistingForm(!showAddExistingForm);
+    
+    if(showAddNewForm)
+      setShowAddNewForm(false);
     if(showUpdateForm)
       setShowUpdateForm(false);
   }
@@ -149,12 +168,15 @@ const StudentsList = () => {
   const handleUpdateClick = async (rowData) => {
     if(showUpdateForm)
       setShowUpdateForm(false);
+
+    //doFetchStudentById(rowData.id)
     await delay(200);
 
     setStudent(rowData);
     setShowUpdateForm(true);
     setIsUpdateSuccess(false);
-    setShowAddForm(false);
+    setShowAddNewForm(false);
+    setShowAddExistingForm(false);
   }
 
   //Paging
@@ -252,18 +274,31 @@ const StudentsList = () => {
     <div className="p-2 m-2">
       <div className='border shadow'>
         <div className="flex flex-row justify-between items-center mt-2 mb-2">
-          <h1 className="text-xl m-2">Students</h1>
+          <h1 className="m-2">Students</h1>
           <StudentSearch></StudentSearch>
         </div>
         {content}
       </div>
       <br></br>
-      {!showAddForm && <div className='p-3'>
-        <Button link onClick={handleAddCLick}>
-          + Student Add
-        </Button>
-      </div> }
-      {showAddForm && addStudent}
+      <div className='flex'>
+        {!showAddNewForm && 
+        <div className='p-3 text-6xl'>
+          <Button link onClick={handleAddCLick}>
+            + New Student
+          </Button>
+        </div> }
+
+        {!showAddExistingForm && 
+        <div className='p-3 text-6xl'>
+          <Button link onClick={handleAddExistingCLick}>
+            + Existing Student
+          </Button>
+        </div> }
+      </div>
+      
+      
+      {showAddNewForm && addNewStudent}
+      {showAddExistingForm && addExistingStudent}
       {showUpdateForm && updateForm}
       
       {isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}

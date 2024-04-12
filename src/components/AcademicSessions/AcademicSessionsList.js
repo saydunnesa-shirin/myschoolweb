@@ -11,7 +11,7 @@ import AcademicSessionAdd from "./AcademicSessionCreate";
 import AcademicSessionUpdate from "./AcademicSessionUpdate";
 import AcademicSessionSearch from "./AcademicSessionSearch";
 import Message from "../Message";
-import { SUCCESS, ERROR } from '../../helpers/constants';
+import { SUCCESS, ERROR, LOGGED_IN_USER_ID, EMPLOYEE_DESIGNATION_ID } from '../../helpers/constants';
 import { displayToLocaleDateString } from '../../helpers/utils';
 import Paging from "../Paging";
 import SortableTable from '../SortableTable';
@@ -39,12 +39,13 @@ const AcademicSessionsList = () => {
   const [doRemoveAcademicSession, isRemovingAcademicSession, removingAcademicSessionError] = useThunk(removeAcademicSession);
 
   const user = useSelector((state) => state.employees.employee);
+
   const getDataByInstitution = async () => {
-    doFetchUser(3);
+    doFetchUser(LOGGED_IN_USER_ID);
     if(user != null){
       doFetchAcademicSessionTemplates({institutionId: user.institutionId});
       doFetchAcademicSessions({institutionId: user.institutionId});
-      doFetchEmployees({institutionId: user.institutionId, designationId: 3});
+      doFetchEmployees({institutionId: user.institutionId, designationId: EMPLOYEE_DESIGNATION_ID});
     }
   }
 
@@ -55,7 +56,7 @@ const AcademicSessionsList = () => {
     if(user != null){
       doFetchAcademicSessionTemplates({institutionId: user.institutionId});
       doFetchAcademicSessions({institutionId: user.institutionId});
-      doFetchEmployees({institutionId: user.institutionId, designationId: 3});
+      doFetchEmployees({institutionId: user.institutionId, designationId: EMPLOYEE_DESIGNATION_ID});
     }
     else{
       getDataByInstitution();
@@ -247,7 +248,7 @@ const AcademicSessionsList = () => {
     <div className="p-2 m-2">
       <div className='border shadow'>
         <div className="flex flex-row justify-between items-center mt-2 mb-2">
-          <h1 className="text-xl m-2">Sessions</h1>
+          <h1 className="m-2">Sessions</h1>
           <AcademicSessionSearch></AcademicSessionSearch>
         </div>
         {content}
