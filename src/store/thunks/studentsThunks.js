@@ -5,9 +5,12 @@ import {baseURL} from '../../helpers/constants';
 const fetchStudents = createAsyncThunk('students/fetch', async(query) =>{
     const  response = await axios.post(`${baseURL}/students/query`, {
         institutionId: query.institutionId,
-        isActive: query.isActive
-    });
-    await pause(1000);
+        isActive: query.isActive,
+        activeSessionIds: query.activeSessionIds,
+        activeClassIds: query.activeClassIds,
+        statusIds:query.statusIds,
+        firstName: query.firstName
+     });
     return response.data;
 });
 

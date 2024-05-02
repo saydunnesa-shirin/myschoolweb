@@ -236,6 +236,8 @@ const handlStudentCreate = (event) => {
                   options={activeSessions} 
                   value={activeSessionSelection} 
                   onChange={handleActiveSessionSelect} 
+                  mandatory={validationError && activeSessionSelection === null && true}
+
                 />
                 
               </div>
@@ -249,6 +251,8 @@ const handlStudentCreate = (event) => {
                   options={academicClasses} 
                   value={activeClassSelection} 
                   onChange={handleActiveClassSelect} 
+                  mandatory={validationError && activeClassSelection === null && true}
+
                 />
                 
               </div>

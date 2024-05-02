@@ -3,14 +3,34 @@ import Button from './Button';
 import { GoTrashcan, GoPencil } from 'react-icons/go';
 
 function Table({ 
-  data, config, keyFn, onDeleteClick, isRemovingRecord, onUpdateClick }) {
+  data, config, keyFn, onDeleteClick, isRemovingRecord, onUpdateClick,  onSelectClick = null }) {
 
   const [recordId, setRecordId] = useState(null);
+
+  const [skippedStudentIds, setSkippedStudentIds] = useState([]);
 
   //Delete
   const handleDeleteClick = (rowData) => {
     setRecordId(rowData.id);
     onDeleteClick(rowData);
+  }
+
+   //Select checkbox
+  const handleCheckboxClick = (rowData) => {
+    setRecordId(rowData.id);
+
+    const exists = skippedStudentIds.find((item) => item === rowData.id);
+
+    if(exists){
+  
+      const updatedArray = skippedStudentIds.filter((item) => item !== rowData.id);
+      setSkippedStudentIds(updatedArray);
+  
+    }else{
+      setSkippedStudentIds([...skippedStudentIds, rowData.id]);
+    }
+    
+    onSelectClick(rowData);
   }
   
   //Header
@@ -33,7 +53,7 @@ function Table({
 
     return (
       <tr className="border-b" key={keyFn(rowData)}>
-        <td className='flex mt-5'>
+        {!onSelectClick && <td className='flex m-5'>
             <Button className='mr-2' loding={isRemovingRecord && recordId===rowData.id} 
               onClick={() => handleDeleteClick(rowData)}>
               <GoTrashcan></GoTrashcan>
@@ -41,7 +61,15 @@ function Table({
             <Button className='mr-2' onClick={() => onUpdateClick(rowData)}>
               <GoPencil></GoPencil>
             </Button>
-        </td>
+        </td>}
+        {onSelectClick && <td className='flex m-5'>
+            <input 
+              type='checkbox' 
+              checked= {skippedStudentIds.find((item) => item === rowData.id)? false : true}
+              onChange={() => handleCheckboxClick(rowData)}
+            ></input>
+        </td> }
+
         {renderedCells}
       </tr>
     );

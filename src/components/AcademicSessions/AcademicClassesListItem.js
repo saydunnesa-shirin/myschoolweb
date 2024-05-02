@@ -67,19 +67,19 @@ return(
       <div>
           <Panel key={detail.id}>  
             <div className='space-y-12'>
-                <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="grid sm:grid-cols-12">
                   <div className="sm:col-span-0.5 sm:col-start-1">
                     <div className="mt-2">
                       <input 
                         type='checkbox' 
-                        className='p-2 mr-2 text-xl'
+                        className='p-2 m-2'
                         checked={academicClass.isActive}
                         onChange={handleChange}
                         ></input>
                     </div>
                   </div>
                   <div className="sm:col-span-2">
-                    <div className="mt-2">
+                    <div className="m-2">
                       <TextBox
                         name="name"
                         id="name"
@@ -91,7 +91,7 @@ return(
                     </div>
                   </div>
                   <div className="sm:col-span-3">
-                    <div className="mt-2">
+                    <div className="m-2">
                       <Dropdown options={teachers} 
                         value={teacherSelection} 
                         onChange={handleTeacherSelect} 
