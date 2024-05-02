@@ -13,6 +13,8 @@ import StudentsList from './components/Students/StudentsList';
 import Home from './components/Home';
 import AcademicSessionTemplatesList from './components/AcademicSessionTemplates/AcademicSessionTemplatesList';
 import AcademicSessionsList from './components/AcademicSessions/AcademicSessionsList';
+import Enrollment from './components/Enrollments/Enrollment';
+
 import { LOGGED_IN_USER_ID } from './helpers/constants';
 
 
@@ -56,6 +58,9 @@ const App = () => {
       </Route>
       <Route path="/students">
         <StudentsList />
+      </Route>
+      <Route path="/enrollments">
+        <Enrollment />
       </Route>
     </div>
   </div>

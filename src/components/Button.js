@@ -37,7 +37,9 @@ function Button({
 
   return (
     <button {...rest} disabled={loding} className={classes}>
-      { loding? <GoSync className='animate-spin'></GoSync> : children}
+      { 
+        loding? <GoSync className='animate-spin'></GoSync> : children
+      }
     </button>
   );
 }

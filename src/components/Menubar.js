@@ -22,7 +22,8 @@ function Menubar() {
     { label: 'Employees', path: '/employees' },
     { label: 'Students', path: '/students' },
     { label: 'Session Templates', path: '/academicSessionTemplates' },
-    { label: 'Sessions', path: '/academicSessions' }
+    { label: 'Sessions', path: '/academicSessions' },
+    { label: 'Enrollments', path: '/enrollments' },
   ];
 
   const renderedLinks = links.map((link) => {

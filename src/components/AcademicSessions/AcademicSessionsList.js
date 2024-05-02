@@ -158,7 +158,7 @@ const AcademicSessionsList = () => {
         onUpdateSuccess={handleUpdateSuccess}
         isLoading={isLoadingById}
         loadingError={loadingByIdError} />
-    </div>;
+  </div>;
 
   const handleUpdateClick = async (rowData) => {
     if(showUpdateForm)

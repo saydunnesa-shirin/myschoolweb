@@ -125,7 +125,6 @@ const studentsSlice = createSlice({
     });
     builder.addCase(removeStudent.fulfilled, (state, action) => {
       state.isLoading = false;
-      console.log(action.payload.id);
       state.data = state.data.filter(student => {
         return student.id !== action.payload.id
       });
