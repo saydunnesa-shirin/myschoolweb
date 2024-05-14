@@ -77,17 +77,21 @@ const enrollmentsSlice = createSlice({
     builder.addCase(updateEnrollment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = state.data.map(Enrollment => {
-
+          
           if(Enrollment.id === action.payload.id){
             return {
               id: action.payload.id,
               institutionId: action.payload.institutionId,
+              studentId: action.payload.studentId,
               enrollmentDate: action.payload.enrollmentDate,
               academicSessionId: action.payload.academicSessionId,
               academicClassId: action.payload.academicClassId,
               academicSessionName: action.payload.academicSessionName,
               academicClassName: action.payload.academicClassName,
-              StudentName: action.payload.StudentName
+              statusId: action.payload.statusId, 
+              statusReasonId: action.payload.statusReasonId,
+              studentIdNumber: action.payload.studentIdNumber,
+              studentName: action.payload.studentName,
             }
           }
           return Enrollment;

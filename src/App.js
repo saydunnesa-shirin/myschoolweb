@@ -5,6 +5,7 @@ import { useThunk } from "./hooks/use-thunks";
 import { fetchGenders, fetchBloodGroups, fetchCountries, getEmployeeById } from './store';
 
 import Menubar from './components/Menubar';
+import Navbar from "./components/Navbar";
 import Route from './components/Route';
 import InstitutionsList from './components/Institutions/InstitutionsList';
 import CountriesList from './components/Countries/CountriesList';
@@ -14,7 +15,7 @@ import Home from './components/Home';
 import AcademicSessionTemplatesList from './components/AcademicSessionTemplates/AcademicSessionTemplatesList';
 import AcademicSessionsList from './components/AcademicSessions/AcademicSessionsList';
 import Enrollment from './components/Enrollments/Enrollment';
-
+import EnrollmentsPreview from './components/EnrollmentsPreview/EnrollmentsPreviewList';
 import { LOGGED_IN_USER_ID } from './helpers/constants';
 
 
@@ -35,8 +36,9 @@ const App = () => {
 
 
   return (
-  <div className='text-2xl'>
-    <Menubar />
+  <div className='text-2xl border border-blue-900'>
+    {/* <Menubar /> */}
+    <Navbar />
     <div>
       <Route path="/">
         <Home />
@@ -61,6 +63,9 @@ const App = () => {
       </Route>
       <Route path="/enrollments">
         <Enrollment />
+      </Route>
+      <Route path="/enrollmentsPreview">
+        <EnrollmentsPreview />
       </Route>
     </div>
   </div>

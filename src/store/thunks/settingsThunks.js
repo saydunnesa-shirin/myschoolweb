@@ -23,10 +23,20 @@ const fetchBloodGroups = createAsyncThunk('bloodGroups/fetch', async() =>{
     return response.data;
 });
 
+const fetchStudentStatus = createAsyncThunk('studentStatus/fetch', async() =>{
+    const  response = await axios.get(`${baseURL}/types/studentStatus`);
+    return response.data;
+});
+
+const fetchStudentStatusReasons = createAsyncThunk('studentStatusReasons/fetch', async() =>{
+    const  response = await axios.get(`${baseURL}/types/studentStatusReasons`);
+    return response.data;
+});
+
 const pause = (duration) => {
     return new Promise((resolve) => {
         setTimeout(resolve, duration);
     });
 };
 
-export { fetchGenders, fetchEmployeeTypes, fetchDesignations, fetchBloodGroups };
+export { fetchGenders, fetchEmployeeTypes, fetchDesignations, fetchBloodGroups, fetchStudentStatus, fetchStudentStatusReasons };

@@ -13,7 +13,7 @@ const AcademicSessionTemplatesSearch = () => {
           dispatch(AcademicSessionTemplatesAction.changeAcademicSessionTemplatesSearchTerm(event.target.value));
   }
   return (
-    <div className='pr-1 w-1/3'>
+    <div className='pr-1 sm:w-1/3'>
       <TextBox optional={true} 
       id="templateName" 
       value={searchTerm && searchTerm} 

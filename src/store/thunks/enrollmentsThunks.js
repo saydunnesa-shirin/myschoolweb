@@ -5,7 +5,11 @@ import {baseURL} from '../../helpers/constants';
 const fetchEnrollments = createAsyncThunk('enrollments/fetch', async(query) =>{
     const  response = await axios.post(`${baseURL}/enrollments/query`, {
         institutionId: query.institutionId,
-        isActive: query.isActive
+        isActive: query.isActive,
+        academicSessionIds: query.academicSessionIds,
+        academicClassIds: query.academicClassIds,
+        studentIds: query.studentIds,
+        studentName: query.studentName
      });
     return response.data;
 });
@@ -35,9 +39,7 @@ const updateEnrollment = createAsyncThunk('enrollments/update', async (enrollmen
         enrollmentDate: enrollment.enrollmentDate,
         academicSessionId: enrollment.academicSessionId,
         academicClassId: enrollment.academicClassId,
-        // academicSessionName: enrollment.academicSessionName,
-        // academicClassName: enrollment.academicClassName,
-        // StudentName: enrollment.StudentName
+        studentId: enrollment.studentId,
     });
     return response.data;
 });
