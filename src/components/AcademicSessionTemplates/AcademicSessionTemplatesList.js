@@ -217,7 +217,7 @@ const AcademicSessionTemplatesList = () => {
   return (
     <div className="p-2 m-2">
       <div className='border shadow'>
-        <div className="flex flex-row justify-between items-center mt-2 mb-2">
+        <div className="sm:flex sm:flex-row sm:justify-between sm:items-center mt-2 mb-2">
           <h1 className="m-2">Templates</h1>
           <AcademicSessionTemplateSearch></AcademicSessionTemplateSearch>
         </div>

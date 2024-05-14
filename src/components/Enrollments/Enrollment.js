@@ -226,8 +226,6 @@ const handlEnrollment = (event) => {
   event.preventDefault();
  
   const valid = isValid();
-  console.log(enrollment)
-  console.log(students)
 
   if(valid)
   {

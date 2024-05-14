@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchGenders, fetchBloodGroups, fetchDesignations, fetchEmployeeTypes } from '../thunks/settingsThunks';
+import { fetchGenders, fetchBloodGroups, fetchDesignations, fetchEmployeeTypes, fetchStudentStatus, fetchStudentStatusReasons } from '../thunks/settingsThunks';
 
 const settingsSlice = createSlice({
     name: 'settings',
@@ -9,6 +9,8 @@ const settingsSlice = createSlice({
       bloodGroups: [],
       designations: [],
       employeeTypes: [],
+      studentStatus: [],
+      studentStatusReasons: [],
       isLoading: false,
       error: null
     },
@@ -42,8 +44,8 @@ const settingsSlice = createSlice({
       state.error = action.error;
     });
 
-   //Fetch genders-----------------------------------------------------------------------
-   builder.addCase(fetchDesignations.pending, (state, action) => {
+   //Fetch designations-----------------------------------------------------------------------
+    builder.addCase(fetchDesignations.pending, (state, action) => {
       state.isLoading = true;
     });
     builder.addCase(fetchDesignations.fulfilled, (state, action) => {
@@ -57,7 +59,7 @@ const settingsSlice = createSlice({
     });
 
 
-    //Fetch genders-----------------------------------------------------------------------
+    //Fetch employee types-----------------------------------------------------------------------
     builder.addCase(fetchEmployeeTypes.pending, (state, action) => {
       state.isLoading = true;
     });
@@ -69,10 +71,34 @@ const settingsSlice = createSlice({
       state.isLoading = false;
       state.error = action.error;
     });
-   
+
+    //Fetch StudentStatus-----------------------------------------------------------------------
+    builder.addCase(fetchStudentStatus.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchStudentStatus.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.studentStatus = action.payload;
+    });
+    builder.addCase(fetchStudentStatus.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error;
+    });
+
+    //Fetch StudentStatusReasons-----------------------------------------------------------------------
+    builder.addCase(fetchStudentStatusReasons.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchStudentStatusReasons.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.studentStatusReasons = action.payload;
+    });
+    builder.addCase(fetchStudentStatusReasons.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error;
+    });
   }
 });
-
 
 export const EmployeesAction = settingsSlice.actions;
 
