@@ -6,6 +6,7 @@ import { updateEmployee} from "../../store";
 import Button from '../Button';
 import TextBox from '../TextBox';
 import Dropdown from '../Dropdown';
+import DropdownWithAutocomplete from '../DropdownWithAutocomplete';
 import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
@@ -394,7 +395,7 @@ const updateForm = (
                 Country
               </Label>
               <div className="mt-2">
-                <Dropdown options={countries} 
+                <DropdownWithAutocomplete options={countries} 
                 value={countrySelection} 
                 onChange={handleCountrySelect} 
                 />
