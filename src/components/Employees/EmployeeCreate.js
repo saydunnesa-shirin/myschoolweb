@@ -10,6 +10,7 @@ import Datepicker from '../Datepicker';
 import TextBox from '../TextBox';
 import Button from '../Button';
 import Dropdown from '../Dropdown';
+import DropdownWithAutocomplete from '../DropdownWithAutocomplete';
 import Label from '../Label';
 import Message from '../Message';
 import {SUCCESS, ERROR} from '../../helpers/constants';
@@ -356,7 +357,7 @@ const handlEmployeeCreate = (event) => {
                 Country
               </Label>
               <div className="mt-2">
-                <Dropdown options={countries} 
+                <DropdownWithAutocomplete options={countries} 
                 value={countrySelection} 
                 onChange={handleCountrySelect} 
                 />
