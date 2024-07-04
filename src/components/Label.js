@@ -6,7 +6,7 @@ function Label({
 }) {
   const classes = className(
     rest.className,
-    'block leading-6 text-gray-900'
+    'block leading-6'
   );
 
   return (

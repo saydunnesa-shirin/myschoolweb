@@ -9,6 +9,7 @@ const AcademicClassesListItem = ({isUpdate = false, detail, institutionId, handl
 
 const initialAcademicClassState = {
 id: detail.id,
+templateId: detail.templateId,
 institutionId: institutionId,
 teacherId: isUpdate ? detail.teacherId : null,
 name: isUpdate ? detail.name : detail.templateName,

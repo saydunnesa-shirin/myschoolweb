@@ -5,7 +5,7 @@ const Paging = ({currentPage, pages, navigatePrev, navigateNext, handleCurrentPa
 
 
   return (
-          <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+          <div className="flex items-center justify-between border-t border-gray-200 bg-white dark:bg-gray-200 px-4 py-3 sm:px-6">
           <div className="sm:flex sm:flex-1 sm:items-center sm:justify-between">
             <div className='mb-2'>
               <p className=" text-gray-700">

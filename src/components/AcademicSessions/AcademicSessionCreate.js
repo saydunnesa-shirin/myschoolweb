@@ -14,9 +14,9 @@ import Message from '../Message';
 import { SUCCESS, ERROR } from '../../helpers/constants';
 import AcademicClassesList from './AcademicClassesList';
 
-const AcademicSessionCreate = ({onClose, isLoadingAcademicSessionTemplates, loadingAcademicSessionTemplatesError}) => {
+const AcademicSessionCreate = ({onClose, isLoadingAcademicClassTemplates, loadingAcademicClassTemplatesError}) => {
 const user = useSelector((state) => state.employees.employee);
-const academicSessionTemplates = useSelector((state) => state.academicSessionTemplates.data);
+const academicClassTemplates = useSelector((state) => state.academicClassTemplates.data);
 
 const initialAcademicSessionState = {
   institutionId: user? user.institutionId: null,
@@ -95,15 +95,15 @@ useEffect(() => {
 }, []);
 
 function addDetail(){
-  academicSessionTemplates.map(academicSessionTemplate => {
+  academicClassTemplates.map(academicClassTemplate => {
 
     setAcademicSession((preAcademicSession) => ({
       ...preAcademicSession,
       academicClasses: [...preAcademicSession.academicClasses, {
           institutionId: user? user.institutionId: null,
           teacherId: null,
-          academicSessionTemplateId: academicSessionTemplate.id,
-          name: academicSessionTemplate.templateName,
+          templateId: academicClassTemplate.id,
+          name: academicClassTemplate.templateName,
           isActive: false
         }
       ],
@@ -117,7 +117,7 @@ const handleAcademicClassesCreate = (rowData) => {
       ...preAcademicSession,
       academicClasses:
       academicSession.academicClasses.map(academicClass => {
-      if (academicClass.academicSessionTemplateId === rowData.id) {
+      if (academicClass.templateId === rowData.id) {
         // Create a *new* object with changes
         return { ...academicClass, 
                 isActive: rowData.isActive,
@@ -207,9 +207,9 @@ const handleAcademicClassesCreate = (rowData) => {
           <br></br>
           <AcademicClassesList 
             institutionId={user? user.institutionId: null}
-            detailList={academicSessionTemplates}
-            isLoding={isLoadingAcademicSessionTemplates} 
-            loadingError={loadingAcademicSessionTemplatesError} 
+            detailList={academicClassTemplates}
+            isLoding={isLoadingAcademicClassTemplates} 
+            loadingError={loadingAcademicClassTemplatesError} 
             handleAcademicClassesAdd={handleAcademicClassesCreate}
             isCreatingMaster={isCreatingAcademicSession}
           ></AcademicClassesList>

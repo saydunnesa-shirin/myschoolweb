@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchAcademicSessions, getById, removeAcademicSession, getEmployeeById, fetchAcademicSessionTemplates, fetchEmployees } from "../../store";
+import { fetchAcademicSessions, getById, removeAcademicSession, getEmployeeById, fetchAcademicClassTemplates, fetchEmployees } from "../../store";
 import { AcademicSessionsAction } from "../../store/slices/academicSessionsSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
@@ -30,7 +30,7 @@ const AcademicSessionsList = () => {
 
   const [isRemoveSuccess, setIsRemoveSuccess] = useState(false);
 
-  const [doFetchAcademicSessionTemplates, isLoadingAcademicSessionTemplates, loadingAcademicSessionTemplatesError] = useThunk(fetchAcademicSessionTemplates);
+  const [doFetchAcademicClassTemplates, isLoadingAcademicClassTemplates, loadingAcademicClassTemplatesError] = useThunk(fetchAcademicClassTemplates);
   const [doFetchEmployees, isLoadingEmployees, loadingEmployeesError] = useThunk(fetchEmployees);
   
   const [doFetchAcademicSessions, isLoadingAcademicSessions, loadingAcademicSessionsError] = useThunk(fetchAcademicSessions);
@@ -43,7 +43,7 @@ const AcademicSessionsList = () => {
   const getDataByInstitution = async () => {
     doFetchUser(LOGGED_IN_USER_ID);
     if(user != null){
-      doFetchAcademicSessionTemplates({institutionId: user.institutionId});
+      doFetchAcademicClassTemplates({institutionId: user.institutionId});
       doFetchAcademicSessions({institutionId: user.institutionId});
       doFetchEmployees({institutionId: user.institutionId, designationId: EMPLOYEE_DESIGNATION_ID});
     }
@@ -54,7 +54,7 @@ const AcademicSessionsList = () => {
   //Fetch data
   useEffect(() => {
     if(user != null){
-      doFetchAcademicSessionTemplates({institutionId: user.institutionId});
+      doFetchAcademicClassTemplates({institutionId: user.institutionId});
       doFetchAcademicSessions({institutionId: user.institutionId});
       doFetchEmployees({institutionId: user.institutionId, designationId: EMPLOYEE_DESIGNATION_ID});
     }
@@ -132,8 +132,8 @@ const AcademicSessionsList = () => {
   const addAcademicSession = <div className='transition ease-out duration-5000'>
     <AcademicSessionAdd 
       onClose={handleAddFormClose} 
-      isLoadingAcademicSessionTemplates={isLoadingAcademicSessionTemplates} 
-      loadingAcademicSessionTemplatesError={loadingAcademicSessionTemplatesError}>
+      isLoadingAcademicClassTemplates={isLoadingAcademicClassTemplates} 
+      loadingAcademicClassTemplatesError={loadingAcademicClassTemplatesError}>
     </AcademicSessionAdd>
   </div>
 

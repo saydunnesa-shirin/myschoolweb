@@ -15,7 +15,7 @@ const Navbar = () => {
           { label: 'Countries', path: '/countries' },
           { label: 'Employees', path: '/employees' },
           { label: 'Students', path: '/students' },
-          { label: 'Session Templates', path: '/academicSessionTemplates' },
+          { label: 'Class Templates', path: '/academicClassTemplates' },
           { label: 'Sessions', path: '/academicSessions' },
           { label: 'Enrollments', path: '/enrollments' },
           { label: 'Enrollments Preview', path: '/enrollmentsPreview' },
@@ -42,7 +42,7 @@ const Navbar = () => {
   });
 
   return (
-    <div className="bg-slate-200">
+    <div className="bg-slate-200 dark:bg-slate-500">
       <div className=" max-w-[1640px] mx-auto sm:flex sm:justify-between sm:items-center p-4 shadow-sm ">
           {/* Left side */}
           <div className="flex items-center">
@@ -71,7 +71,7 @@ const Navbar = () => {
               placeholder="Search"
             />
           </div>
-          <button className="bg-black text-white hidden md:flex items-center py-2 rounded-full border border-black px-5">
+          <button className="bg-black text-white hidden md:flex items-center py-2 rounded-full border border-black px-5 transform duration-500 hover:scale-105">
             <FaUser size={20} className="mr-2" /> User
           </button>
 
@@ -99,7 +99,7 @@ const Navbar = () => {
             <h2 className="text-2xl p-4">
               School <span className="font-bold">Management</span>
             </h2>
-            <nav>
+            <nav className="transform duration-1000">
               <ul className="flex flex-col p-4 text-black" onClick={() => setNav(!nav)}>
                 {/* {menuItems.map(({ icon, text }, index) => {
                   return (

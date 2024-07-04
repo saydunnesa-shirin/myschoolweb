@@ -2,14 +2,14 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchAcademicSessionTemplates, removeAcademicSessionTemplate, getEmployeeById } from "../../store";
-import { AcademicSessionTemplatesAction } from "../../store/slices/academicSessionTemplatesSlice";
+import { fetchAcademicClassTemplates, removeAcademicClassTemplate, getEmployeeById } from "../../store";
+import { AcademicClassTemplatesAction } from "../../store/slices/academicClassTemplatesSlice";
 
 import { useThunk } from "../../hooks/use-thunks";
 import Skeleton from "../Skeleton";
-import AcademicSessionTemplateCreate from "./AcademicSessionTemplateCreate";
-import AcademicSessionTemplateUpdate from "./AcademicSessionTemplateUpdate";
-import AcademicSessionTemplateSearch from "./AcademicSessionTemplateSearch";
+import AcademicClassTemplateCreate from "./AcademicClassTemplateCreate";
+import AcademicClassTemplateUpdate from "./AcademicClassTemplateUpdate";
+import AcademicClassTemplateSearch from "./AcademicClassTemplateSearch";
 import Message from "../Message";
 import { SUCCESS, ERROR, LOGGED_IN_USER_ID } from '../../helpers/constants';
 import Paging from "../Paging";
@@ -17,7 +17,7 @@ import SortableTable from '../SortableTable';
 import Button from '../Button';
 import Modal from '../Modal';
 
-const AcademicSessionTemplatesList = () => {
+const AcademicClassTemplatesList = () => {
   const dispatch = useDispatch();
 
   const [doFetchUser, isLoadingUser, loadingUserError] = useThunk(getEmployeeById);
@@ -25,30 +25,30 @@ const AcademicSessionTemplatesList = () => {
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   const [isRemoveSuccess, setIsRemoveSuccess] = useState(false);
-  const [doFetchAcademicSessionTemplates, isLoadingAcademicSessionTemplates, loadingAcademicSessionTemplatesError] = useThunk(fetchAcademicSessionTemplates);
+  const [doFetchAcademicClassTemplates, isLoadingAcademicClassTemplates, loadingAcademicClassTemplatesError] = useThunk(fetchAcademicClassTemplates);
   
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
-  const [doRemoveAcademicSessionTemplate, isRemovingAcademicSessionTemplate, removingAcademicSessionTemplateError] = useThunk(removeAcademicSessionTemplate);
+  const [doRemoveAcademicClassTemplate, isRemovingAcademicClassTemplate, removingAcademicClassTemplateError] = useThunk(removeAcademicClassTemplate);
 
 
   const user = useSelector((state) => state.employees.employee);
   const getInstitution = async () => {
     doFetchUser(LOGGED_IN_USER_ID);
     if(user != null)
-      doFetchAcademicSessionTemplates({institutionId: user.institutionId});
+      doFetchAcademicClassTemplates({institutionId: user.institutionId});
   }
 
  //Fetch data
   useEffect(() => {
     if(user != null){
-      doFetchAcademicSessionTemplates({institutionId: user.institutionId});
+      doFetchAcademicClassTemplates({institutionId: user.institutionId});
     }
     else{
       getInstitution();
     }
   }, [user]);
 
-  const { academicSessionTemplates } = useSelector(({ academicSessionTemplates: { data, searchTerm }}) => {
+  const { academicClassTemplates } = useSelector(({ academicClassTemplates: { data, searchTerm }}) => {
     let dataList = data;
     
     if(searchTerm.length !== 0){
@@ -67,27 +67,27 @@ const AcademicSessionTemplatesList = () => {
     });
 
     return {
-      academicSessionTemplates: sortedData
+      academicClassTemplates: sortedData
     }
   }); 
   
  //Delete
  const [showModal, setShowModal] = useState(false);
- const [academicSessionTemplate, setAcademicSessionTemplate] = useState(null);
+ const [academicClassTemplate, setAcademicClassTemplate] = useState(null);
 
  const handleModalClose = () => setShowModal(false);
 
- const handleDeleteClick = (academicSessionTemplate) => {
+ const handleDeleteClick = (academicClassTemplate) => {
     setShowModal(true);
-    setAcademicSessionTemplate(academicSessionTemplate);
+    setAcademicClassTemplate(academicClassTemplate);
     setIsRemoveSuccess(false);
   }
 
  const confirmDelete = () =>{
-    doRemoveAcademicSessionTemplate(academicSessionTemplate);
+    doRemoveAcademicClassTemplate(academicClassTemplate);
     setShowModal(false);
 
-    if(!isRemovingAcademicSessionTemplate && !removingAcademicSessionTemplateError){
+    if(!isRemovingAcademicClassTemplate && !removingAcademicClassTemplateError){
         setIsRemoveSuccess(true);
     }
  }
@@ -115,8 +115,8 @@ const AcademicSessionTemplatesList = () => {
   //Add
   const handleAddFormClose = () => setShowAddForm(false);
   
-  const addAcademicSessionTemplate = <div className='transition ease-out duration-5000'>
-    <AcademicSessionTemplateCreate onClose={handleAddFormClose}></AcademicSessionTemplateCreate>
+  const addAcademicClassTemplate = <div className='transition ease-out duration-5000'>
+    <AcademicClassTemplateCreate onClose={handleAddFormClose}></AcademicClassTemplateCreate>
   </div>
 
   const handleAddCLick = () =>{
@@ -135,7 +135,7 @@ const AcademicSessionTemplatesList = () => {
   }
 
   const updateForm = <div> 
-      <AcademicSessionTemplateUpdate data={academicSessionTemplate} onClose={handleUpdateFormClose}
+      <AcademicClassTemplateUpdate data={academicClassTemplate} onClose={handleUpdateFormClose}
        onUpdateSuccess={handleUpdateSuccess} />
     </div>;
 
@@ -144,68 +144,68 @@ const AcademicSessionTemplatesList = () => {
       setShowUpdateForm(false);
     await delay(200);
 
-    setAcademicSessionTemplate(rowData);
+    setAcademicClassTemplate(rowData);
     setShowUpdateForm(true);
     setIsUpdateSuccess(false);
     setShowAddForm(false);
   }
 
   //Paging
-  const dataPerPage = useSelector((state) => state.academicSessionTemplates.dataPerPage);
-  const currentPage = useSelector((state) => state.academicSessionTemplates.currentPage);
+  const dataPerPage = useSelector((state) => state.academicClassTemplates.dataPerPage);
+  const currentPage = useSelector((state) => state.academicClassTemplates.currentPage);
 
-  const totalPages = Math.ceil(academicSessionTemplates.length / dataPerPage);
+  const totalPages = Math.ceil(academicClassTemplates.length / dataPerPage);
   const pages = [...Array(totalPages + 1).keys()].slice(1);
   const indexOfLastPage = currentPage * dataPerPage;
   const indexofFirstPage = indexOfLastPage - dataPerPage;
 
-  const visibleAcademicSessionTemplates = academicSessionTemplates.slice(indexofFirstPage, indexOfLastPage);
+  const visibleAcademicClassTemplates = academicClassTemplates.slice(indexofFirstPage, indexOfLastPage);
 
   const navigatePrev = () => {
     if (currentPage !== 1) {
-      dispatch(AcademicSessionTemplatesAction.onNavigatePrev());
+      dispatch(AcademicClassTemplatesAction.onNavigatePrev());
     }
   };
 
   const navigateNext = () => {
     if (currentPage !== totalPages) {
-      dispatch(AcademicSessionTemplatesAction.onNavigateNext());
+      dispatch(AcademicClassTemplatesAction.onNavigateNext());
     }
   };
 
-  const handleCurrentPage = (_p) => dispatch(AcademicSessionTemplatesAction.onClickCurrentPage(_p));
+  const handleCurrentPage = (_p) => dispatch(AcademicClassTemplatesAction.onClickCurrentPage(_p));
 
-  const handleChangeDataPerpage = (e) => dispatch(AcademicSessionTemplatesAction.onChangeTodosPerpage(e));
+  const handleChangeDataPerpage = (e) => dispatch(AcademicClassTemplatesAction.onChangeTodosPerpage(e));
   
   //Table
   const config = [
     {
       label: 'Template',
-      render: (academicSessionTemplate) => academicSessionTemplate.templateName,
-      sortValue: (academicSessionTemplate) => academicSessionTemplate.templateName,
+      render: (academicClassTemplate) => academicClassTemplate.templateName,
+      sortValue: (academicClassTemplate) => academicClassTemplate.templateName,
     }
   ];
 
-  const keyFn = (academicSessionTemplate) => {
-    return academicSessionTemplate.id;
+  const keyFn = (academicClassTemplate) => {
+    return academicClassTemplate.id;
   };
 
   let content;
 
-  if(isLoadingAcademicSessionTemplates){
+  if(isLoadingAcademicClassTemplates){
     content = <Skeleton times={6} className="h-8 w-full"></Skeleton>;
   }
-  else if(loadingAcademicSessionTemplatesError || loadingUserError){
+  else if(loadingAcademicClassTemplatesError || loadingUserError){
     content = <div> <Message message={'Error fetching academic session templates'} type={ERROR}></Message>  </div>
   }
   else{
     content = <div>
       <SortableTable 
-        data={visibleAcademicSessionTemplates} 
+        data={visibleAcademicClassTemplates} 
         config={config} 
         keyFn={keyFn} 
         onDeleteClick={handleDeleteClick}
-        isRemovingRecord={isRemovingAcademicSessionTemplate}
+        isRemovingRecord={isRemovingAcademicClassTemplate}
         onUpdateClick={handleUpdateClick}
       />
       <Paging currentPage={currentPage} pages={pages} navigatePrev={navigatePrev} navigateNext={navigateNext} 
@@ -219,7 +219,7 @@ const AcademicSessionTemplatesList = () => {
       <div className='border shadow'>
         <div className="sm:flex sm:flex-row sm:justify-between sm:items-center mt-2 mb-2">
           <h1 className="m-2">Templates</h1>
-          <AcademicSessionTemplateSearch></AcademicSessionTemplateSearch>
+          <AcademicClassTemplateSearch></AcademicClassTemplateSearch>
         </div>
         {content}
       </div>
@@ -229,7 +229,7 @@ const AcademicSessionTemplatesList = () => {
           + Add
         </Button>
       </div> }
-      {showAddForm && addAcademicSessionTemplate}
+      {showAddForm && addAcademicClassTemplate}
       {showUpdateForm && updateForm}
       
       {isUpdateSuccess && <Message message={'Update successfull!'} type={SUCCESS}></Message>}
@@ -239,4 +239,4 @@ const AcademicSessionTemplatesList = () => {
   )
 }
 
-export default AcademicSessionTemplatesList;
+export default AcademicClassTemplatesList;

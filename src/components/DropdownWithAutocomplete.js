@@ -30,7 +30,7 @@ function DropdownWithAutocomplete({ options, value, onChange, mandatory=false })
   });
  
 
-  const handleNameChange = (event) => {
+  const handleNameChange = (event) => {   
     setSearchTerm(event.target.value);
 
     if(event.target.value.length > 1){

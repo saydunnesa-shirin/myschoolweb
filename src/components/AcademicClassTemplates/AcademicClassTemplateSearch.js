@@ -1,16 +1,16 @@
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { AcademicSessionTemplatesAction } from "../../store/slices/academicSessionTemplatesSlice";
+import { AcademicClassTemplatesAction } from "../../store/slices/academicClassTemplatesSlice";
 import TextBox from "../TextBox";
 
-const AcademicSessionTemplatesSearch = () => {
+const AcademicClassTemplatesSearch = () => {
   const dispatch = useDispatch();
 
   const searchTerm = useSelector((state)=>{
-          return state.academicSessionTemplates.searchTerm;
+          return state.academicClassTemplates.searchTerm;
   });
   const handleSearchTermChange = (event) => {
-          dispatch(AcademicSessionTemplatesAction.changeAcademicSessionTemplatesSearchTerm(event.target.value));
+          dispatch(AcademicClassTemplatesAction.changeAcademicClassTemplatesSearchTerm(event.target.value));
   }
   return (
     <div className='pr-1 sm:w-1/3'>
@@ -24,4 +24,4 @@ const AcademicSessionTemplatesSearch = () => {
   )
 }
 
-export default AcademicSessionTemplatesSearch;
+export default AcademicClassTemplatesSearch;

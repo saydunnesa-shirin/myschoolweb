@@ -107,7 +107,9 @@ const handleAcademicClassesUpdate = (rowData) => {
         return { ...academicClass, 
                 isActive: rowData.isActive, 
                 name: rowData.name,
-                teacherId: rowData.teacherId
+                teacherId: rowData.teacherId,
+                templateId: rowData.templateId
+
               };
       } else {
         // No changes

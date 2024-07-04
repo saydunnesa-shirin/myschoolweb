@@ -1,4 +1,7 @@
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @layer base {
           h1 {
                     @apply text-3xl font-bold;
@@ -16,8 +19,6 @@
                     @apply text-lg font-bold;    
           }
 }
-@tailwind components;
-@tailwind utilities;
 
 /* .elementToFadeInAndOut {
 -webkit-animation: fadeinout linear forwards;

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
-import { academicSessionTemplatesReducer } from './slices/academicSessionTemplatesSlice';
+import { academicClassTemplatesReducer } from './slices/academicClassTemplatesSlice';
 import { academicSessionsReducer } from './slices/academicSessionsSlice';
 import { academicClassesReducer } from './slices/academicClassesSlice';
 
@@ -15,7 +15,7 @@ import { settingsReducer } from './slices/settingsSlice';
 
 export const store = configureStore({
     reducer: {
-      academicSessionTemplates: academicSessionTemplatesReducer,
+      academicClassTemplates: academicClassTemplatesReducer,
       academicSessions: academicSessionsReducer,
       academicClasses: academicClassesReducer,
       countries: countriesReducer,
@@ -29,7 +29,7 @@ export const store = configureStore({
 
 setupListeners(store.dispatch);
 
-export * from './thunks/academicSessionTemplatesThunks';
+export * from './thunks/academicClassTemplatesThunks';
 export * from './thunks/academicSessionsThunks';
 export * from './thunks/academicClassesThunks';
 
