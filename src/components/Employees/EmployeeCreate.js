@@ -96,7 +96,14 @@ const handleCountrySelect = (option) => {
 //Textbox
 const handleFirstNameChange = (event) => setEmployee({ ...employee, firstName: event.target.value.replace(/[0-9]/, '') });
 const handleLastNameChange = (event) => setEmployee({ ...employee, lastName: event.target.value.replace(/[0-9]/, '') });
-const handleEmployeeIdChange = (event) => setEmployee({ ...employee, employeeId: event.target.value });
+const handleEmployeeIdChange = (event) => {
+
+ 
+
+  setEmployee({ ...employee, employeeId: event.target.value });
+
+}
+  
 const handleMobileChange = (event) => setEmployee({ ...employee, mobile: event.target.value.replace(/[a-z]/, '') });
 const handleEmailChange = (event) => setEmployee({ ...employee, email: event.target.value });
 const handleFatherNameChange = (event) => setEmployee({ ...employee, fatherName: event.target.value.replace(/[0-9]/, '') });
@@ -133,7 +140,7 @@ function isValid(){
 
 const handlEmployeeCreate = (event) => {
   event.preventDefault();
-  console.log(employee);
+
   const valid = isValid();
 
   if(valid)
@@ -152,8 +159,15 @@ const handlEmployeeCreate = (event) => {
     setCountrySelection(null);
   }
 }
+
+const handleKeyDown = (event) =>{
+  if (event.keyCode === 13) { //13 is the key code for Enter
+    event.preventDefault()
+  }
+}
   return (
-    <form className="border shadow p-2" onSubmit={handlEmployeeCreate}>
+    <form className="border shadow p-2" onSubmit={handlEmployeeCreate} 
+      onKeyDown={handleKeyDown}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <div className='flex justify-between'>

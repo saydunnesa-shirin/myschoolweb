@@ -12,7 +12,7 @@ import CountriesList from './components/Countries/CountriesList';
 import EmployeesList from './components/Employees/EmployeesList';
 import StudentsList from './components/Students/StudentsList';
 import Home from './components/Home';
-import AcademicSessionTemplatesList from './components/AcademicSessionTemplates/AcademicSessionTemplatesList';
+import AcademicClassTemplatesList from './components/AcademicClassTemplates/AcademicClassTemplatesList';
 import AcademicSessionsList from './components/AcademicSessions/AcademicSessionsList';
 import Enrollment from './components/Enrollments/Enrollment';
 import EnrollmentsPreview from './components/EnrollmentsPreview/EnrollmentsPreviewList';
@@ -36,7 +36,7 @@ const App = () => {
 
 
   return (
-  <div className='text-2xl border border-blue-900'>
+  <div className='text-2xl border border-blue-900 dark:bg-gray-800 dark:text-slate-300 '>
     {/* <Menubar /> */}
     <Navbar />
     <div>
@@ -46,8 +46,8 @@ const App = () => {
       <Route path="/institutions">
         <InstitutionsList />
       </Route>
-      <Route path="/academicSessionTemplates">
-        <AcademicSessionTemplatesList />
+      <Route path="/academicClassTemplates">
+        <AcademicClassTemplatesList />
       </Route>
       <Route path="/academicSessions">
         <AcademicSessionsList />

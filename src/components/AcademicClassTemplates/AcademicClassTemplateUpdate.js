@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect  } from "react";
 import { useSelector } from "react-redux";
 
-import { updateAcademicSessionTemplate} from "../../store";
+import { updateAcademicClassTemplate} from "../../store";
 import Button from '../Button';
 import TextBox from '../TextBox';
 import Label from '../Label';
@@ -11,56 +11,69 @@ import Message from '../Message';
 import { ERROR } from '../../helpers/constants';
 import { displayErrorMessage } from '../../helpers/utils';
 
-const AcademicSessionTemplateUpdate = ({data, onClose, onUpdateSuccess}) => {
+const AcademicClassTemplateUpdate = ({data, onClose, onUpdateSuccess}) => {
 
 const user = useSelector((state) => state.employees.employee);
 // //Update
-const initialAcademicSessionTemplateState = {
+const initialAcademicClassTemplateState = {
   id: data.id,
   templateName: data.templateName,
-  institutionId: user? user.institutionId: null
+  institutionId: user? user.institutionId: null,
+  serialNo:data.serialNo
 };
 
 const [isSubmitted, setIsSubmitted] = useState(false);
-const [academicSessionTemplate, setAcademicSessionTemplate] = useState(initialAcademicSessionTemplateState);
+const [academicClassTemplate, setAcademicClassTemplate] = useState(initialAcademicClassTemplateState);
 const [validationError, setValidationError] = useState(false);
-const [doUpdateAcademicSessionTemplate, isUpdatingAcademicSessionTemplate, updatingAcademicSessionTemplateError] = useThunk(updateAcademicSessionTemplate);
+const [doUpdateAcademicClassTemplate, isUpdatingAcademicClassTemplate, updatingAcademicClassTemplateError] = useThunk(updateAcademicClassTemplate);
 
 useEffect(() => {
-  if(isSubmitted && !isUpdatingAcademicSessionTemplate && !updatingAcademicSessionTemplateError){
+  if(isSubmitted && !isUpdatingAcademicClassTemplate && !updatingAcademicClassTemplateError){
     onUpdateSuccess();
   }
-}, [isUpdatingAcademicSessionTemplate]);
+}, [isUpdatingAcademicClassTemplate]);
 
 
 const handleTemplateNameChange = (event) => {
-  setAcademicSessionTemplate({ ...academicSessionTemplate, templateName: event.target.value });
+  setAcademicClassTemplate({ ...academicClassTemplate, templateName: event.target.value });
+}
+
+const handleSerialNoChange = (event) => {
+  setAcademicClassTemplate({ 
+      ...academicClassTemplate, 
+      serialNo: event.target.value
+    });
 }
 
 function isValid(){
-  if(academicSessionTemplate.templateName.length === 0){
+  if(academicClassTemplate.templateName.length === 0){
     setValidationError(true);
     return false;
-  }else{
+  }
+  else if(academicClassTemplate.serialNo < 1){
+    setValidationError(true);
+    return false;
+  }
+  else{
     setValidationError(false);
     return true;
   }
 }
 
-const handlAcademicSessionTemplateUpdate = (event) => {
+const handlAcademicClassTemplateUpdate = (event) => {
   event.preventDefault();
   const valid = isValid();
   
   if(valid)
   {
     setValidationError(false);
-    doUpdateAcademicSessionTemplate(academicSessionTemplate);
+    doUpdateAcademicClassTemplate(academicClassTemplate);
     setIsSubmitted(true);
   }
 }     
   return (
     <div>
-      <form className="border shadow p-2" onSubmit={handlAcademicSessionTemplateUpdate}>
+      <form className="border shadow p-2" onSubmit={handlAcademicClassTemplateUpdate}>
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <div className='flex justify-between'>
@@ -81,12 +94,29 @@ const handlAcademicSessionTemplateUpdate = (event) => {
                     autoFocus={true}
                     className="templateName"
                     id="templateName"
-                    value={academicSessionTemplate.templateName} 
+                    value={academicClassTemplate.templateName} 
                     placeholder="Class I" onChange={handleTemplateNameChange} 
-                    mandatory={validationError && academicSessionTemplate.templateName.length < 2 && true}
+                    mandatory={validationError && academicClassTemplate.templateName.length < 2 && true}
                   />
                 </div>
               </div>
+              <div className="sm:col-span-2">
+              <Label>
+                Serial No.
+              </Label>
+              
+              <div className="mt-2">
+                <TextBox
+                  type="number"
+                  name="serialNo"
+                  id="serialNo"
+                  value={academicClassTemplate.serialNo} 
+                  placeholder="1" onChange={handleSerialNoChange} 
+                  min={0}
+                  mandatory={validationError && academicClassTemplate.serialNo < 1 && true}
+                />
+              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -98,7 +128,7 @@ const handlAcademicSessionTemplateUpdate = (event) => {
           <Button 
           type="submit" 
           primary
-          loding={isUpdatingAcademicSessionTemplate} 
+          loding={isUpdatingAcademicClassTemplate} 
           >
             Save
           </Button>
@@ -110,10 +140,10 @@ const handlAcademicSessionTemplateUpdate = (event) => {
           }
           { 
             isSubmitted 
-            && !isUpdatingAcademicSessionTemplate 
-            && updatingAcademicSessionTemplateError 
+            && !isUpdatingAcademicClassTemplate 
+            && updatingAcademicClassTemplateError 
             && <Message 
-                  message={displayErrorMessage(updatingAcademicSessionTemplateError.message, 'Error updating Academic Session Template')} 
+                  message={displayErrorMessage(updatingAcademicClassTemplateError.message, 'Error updating Academic Session Template')} 
                   type={ERROR}
                 ></Message>
           }
@@ -123,4 +153,4 @@ const handlAcademicSessionTemplateUpdate = (event) => {
   )
 }
 
-export default AcademicSessionTemplateUpdate
+export default AcademicClassTemplateUpdate

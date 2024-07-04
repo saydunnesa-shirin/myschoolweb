@@ -9,7 +9,7 @@ function TextArea({
     rest.className,
     'leading-tight border rounded p-3 shadow w-full',
     {
-      'bg-red-50 text-gray-700 border border-red-500 focus:outline-none focus:bg-white': mandatory,
+      'bg-red-50 dark:bg-gray-200 text-gray-700 border border-red-500 focus:outline-none focus:bg-white': mandatory,
     }
   );
 
