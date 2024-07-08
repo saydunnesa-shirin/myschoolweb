@@ -7,7 +7,7 @@ import { useThunk } from "../../hooks/use-thunks";
 
 import Button from '../Button';
 import TextBox from '../TextBox';
-import Dropdown from '../Dropdown';
+import DDL from '../DDL';
 import Label from '../Label';
 import Message from '../Message';
 import { SUCCESS, ERROR } from '../../helpers/constants';
@@ -101,7 +101,7 @@ const handlInstitutionCreate = (event) => {
                 Country
               </Label>
               <div className="mt-2">
-                <Dropdown 
+                <DDL 
                   options={countries} 
                   value={selection} 
                   onChange={handleSelect} 
