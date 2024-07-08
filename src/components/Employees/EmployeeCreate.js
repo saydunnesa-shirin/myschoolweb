@@ -10,7 +10,7 @@ import Datepicker from '../Datepicker';
 import TextBox from '../TextBox';
 import Button from '../Button';
 import Dropdown from '../Dropdown';
-import DropdownWithAutocomplete from '../DropdownWithAutocomplete';
+import DDLAutoComplete from '../DDLAutoComplete';
 import Label from '../Label';
 import Message from '../Message';
 import {SUCCESS, ERROR} from '../../helpers/constants';
@@ -371,7 +371,7 @@ const handleKeyDown = (event) =>{
                 Country
               </Label>
               <div className="mt-2">
-                <DropdownWithAutocomplete options={countries} 
+                <DDLAutoComplete options={countries} 
                 value={countrySelection} 
                 onChange={handleCountrySelect} 
                 />
