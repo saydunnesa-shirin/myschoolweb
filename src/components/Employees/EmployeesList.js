@@ -104,11 +104,6 @@ const EmployeesList = () => {
     </Modal>
   );
 
-  const delay = async (ms) => {
-    return new Promise((resolve) => 
-        setTimeout(resolve, ms));
-  }
-
   //Add
   const handleAddFormClose = () => setShowAddForm(false);
   
@@ -132,15 +127,15 @@ const EmployeesList = () => {
   }
 
   const updateForm = <div> 
-      <EmployeeUpdate data={employee} onClose={handleUpdateFormClose}
-       onUpdateSuccess={handleUpdateSuccess} />
+      <EmployeeUpdate 
+        data={employee} 
+        onClose={handleUpdateFormClose}
+        onUpdateSuccess={handleUpdateSuccess}
+       />
     </div>;
 
-  const handleUpdateClick = async (rowData) => {
-    if(showUpdateForm)
-      setShowUpdateForm(false);
-    await delay(200);
 
+  const handleUpdateClick = (rowData) => {
     setEmployee(rowData);
     setShowUpdateForm(true);
     setIsUpdateSuccess(false);

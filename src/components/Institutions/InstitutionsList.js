@@ -56,7 +56,6 @@ const InstitutionsList = () => {
     return {
       institutions: sortedData
     }
-
   }); 
   
  //Delete
@@ -95,11 +94,6 @@ const InstitutionsList = () => {
     </Modal>
   );
 
-  const delay = async (ms) => {
-    return new Promise((resolve) => 
-        setTimeout(resolve, ms));
-  }
-
   //Add
   const handleAddFormClose = () => setShowAddForm(false);
   
@@ -127,11 +121,7 @@ const InstitutionsList = () => {
        onUpdateSuccess={handleUpdateSuccess} />
     </div>;
 
-  const handleUpdateClick = async (rowData) => {
-    if(showUpdateForm)
-      setShowUpdateForm(false);
-    await delay(200);
-
+  const handleUpdateClick = (rowData) => {
     setInstitution(rowData);
     setShowUpdateForm(true);
     setIsUpdateSuccess(false);

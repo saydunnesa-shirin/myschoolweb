@@ -24,14 +24,20 @@ function dateFormat(initialValue){
 }
 //Set Details data
 useEffect(() => {
-  if(reset)
-  {
-    setDateValue({
-      startDate : initialValue,
-      endDate: initialValue
-    })
-  }
-}, [reset]);
+  // if(reset)
+  // {
+  //   setDateValue({
+  //     startDate : initialValue,
+  //     endDate: initialValue
+  //   })
+  // }
+
+  setDateValue({
+    startDate : initialValue,
+    endDate: initialValue
+  });
+
+}, [reset, initialValue]);
 
 const [dateValue, setDateValue] = useState({
   startDate : initialValue,

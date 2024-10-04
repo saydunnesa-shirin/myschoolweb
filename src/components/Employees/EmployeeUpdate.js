@@ -15,40 +15,13 @@ import Datepicker from '../Datepicker';
 import { displayErrorMessage } from '../../helpers/utils';
 
 const EmployeeUpdate = ({data, onClose, onUpdateSuccess}) => {
-
  //Update
-const initialEmployeeState = {
-id: data.id,
-employeeId:data.employeeId,
-institutionId: data.institutionId,
-joinDate:data.joinDate,
-designationId:data.designationId,
-employeeTypeId:data.employeeTypeId,
-
-firstName: data.firstName,
-lastName: data.lastName,
-email:data.email,
-mobile:data.mobile,
-
-fatherName:data.fatherName,
-motherName:data.motherName,
-dateOfBirth:data.dateOfBirth,
-genderId:data.genderId,
-bloodGroupId:data.bloodGroupId,
-countryId:data.countryId,
-street: data.street,
-city:data.city,
-state:data.state,
-postalCode:data.postalCode
-};
-
 const [isSubmitted, setIsSubmitted] = useState(false);
-const [employee, setEmployee] = useState(initialEmployeeState);
+const [employee, setEmployee] = useState(data);
 const [validationError, setValidationError] = useState(false);
 const [doUpdateEmployee, isUpdatingEmployee, updatingEmployeeError] = useThunk(updateEmployee);
 
 //DDL
-
 const institutions = useSelector((state) => state.institutions.data);
 const employeeTypes = useSelector((state) => state.settings.employeeTypes);
 const designations = useSelector((state) => state.settings.designations);
@@ -62,6 +35,77 @@ const [bloodGroupSelection, setBloodGroupSelection] = useState(null);
 const [employeeTypeSelection, setEmployeeTypeSelection] = useState(null);
 const [designationSelection, setDesignationSelection] = useState(null);
 const [countrySelection, setCountrySelection] = useState(null);
+
+//Datepicker
+const [joinDate, setJoinDate] = useState(null);
+const [dateOfBirth, setDateOfBirth] = useState(null);
+
+useEffect(() => {
+  if(isSubmitted && !isUpdatingEmployee && !updatingEmployeeError){
+    onUpdateSuccess();
+  }
+
+  //Set Initail value
+  if(isUpdatingEmployee === false){
+
+    setEmployee(data);
+
+    if(data.joinDate !== null){
+      setJoinDate(data.joinDate); 
+    }else{
+      setJoinDate(null); 
+    }
+
+    if(data.dateOfBirth !== null){
+      setDateOfBirth(data.dateOfBirth); 
+    }else{
+      setDateOfBirth(null); 
+    }
+
+    if( data.institutionId !== null){
+      const institution = institutions.filter((item) => item.id === data.institutionId);
+      setInstitutionSelection(institution[0]); 
+    }else{
+      setInstitutionSelection(null); 
+    }
+
+    if( data.designationId !== null){
+      const designation = designations.filter((item) => item.id === data.designationId);
+      setDesignationSelection(designation[0]); 
+    }else{
+      setDesignationSelection(null);
+    }
+
+    if( data.employeeTypeId !== null){
+      const employeeType = employeeTypes.filter((item) => item.id === data.employeeTypeId);
+      setEmployeeTypeSelection(employeeType[0]); 
+    }else{
+      setEmployeeTypeSelection(null);
+    }
+
+    if( data.genderId !== null){
+      const gender = genders.filter((item) => item.id === data.genderId);
+      setGenderSelection(gender[0]); 
+    }else{
+      setGenderSelection(null);
+    }
+
+    if( data.countryId !== null){
+      const country = countries.filter((item) => item.id === data.countryId);
+      setCountrySelection(country[0]); 
+    }else{
+      setCountrySelection(null);
+    }
+
+    if( data.bloodGroupId !== null){
+      const bloodGroup = bloodGroups.filter((item) => item.id === data.bloodGroupId);
+      setBloodGroupSelection(bloodGroup[0]); 
+    }else{
+      setBloodGroupSelection(null);
+    }
+  }
+  
+}, [isUpdatingEmployee, data?.id]);
 
 const handleInstitutionSelect = (option) => {
 setInstitutionSelection(option);
@@ -106,49 +150,13 @@ const handleCityChange = (event) => setEmployee({ ...employee, city: event.targe
 const handleStateChange = (event) => setEmployee({ ...employee, state: event.target.value });
 const handlePostalCodeChange = (event) => setEmployee({ ...employee, postalCode: event.target.value });
 
-//DatePicker
-const handleJoinDateChange = (newValue) => setEmployee({ ...employee, joinDate: newValue });
+//DatePicker change handler
+const handleJoinDateChange = (newValue) =>
+{
+  setEmployee({ ...employee, joinDate: newValue });
+  setJoinDate(newValue);
+}
 const handleDateOfBirthChange = (newValue) => setEmployee({ ...employee, dateOfBirth: newValue});
-
-useEffect(() => {
-  if(isSubmitted && !isUpdatingEmployee && !updatingEmployeeError){
-    onUpdateSuccess();
-  }
-
-  //Set DDL
-  if(isUpdatingEmployee === false){
-    if( data.institutionId !== null){
-      const institution = institutions.filter((item) => item.id === data.institutionId);
-      setInstitutionSelection(institution[0]); 
-    }
-
-    if( data.designationId !== null){
-      const designation = designations.filter((item) => item.id === data.designationId);
-      setDesignationSelection(designation[0]); 
-    }
-
-    if( data.employeeTypeId !== null){
-      const employeeType = employeeTypes.filter((item) => item.id === data.employeeTypeId);
-      setEmployeeTypeSelection(employeeType[0]); 
-    }
-
-    if( data.genderId !== null){
-      const gender = genders.filter((item) => item.id === data.genderId);
-      setGenderSelection(gender[0]); 
-    }
-
-    if( data.countryId !== null){
-      const country = countries.filter((item) => item.id === data.countryId);
-      setCountrySelection(country[0]); 
-    }
-
-    if( data.bloodGroupId !== null){
-      const bloodGroup = bloodGroups.filter((item) => item.id === data.bloodGroupId);
-      setBloodGroupSelection(bloodGroup[0]); 
-    }
-  }
-  
-}, [isUpdatingEmployee]);
 
 function isValid(){
   if(
@@ -230,16 +238,15 @@ const updateForm = (
                 />
               </div>
             </div>
-
             <div className="sm:col-span-2">
               <Label>
                 Joining Date
               </Label>
               <div className="mt-2">
                 <Datepicker 
-                  initialValue={employee.joinDate}
+                  initialValue={joinDate}
                   changeDate={handleJoinDateChange}
-                  mandatory={validationError && employee.joinDate === null && true}
+                  mandatory={validationError && joinDate === null && true}
                   />
               </div>
             </div>
@@ -361,7 +368,7 @@ const updateForm = (
               </Label>
               <div className="mt-2">
                 <Datepicker 
-                  initialValue={employee.dateOfBirth}
+                  initialValue={dateOfBirth}
                   changeDate={handleDateOfBirthChange}
                   />
               </div>
@@ -485,7 +492,6 @@ const updateForm = (
               message={displayErrorMessage(updatingEmployeeError.message, 'Error updating Employee')} 
               type={ERROR}
             ></Message>
-          
         }
       </div>
     </form>
