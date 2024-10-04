@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { updateInstitution} from "../../store";
 import Button from '../Button';
 import TextBox from '../TextBox';
-import Dropdown from '../Dropdown';
+import DropdownWithAutocomplete from '../DropdownWithAutocomplete';
 import Label from '../Label';
 import { useThunk } from "../../hooks/use-thunks";
 import Message from '../Message';
@@ -14,15 +14,9 @@ import { displayErrorMessage } from '../../helpers/utils';
 
 const InstitutionUpdate = ({data, onClose, onUpdateSuccess}) => {
 // //Update
-const initialInstitutionState = {
-  id: data.id,
-  name: data.name,
-  address: data.address,
-  countryId: data.countryId
-};
 
 const [isSubmitted, setIsSubmitted] = useState(false);
-const [institution, setInstitution] = useState(initialInstitutionState);
+const [institution, setInstitution] = useState(data);
 const [validationError, setValidationError] = useState(false);
 const [doUpdateInstitution, isUpdatingInstitution, updatingInstitutionError] = useThunk(updateInstitution);
 
@@ -35,11 +29,18 @@ useEffect(() => {
     onUpdateSuccess();
   }
 
-  if( data.countryId !== null && isUpdatingInstitution === false){
-    const country = countries.filter((item) => item.id === data.countryId);
-    setSelection(country[0]); 
+  if(isUpdatingInstitution === false){
+
+    setInstitution(data);
+
+    if( data.countryId !== null && isUpdatingInstitution === false){
+      const country = countries.filter((item) => item.id === data.countryId);
+      setSelection(country[0]); 
+    }
   }
-}, [isUpdatingInstitution]);
+
+  
+}, [isUpdatingInstitution, data?.id]);
 
 const handleSelect = (option) => {
   setSelection(option);
@@ -111,7 +112,7 @@ const handlInstitutionUpdate = (event) => {
                   Country
                 </Label>
                 <div className="mt-2">
-                  <Dropdown 
+                  <DropdownWithAutocomplete
                     options={countries} 
                     value={selection} 
                     onChange={handleSelect} 

@@ -24,7 +24,7 @@ const updateCountry = createAsyncThunk('countries/update', async (country) => {
 
 const removeCountry = createAsyncThunk('countries/remove', async (country) => {
     // const response = await axios.delete(`${baseURL}/countries/${country.id}`);
-    const response = await axios.delete(`${baseURL}/countries`,{ 
+    await axios.delete(`${baseURL}/countries`,{ 
         data: { 
             id: country.id 
         } 
